@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+    <header></header>
+    <main>
+        <h1>Sessão de estudo</h1>
+            <form>
+
+                <h2>Cronograma de estudo</h2>
+
+                <label for="inicio_do_projeto">
+                    Início do Projeto:
+                </label>
+
+                <input
+                    type="date"
+                    name="data_do_inicio"
+                    id="inicio_do_projeto"
+                >
+
+                <br>
+
+                <label for="horas_por_semana">
+                    Tempo de estudo por semana:
+                </label>
+
+                <input
+                    type="number"
+                    name="horas"
+                    id="horas_por_semana"
+                    placeholder="Horas"
+                    min="0"
+                >
+
+                <input
+                    type="number"
+                    name="minutos"
+                    id="minutos_por_semana"
+                    placeholder="Minutos"
+                    min="0"
+                    max="59"
+                >
+
+                <button type="submit">
+                    Salvar
+                </button>
+
+            </form>
+    </main>
+    <footer></footer>
+</body>
+</html>
