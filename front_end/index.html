@@ -4,75 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="static/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Monoton&display=swap" rel="stylesheet">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Monoton&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="static/style.css">
 </head>
 <body>
-    <header>
-        <h1>studytrack</h1>
-        <nav> <!--menu principal-->
-            <lista>
-                <details>
-                    <summary>Menu</summary>
-                    <ul>
-                        <li><a href="#">Geral</a></li>
-                        <li><a href="#">Dashboard</a></li>
-                        <li><a href="http://127.0.0.1:5500/front_end/questao.html?">Caderno de erros</a></li>
-                        <li><a href="#">Materias</a></li>
-                        <li><a href="#">Sessão de estudo</a></li>
-                        <li><a href="#">Revisões</a></li>
-                    </ul>
-                </details>
-                </summary>
-            </lista>
-        </nav>
-    </header>
+<!--Barra fixa-->
+<aside class="sidebar">
+    <div class="logo">
+        <h1>StudyMetrics</h1>
+    </div>
 
-    <main id="main_do_perfil">
-        <article id="perfil">
-            <img src="imagens/avatar.png" alt="avatar" srcset="" width = 100px>
-            <section>
-                <!--informarçao pessoal-->
-                <form>
-                    <fieldset>
-                    <h2>Perfil</h2>
-                    <label for="nome">Nome:</label>
-                    <input type="text" placeholder="Qual seu nome..." id="nome"> <br>
-                    <label for="idade">Idade</label>
-                    <input type="date" name="data" id="idade"><br>
-                    <label for="email">Email</label>
-                    <input type="email" id="email"><br>
-                    <input type="button" value="Salva">
-                    </fieldset>
-                </form>
-            </section>
-            <section>
-                <!--termos motivaçao-->
-                <fieldset>
-                <form>
-                    <label for="text">Data que deseja passar no concurso:</label>
-                    <input type="date" name="data" id="data_conclucao">
-                    <p>Tipo de motivaçao deseja:</p>
-                    <input type="checkbox" id="motiv_1" name="motivacao" value="Disciplina" >
-                    <label for="motiv_1">Disciplina</label>
-                    <input type="checkbox" id="motiv_2" name="motivacao" value="Foco" >
-                    <label for="motiv_2">Foco</label>
-                    <input type="checkbox" id="motiv_3" name="motivacao" value="Persistência" >
-                    <label for="motiv_3">Persistência</label>
-                    <input type="checkbox" id="motiv_4" name="motivacao" value="Evolução" >
-                    <label for="motiv_4">Evolução</label>
-                    <input type="checkbox" id="motiv_5" name="motivacao" value="Constância" >
-                    <label for="motiv_5">Constância</label>
-                </form>
-                </fieldset>
-            </section>
-        </article>
+    <nav class="menu">
+        <a href="index.html" class="menu-item">Dashboard</a>
+        <a href="materias.html" class="menu-item">Matérias</a>
+        <a href="sessao_de_estudo.html" class="menu-item">Sessão de estudo</a>
+        <a href="caderno_de_questos.html" class="menu-item">Caderno de erros</a>
+        <a href="revisao.html" class="menu-item">Revisões</a>
+        <a href="perfil.html" class="menu-item">Perfil</a>
+    </nav>
+</aside>
+
+
+    <main class="conteudo">
+
+        <h1>Dashboard</h1>
+
+        <p>
+            Bem-vindo ao StudyMetrics.
+        </p>
 
     </main>
+
 </body>
 </html>

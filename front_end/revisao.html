@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revisões | StudyMetrics</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Monoton&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="logo">
+            <h1>StudyMetrics</h1>
+        </div>
+        <nav class="menu">
+            <a href="index.html" class="menu-item">Dashboard</a>
+            <a href="materias.html" class="menu-item">Matérias</a>
+            <a href="sessao.html" class="menu-item">Sessão de estudo</a>
+            <a href="questao.html" class="menu-item">Caderno de erros</a>
+            <a href="revisoes.html" class="menu-item ativo">Revisões</a>
+            <a href="perfil.html" class="menu-item">Perfil</a>
+        </nav>
+    </aside>
+    <main class="conteudo">
+        <header class="cabecalho-pagina">
+            <div>
+                <h1>Revisões</h1>
+                <p>Revise os assuntos certos no momento certo e acompanhe sua retenção.</p>
+            </div>
+            <button class="btn-principal">+ Nova revisão</button>
+        </header>
+        <section class="resumo-revisoes">
+            <article class="card-resumo">
+                <span class="numero-resumo">4</span>
+                <p>Para hoje</p>
+            </article>
+            <article class="card-resumo alerta">
+                <span class="numero-resumo">2</span>
+                <p>Atrasadas</p>
+            </article>
+            <article class="card-resumo">
+                <span class="numero-resumo">9</span>
+                <p>Esta semana</p>
+            </article>
+            <article class="card-resumo sucesso">
+                <span class="numero-resumo">27</span>
+                <p>Concluídas</p>
+            </article>
+        </section>
+        <section class="secao-revisoes">
+            <div class="titulo-secao">
+                <div>
+                    <h2>Revisões para hoje</h2>
+                    <p>Comece pelos assuntos com maior prioridade.</p>
+                </div>
+                <select name="filtro_revisao" id="filtro_revisao">
+                    <option value="todas">Todas</option>
+                    <option value="atrasadas">Atrasadas</option>
+                    <option value="hoje">Hoje</option>
+                    <option value="semana">Esta semana</option>
+                </select>
+            </div>
+            <div class="grade-revisoes">
+                <article class="card-revisao prioridade-alta">
+                    <div class="topo-revisao">
+                        <span class="etiqueta-materia">Português</span>
+                        <span class="status atrasada">Prioridade alta</span>
+                    </div>
+                    <h3>Interpretação de texto</h3>
+                    <p class="descricao-revisao">Revisar erros anteriores e resolver novas questões.</p>
+                    <div class="dados-revisao">
+                        <div>
+                            <span>Etapa</span>
+                            <strong>R2 • 7 dias</strong>
+                        </div>
+                        <div>
+                            <span>Desempenho</span>
+                            <strong>58%</strong>
+                        </div>
+                        <div>
+                            <span>Última revisão</span>
+                            <strong>02/09/2026</strong>
+                        </div>
+                    </div>
+                    <div class="acoes-revisao">
+                        <button class="btn-secundario">Ver erros</button>
+                        <button class="btn-principal">Iniciar revisão</button>
+                    </div>
+                </article>
+                <article class="card-revisao prioridade-media">
+                    <div class="topo-revisao">
+                        <span class="etiqueta-materia">Direito Administrativo</span>
+                        <span class="status hoje">Hoje</span>
+                    </div>
+                    <h3>Atos administrativos</h3>
+                    <p class="descricao-revisao">Recuperação ativa dos conceitos e resolução de questões.</p>
+                    <div class="dados-revisao">
+                        <div>
+                            <span>Etapa</span>
+                            <strong>R1 • 1 dia</strong>
+                        </div>
+                        <div>
+                            <span>Desempenho</span>
+                            <strong>74%</strong>
+                        </div>
+                        <div>
+                            <span>Último estudo</span>
+                            <strong>08/09/2026</strong>
+                        </div>
+                    </div>
+                    <div class="acoes-revisao">
+                        <button class="btn-secundario">Ver matéria</button>
+                        <button class="btn-principal">Iniciar revisão</button>
+                    </div>
+                </article>
+                <article class="card-revisao prioridade-baixa">
+                    <div class="topo-revisao">
+                        <span class="etiqueta-materia">Constitucional</span>
+                        <span class="status hoje">Hoje</span>
+                    </div>
+                    <h3>Direitos fundamentais</h3>
+                    <p class="descricao-revisao">Faça uma revisão rápida e teste a retenção com questões.</p>
+                    <div class="dados-revisao">
+                        <div>
+                            <span>Etapa</span>
+                            <strong>R3 • 30 dias</strong>
+                        </div>
+                        <div>
+                            <span>Desempenho</span>
+                            <strong>86%</strong>
+                        </div>
+                        <div>
+                            <span>Última revisão</span>
+                            <strong>10/08/2026</strong>
+                        </div>
+                    </div>
+                    <div class="acoes-revisao">
+                        <button class="btn-secundario">Ver matéria</button>
+                        <button class="btn-principal">Iniciar revisão</button>
+                    </div>
+                </article>
+            </div>
+        </section>
+        <section class="card-nova-revisao">
+            <div class="titulo-secao">
+                <div>
+                    <h2>Registrar revisão</h2>
+                    <p>Registre o resultado para o StudyMetrics calcular sua evolução.</p>
+                </div>
+            </div>
+            <form class="form-revisao">
+                <div class="campo">
+                    <label for="materia_revisao">Matéria</label>
+                    <select name="materia" id="materia_revisao" required>
+                        <option value="">Selecione uma matéria</option>
+                        <option value="portugues">Português</option>
+                        <option value="direito_administrativo">Direito Administrativo</option>
+                        <option value="constitucional">Direito Constitucional</option>
+                        <option value="rlm">Raciocínio Lógico</option>
+                    </select>
+                </div>
+                <div class="campo">
+                    <label for="assunto_revisao">Assunto</label>
+                    <input type="text" name="assunto" id="assunto_revisao" placeholder="Ex: Concordância verbal" required>
+                </div>
+                <div class="campo">
+                    <label for="tipo_revisao">Método de revisão</label>
+                    <select name="tipo_revisao" id="tipo_revisao">
+                        <option value="questoes">Questões</option>
+                        <option value="flashcards">Flashcards</option>
+                        <option value="resumo">Resumo</option>
+                        <option value="lei_seca">Lei seca</option>
+                        <option value="explicacao">Explicar sem consultar</option>
+                    </select>
+                </div>
+                <div class="campo">
+                    <label for="questoes_revisao">Questões realizadas</label>
+                    <input type="number" name="questoes" id="questoes_revisao" min="0" placeholder="Ex: 20">
+                </div>
+                <div class="campo">
+                    <label for="acertos_revisao">Acertos</label>
+                    <input type="number" name="acertos" id="acertos_revisao" min="0" placeholder="Ex: 16">
+                </div>
+                <div class="campo">
+                    <label for="dominio">Como estava seu domínio?</label>
+                    <select name="dominio" id="dominio">
+                        <option value="">Selecione</option>
+                        <option value="ruim">Ruim</option>
+                        <option value="medio">Médio</option>
+                        <option value="bom">Bom</option>
+                        <option value="excelente">Excelente</option>
+                    </select>
+                </div>
+                <div class="campo campo-observacao">
+                    <label for="observacao_revisao">Observações</label>
+                    <textarea name="observacao" id="observacao_revisao" rows="3" placeholder="O que você esqueceu? O que precisa revisar novamente?"></textarea>
+                </div>
+                <button type="submit" class="btn-principal btn-salvar-revisao">Concluir revisão</button>
+            </form>
+        </section>
+        <section class="card-historico-revisoes">
+            <div class="titulo-secao">
+                <div>
+                    <h2>Próximas revisões</h2>
+                    <p>Cronograma baseado no seu histórico de estudos.</p>
+                </div>
+            </div>
+            <div class="tabela-responsiva">
+                <table class="tabela-revisoes">
+                    <thead>
+                        <tr>
+                            <th>Matéria</th>
+                            <th>Assunto</th>
+                            <th>Próxima revisão</th>
+                            <th>Etapa</th>
+                            <th>Desempenho</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Português</td>
+                            <td>Pontuação</td>
+                            <td>10/09/2026</td>
+                            <td>R1</td>
+                            <td>63%</td>
+                            <td><span class="status proxima">Amanhã</span></td>
+                        </tr>
+                        <tr>
+                            <td>Raciocínio Lógico</td>
+                            <td>Probabilidade</td>
+                            <td>12/09/2026</td>
+                            <td>R2</td>
+                            <td>51%</td>
+                            <td><span class="status proxima">Em 3 dias</span></td>
+                        </tr>
+                        <tr>
+                            <td>Constitucional</td>
+                            <td>Direitos sociais</td>
+                            <td>16/09/2026</td>
+                            <td>R3</td>
+                            <td>88%</td>
+                            <td><span class="status proxima">Em 7 dias</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

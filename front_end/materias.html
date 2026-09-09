@@ -3,40 +3,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Matérias | StudyMetrics</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Monoton&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="static/style.css">
 </head>
 <body>
-    <header></header>
-    <main>
-        <h2>Disciplina</h2>
-        <p>Adiconar material</p>
-        <section>
-            <form>
-                <label for="text">Materia:</label>
-                <input type="text" id = "materia_que_vai_estudar"> <br>
-                <label for="Disciplina">Disciplinas:</label>
-                <input type="text" id="disciplina">
-                <input type="button" value="Salva">
-            </form>
+    <aside class="sidebar">
+        <div class="logo">
+            <h1>StudyMetrics</h1>
+        </div>
+        <nav class="menu">
+            <a href="index.html" class="menu-item">Dashboard</a>
+            <a href="materias.html" class="menu-item ativo">Matérias</a>
+            <a href="sessao.html" class="menu-item">Sessão de estudo</a>
+            <a href="questao.html" class="menu-item">Caderno de erros</a>
+            <a href="revisoes.html" class="menu-item">Revisões</a>
+            <a href="perfil.html" class="menu-item">Perfil</a>
+        </nav>
+    </aside>
+    <main class="conteudo">
+        <header class="cabecalho-pagina">
+            <h1>Matérias</h1>
+            <p>Cadastre e organize os conteúdos que você está estudando.</p>
+        </header>
+        <section class="materias-grid">
+            <div class="card-materia">
+                <form>
+                    <fieldset>
+                        <legend>Adicionar matéria</legend>
+                        <div class="campo">
+                            <label for="materia">Matéria</label>
+                            <input type="text" name="materia" id="materia" placeholder="Ex: Português" required>
+                        </div>
+                        <div class="campo">
+                            <label for="assunto">Assunto</label>
+                            <input type="text" name="assunto" id="assunto" placeholder="Ex: Concordância verbal" required>
+                        </div>
+                        <div class="campo">
+                            <label for="material">Material de estudo</label>
+                            <input type="text" name="material" id="material" placeholder="Ex: PDF, curso, livro...">
+                        </div>
+                        <div class="campo">
+                            <label for="link_material">Link do material</label>
+                            <input type="url" name="link_material" id="link_material" placeholder="https://...">
+                        </div>
+                        <button type="submit" class="btn-principal">Salvar matéria</button>
+                    </fieldset>
+                </form>
+            </div>
+            <div class="card-materia">
+                <form>
+                    <fieldset>
+                        <legend>Nível de dificuldade</legend>
+                        <div class="lista-dificuldade">
+                            <label class="dificuldade-opcao">
+                                <input type="radio" name="nivel_dificuldade" id="dificil" value="dificil">
+                                <span>Difícil</span>
+                            </label>
+                            <label class="dificuldade-opcao">
+                                <input type="radio" name="nivel_dificuldade" id="medio" value="medio">
+                                <span>Médio</span>
+                            </label>
+                            <label class="dificuldade-opcao">
+                                <input type="radio" name="nivel_dificuldade" id="facil" value="facil">
+                                <span>Fácil</span>
+                            </label>
+                        </div>
+                        <div class="campo">
+                            <label for="prioridade">Prioridade</label>
+                            <select name="prioridade" id="prioridade">
+                                <option value="">Selecione</option>
+                                <option value="alta">Alta</option>
+                                <option value="media">Média</option>
+                                <option value="baixa">Baixa</option>
+                            </select>
+                        </div>
+                        <div class="campo">
+                            <label for="observacao">Observações</label>
+                            <textarea name="observacao" id="observacao" rows="4" placeholder="Ex: Tenho dificuldade nesse assunto..."></textarea>
+                        </div>
+                        <button type="submit" class="btn-principal">Salvar configuração</button>
+                    </fieldset>
+                </form>
+            </div>
         </section>
-        <section>
-            <form>
-                <fieldset>
-                <p>Dificudade</p>
-                <input type="radio" id="nivel_de_dificuldade" value="dificil">
-                <label for="radio">Dificil</label>
-
-                <input type="radio" id="nivel_de_dificuldade" value="medio">
-                <label for="radio">Medio</label>
-
-                <input type="radio" id="nivel_de_dificuldade" value="facil">
-                <label for="radio">Facil</label>
-                </fieldset>
-                <input type="button" value="Salva">
-            </form>
+        <section class="card-lista-materias">
+            <div class="titulo-lista">
+                <h2>Matérias cadastradas</h2>
+                <p>Seus conteúdos aparecerão aqui.</p>
+            </div>
+            <table class="tabela-materias">
+                <thead>
+                    <tr>
+                        <th>Matéria</th>
+                        <th>Assunto</th>
+                        <th>Dificuldade</th>
+                        <th>Prioridade</th>
+                        <th>Desempenho</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Português</td>
+                        <td>Interpretação de texto</td>
+                        <td>Difícil</td>
+                        <td>Alta</td>
+                        <td>58%</td>
+                    </tr>
+                    <tr>
+                        <td>Direito Administrativo</td>
+                        <td>Atos administrativos</td>
+                        <td>Médio</td>
+                        <td>Média</td>
+                        <td>76%</td>
+                    </tr>
+                </tbody>
+            </table>
         </section>
     </main>
-    <footer></footer>
 </body>
 </html>

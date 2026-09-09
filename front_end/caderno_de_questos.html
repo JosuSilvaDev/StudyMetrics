@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Caderno de erros | StudyMetrics</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Monoton&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="static/style.css">
+</head>
+
+<body>
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            <h1>StudyMetrics</h1>
+        </div>
+
+        <nav class="menu">
+            <a href="index.html" class="menu-item">Dashboard</a>
+            <a href="materias.html" class="menu-item">Matérias</a>
+            <a href="sessao.html" class="menu-item">Sessão de estudo</a>
+            <a href="caderno_de_questoes.html" class="menu-item ativo">Caderno de erros</a>
+            <a href="revisoes.html" class="menu-item">Revisões</a>
+            <a href="perfil.html" class="menu-item">Perfil</a>
+        </nav>
+
+    </aside>
+
+    <main class="conteudo">
+
+        <header class="cabecalho-pagina">
+
+            <h1>Caderno de erros</h1>
+
+            <p>
+                Registre suas questões erradas e descubra quais dificuldades mais se repetem.
+            </p>
+
+        </header>
+
+        <section class="caderno-erros-container">
+
+            <!-- FORMULÁRIO -->
+
+            <article class="card-caderno-erros">
+
+                <form>
+
+                    <h2>Registrar erro</h2>
+
+                    <label for="questao">
+                        Digite a questão:
+                    </label>
+
+                    <input
+                        type="text"
+                        id="questao"
+                        name="questao"
+                        placeholder="Digite ou cole o enunciado"
+                    >
+
+                    <label for="disciplina">
+                        Disciplina:
+                    </label>
+
+                    <select
+                        name="disciplina"
+                        id="disciplina"
+                    >
+
+                        <option value="">
+                            Selecione uma disciplina
+                        </option>
+
+                        <option value="portugues">
+                            Português
+                        </option>
+
+                        <option value="administrativo">
+                            Direito Administrativo
+                        </option>
+
+                        <option value="rlm">
+                            Raciocínio Lógico
+                        </option>
+
+                    </select>
+
+
+                    <label for="assunto">
+                        Assunto:
+                    </label>
+
+                    <input
+                        type="text"
+                        name="assunto"
+                        id="assunto"
+                        placeholder="Ex: Concordância verbal"
+                    >
+
+
+                    <h3>Motivo do erro</h3>
+
+
+                    <div class="motivos">
+
+                        <label>
+                            <input
+                                type="radio"
+                                name="motivo_erro"
+                                value="nao_sabia"
+                            >
+                            Não sabia
+                        </label>
+
+
+                        <label>
+                            <input
+                                type="radio"
+                                name="motivo_erro"
+                                value="esqueci"
+                            >
+                            Esqueci
+                        </label>
+
+
+                        <label>
+                            <input
+                                type="radio"
+                                name="motivo_erro"
+                                value="interpretacao"
+                            >
+                            Interpretação
+                        </label>
+
+
+                        <label>
+                            <input
+                                type="radio"
+                                name="motivo_erro"
+                                value="desatencao"
+                            >
+                            Desatenção
+                        </label>
+
+
+                        <label>
+                            <input
+                                type="radio"
+                                name="motivo_erro"
+                                value="confusao"
+                            >
+                            Confusão entre conceitos
+                        </label>
+
+
+                        <label>
+                            <input
+                                type="radio"
+                                name="motivo_erro"
+                                value="calculo"
+                            >
+                            Erro de cálculo
+                        </label>
+
+
+                        <label>
+                            <input
+                                type="radio"
+                                name="motivo_erro"
+                                value="chute"
+                            >
+                            Chute
+                        </label>
+
+                    </div>
+
+
+                    <label for="resposta_correta">
+                        Resposta correta:
+                    </label>
+
+                    <input
+                        type="text"
+                        name="resposta_correta"
+                        id="resposta_correta"
+                        placeholder="Ex: Alternativa C"
+                    >
+
+
+                    <label for="observacao_erro">
+                        Observação:
+                    </label>
+
+                    <textarea
+                        name="observacao"
+                        id="observacao_erro"
+                        rows="4"
+                        placeholder="Por que você errou? O que precisa revisar?"
+                    ></textarea>
+
+
+                    <button type="submit">
+                        Salvar erro
+                    </button>
+
+                </form>
+
+            </article>
+
+
+            <!-- TABELA -->
+
+            <section id="tabela_de_questao">
+
+                <h2>Questões mais erradas</h2>
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Questão</th>
+                            <th>Enunciado</th>
+                            <th>Disciplina</th>
+                            <th>Motivo</th>
+                            <th>Erros</th>
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        <tr>
+                            <td>1</td>
+                            <td>Enunciado da questão...</td>
+                            <td>Português</td>
+                            <td>Esqueci</td>
+                            <td>10</td>
+                        </tr>
+
+
+                        <tr>
+                            <td>2</td>
+                            <td>Enunciado da questão...</td>
+                            <td>Raciocínio Lógico</td>
+                            <td>Não sabia</td>
+                            <td>1</td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </section>
+
+        </section>
+
+    </main>
+
+</body>
+
+</html>

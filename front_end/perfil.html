@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <title>Perfil | StudyMetrics</title>
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Monoton&family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet"
+          href="static/style.css">
+</head>
+<body>
+    <!-- MENU LATERAL -->
+    <aside class="sidebar">
+        <div class="logo">
+            <h1>StudyMetrics</h1>
+        </div>
+        <nav class="menu">
+            <a href="index.html"
+               class="menu-item">
+                Dashboard
+            </a>
+            <a href="materias.html"
+               class="menu-item">
+                Matérias
+            </a>
+            <a href="sessao.html"
+               class="menu-item">
+                Sessão de estudo
+            </a>
+            <a href="questao.html"
+               class="menu-item">
+                Caderno de erros
+            </a>
+            <a href="revisoes.html"
+               class="menu-item">
+                Revisões
+            </a>
+            <a href="perfil.html"
+               class="menu-item ativo">
+                Perfil
+            </a>
+        </nav>
+    </aside>
+    <!-- CONTEÚDO Dados-->
+    <main class="conteudo">
+        <header class="cabecalho-pagina">
+            <div>
+                <h1>Perfil</h1>
+                <p> Configure suas informações e preferências.</p>
+            </div>
+        </header>
+        <section class="perfil-cabecalho">
+            <img src="imagens/avatar.png"
+                 alt="Foto de perfil"
+                 class="avatar">
+            <div>
+                <h2>Meu perfil</h2>
+                <p>Personalize sua experiência no StudyMetrics.</p>
+            </div>
+        </section>
+        <section class="perfil-grid">
+            <!-- CARD 1 -->
+            <div class="card-perfil">
+                <form>
+                    <fieldset>
+                        <legend>
+                            Informações pessoais
+                        </legend>
+                        <div class="campo">
+                            <label for="nome">Nome</label>
+                            <input type="text" name="nome" id="nome" placeholder="Digite seu nome">
+                        </div>
+                        <div class="campo">
+                            <label for="data_nascimento">Data de nascimento</label>
+                            <input type="date" name="data_nascimento" id="data_nascimento">
+                        </div>
+                        <div class="campo">
+                            <label for="email">E-mail</label>
+                            <input type="email"name="email"id="email" placeholder="seuemail@email.com">
+                        </div>
+                        <button type="submit" class="btn-principal">Salvar</button>
+                    </fieldset>
+                </form>
+            </div>
+         <!-- CARD 2 -->
+            <div class="card-perfil">
+                <form>
+                    <fieldset>
+                        <legend>Objetivo e motivação</legend>
+                        <div class="campo">
+                            <label for="data_conclusao">Data que deseja alcançar seu objetivo</label>
+                            <input type="date" name="data_conclusao" id="data_conclusao">
+                        </div>
+                        <p class="titulo-motivacao">Que tipo de motivação</p>
+                        <div class="lista-motivacoes">
+                            <label class="motivacao-opcao">
+                                <input type="checkbox"name="motivacao"value="Disciplina">
+                                <span>Disciplina</span>
+                            </label>
+                            <label class="motivacao-opcao">
+                                <input type="checkbox"name="motivacao" value="Foco">
+                                <span>Foco</span>
+                            </label>
+                            <label class="motivacao-opcao">
+                                <input type="checkbox" name="motivacao"  value="Persistência">
+                                <span>Persistência</span>
+                            </label>
+                            <label class="motivacao-opcao">
+                                <input type="checkbox"name="motivacao"  value="Evolução">
+                                <span>Evolução</span>
+                            </label>
+                            <label class="motivacao-opcao">
+                                <input type="checkbox" name="motivacao" value="Constância">
+                                <span>Constância</span>
+                            </label>
+                        </div>
+                        <button type="submit"class="btn-principal">Salvar preferências</button>
+                    </fieldset>
+                </form>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
