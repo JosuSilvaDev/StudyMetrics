@@ -1,16 +1,12 @@
-<!DOCTYPE html>
-<html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sessão de estudo | StudyMetrics</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Monoton&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="static/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sessão de estudo | StudyMetrics</title>
+    <link rel="stylesheet" href="static/style.css">
+</head>
 </head>
 <body>
-<aside class="sidebar">
+<aside class="sidebar"> 
     <div class="logo">
         <h1>StudyMetrics</h1>
     </div>
@@ -28,7 +24,7 @@
         <h1>Sessão de estudo</h1>
         <p>Registre seus estudos e acompanhe seu desempenho.</p>
     </header>
-    <section class="mensagem-dia">
+    <section class="mensagem-dia"> <!--Mensagen do Dia-->
         <div class="mensagem-dia-icone">✦</div>
         <div class="mensagem-dia-conteudo">
             <span>Mensagem do dia</span>
@@ -36,7 +32,8 @@
             <p id="categoria_frase">Constância</p>
         </div>
     </section>
-    <section class="card-calendario-estudo">
+
+    <section class="card-calendario-estudo"> <!--Calendario-->
         <div class="calendario-cabecalho">
             <div>
                 <h2>Calendário de estudos</h2>
@@ -111,80 +108,88 @@
                 </fieldset>
             </form>
         </article>
-        <article class="card-cronometro">
-            <h2>Sessão atual</h2>
-            <p class="cronometro-texto">Use o cronômetro para controlar seu tempo líquido de estudo.</p>
-            <div id="cronometro">00:00:00</div>
-            <div class="cronometro-acoes">
-                <button type="button" class="btn-principal" id="btn_iniciar">Iniciar</button>
-                <button type="button" class="btn-secundario" id="btn_pausar">Pausar</button>
-                <button type="button" class="btn-finalizar" id="btn_zerar">Zerar</button>
-            </div>
-            <div class="sessao-atual-info">
-                <div>
-                    <span>Status</span>
-                    <strong id="status_cronometro">Aguardando</strong>
-                </div>
-                <div>
-                    <span>Objetivo</span>
-                    <strong>Tempo líquido</strong>
-                </div>
-            </div>
-        </article>
-    </section>
-    <section class="card-historico-sessoes">
-        <div class="titulo-historico">
+       </article>
+
+    <article class="card-cronometro">
+        <h2>Sessão atual</h2>
+        <p class="cronometro-texto">Use o cronômetro para controlar seu tempo líquido de estudo.</p>
+
+        <div id="cronometro">00:00:00</div>
+
+        <div class="cronometro-acoes">
+            <button type="button" class="btn-principal" id="btn_iniciar">Iniciar</button>
+            <button type="button" class="btn-secundario" id="btn_pausar">Pausar</button>
+            <button type="button" class="btn-finalizar" id="btn_zerar">Zerar</button>
+        </div>
+    <article>
+        <div class="sessao-atual-info">
             <div>
-                <h2>Histórico de sessões</h2>
-                <p>Acompanhe sua evolução ao longo dos estudos.</p>
+                <span>Status</span>
+                <strong id="status_cronometro">Aguardando</strong>
+            </div>
+
+            <div>
+                <span>Objetivo</span>
+                <strong>Tempo líquido</strong>
             </div>
         </div>
-        <div class="tabela-responsiva">
-            <table class="tabela-sessoes">
-                <thead>
-                    <tr>
-                        <th>Data</th>
-                        <th>Matéria</th>
-                        <th>Assunto</th>
-                        <th>Tempo</th>
-                        <th>Questões</th>
-                        <th>Acertos</th>
-                        <th>Desempenho</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>09/09/2026</td>
-                        <td>Português</td>
-                        <td>Crase</td>
-                        <td>1h30</td>
-                        <td>30</td>
-                        <td>21</td>
-                        <td><span class="desempenho medio">70%</span></td>
-                    </tr>
-                    <tr>
-                        <td>08/09/2026</td>
-                        <td>Raciocínio Lógico</td>
-                        <td>Probabilidade</td>
-                        <td>1h00</td>
-                        <td>20</td>
-                        <td>11</td>
-                        <td><span class="desempenho ruim">55%</span></td>
-                    </tr>
-                    <tr>
-                        <td>07/09/2026</td>
-                        <td>Direito Administrativo</td>
-                        <td>Atos administrativos</td>
-                        <td>2h00</td>
-                        <td>40</td>
-                        <td>34</td>
-                        <td><span class="desempenho bom">85%</span></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+    </article>
+
+    <section class="card-historico-sessoes">
+    <div class="titulo-historico">
+        <h2>Histórico de sessões</h2>
+        <p>Acompanhe sua evolução ao longo dos estudos.</p>
+    </div>
+
+    <div class="tabela-responsiva">
+        <table class="tabela-sessoes">
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Matéria</th>
+                    <th>Assunto</th>
+                    <th>Tempo</th>
+                    <th>Questões</th>
+                    <th>Acertos</th>
+                    <th>Desempenho</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td>09/09/2026</td>
+                    <td>Português</td>
+                    <td>Crase</td>
+                    <td>1h30</td>
+                    <td>30</td>
+                    <td>21</td>
+                    <td><span class="desempenho medio">70%</span></td>
+                </tr>
+
+                <tr>
+                    <td>08/09/2026</td>
+                    <td>Raciocínio Lógico</td>
+                    <td>Probabilidade</td>
+                    <td>1h00</td>
+                    <td>20</td>
+                    <td>11</td>
+                    <td><span class="desempenho ruim">55%</span></td>
+                </tr>
+
+                <tr>
+                    <td>07/09/2026</td>
+                    <td>Direito Administrativo</td>
+                    <td>Atos administrativos</td>
+                    <td>2h00</td>
+                    <td>40</td>
+                    <td>34</td>
+                    <td><span class="desempenho bom">85%</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
     </section>
 </main>
-<script src="static/sessao.js"></script>
+<script src="static/static/cronometro.js"></script>
 </body>
 </html>
