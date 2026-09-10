@@ -33,32 +33,45 @@
         </div>
     </section>
 
-    <section class="card-calendario-estudo"> <!--Calendario-->
-        <div class="calendario-cabecalho">
+    <section class="calendario-premium"> <!--Celendario 2.0-->        
+        <div class="calendario-topo-premium">
+
+            <div class="acoes-calendario"> 
+                <div class="controle-mes-premium">
+                    <button type="button" id="mes_anterior">‹</button>
+                    <h3 id="mes_ano">Setembro 2026</h3>
+                    <button type="button" id="proximo_mes">›</button>
+                </div>
+                <button type="button" id="toggle_calendario" class="toggle-calendario" title="Mostrar somente a semana">
+                    <span id="icone_toggle">⌃</span>
+                </button>
+            </div>
+
             <div>
+                <span class="calendario-tag">PLANEJAMENTO</span>
                 <h2>Calendário de estudos</h2>
-                <p>Visualize suas sessões, revisões e simulados.</p>
+                <p>Acompanhe sessões, revisões e simulados.</p>
             </div>
-            <div class="controle-mes">
-                <button type="button" id="mes_anterior">←</button>
+            <div class="controle-mes-premium">
+                <button type="button" id="mes_anterior">‹</button>
                 <h3 id="mes_ano">Setembro 2026</h3>
-                <button type="button" id="proximo_mes">→</button>
+                <button type="button" id="proximo_mes">›</button>
             </div>
         </div>
-        <div class="dias-semana">
-            <span>Dom</span>
-            <span>Seg</span>
-            <span>Ter</span>
-            <span>Qua</span>
-            <span>Qui</span>
-            <span>Sex</span>
-            <span>Sáb</span>
+        <div class="dias-semana-premium">
+            <span>DOM</span>
+            <span>SEG</span>
+            <span>TER</span>
+            <span>QUA</span>
+            <span>QUI</span>
+            <span>SEX</span>
+            <span>SÁB</span>
         </div>
-        <div id="dias_calendario" class="dias-calendario"></div>
-        <div class="legenda-calendario">
-            <span><i class="legenda estudo"></i>Sessão</span>
-            <span><i class="legenda revisao"></i>Revisão</span>
-            <span><i class="legenda simulado"></i>Simulado</span>
+        <div id="dias_calendario" class="dias-calendario-premium"></div>
+        <div class="calendario-legenda-premium">
+            <span><i class="ponto estudo"></i>Sessão</span>
+            <span><i class="ponto revisao"></i>Revisão</span>
+            <span><i class="ponto simulado"></i>Simulado</span>
         </div>
     </section>
     <section class="sessao-grid">
@@ -208,5 +221,6 @@
     </section>
 </main>
 <script src="static/static/cronometro.js"></script>
+<script src="static/script.js"></script>
 </body>
 </html>

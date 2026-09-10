@@ -2463,3 +2463,291 @@ body {
         letter-spacing: 4px;
     }
 }
+/* =========================================
+   CALENDÁRIO PREMIUM - STUDYMETRICS
+========================================= */
+
+.calendario-premium {
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 25px;
+    padding: 30px;
+    border-radius: 24px;
+    background: linear-gradient(145deg, rgba(255,255,255,.92), rgba(241,251,249,.78));
+    border: 1px solid rgba(255,255,255,.8);
+    box-shadow: 0 15px 35px rgba(15,42,67,.08);
+    backdrop-filter: blur(15px);
+}
+
+.calendario-premium::before {
+    content: "";
+    position: absolute;
+    width: 250px;
+    height: 250px;
+    right: -120px;
+    top: -130px;
+    border-radius: 50%;
+    background: rgba(70,240,210,.12);
+    filter: blur(10px);
+}
+
+.calendario-topo-premium {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 25px;
+    margin-bottom: 30px;
+}
+
+.calendario-tag {
+    display: block;
+    margin-bottom: 5px;
+    color: #20bfa7;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.7px;
+}
+
+.calendario-topo-premium h2 {
+    margin: 0;
+    color: #102f49;
+    font-size: 25px;
+    font-weight: 700;
+}
+
+.calendario-topo-premium p {
+    margin-top: 5px;
+    color: #708398;
+    font-size: 13px;
+}
+
+.controle-mes-premium {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 7px;
+    border-radius: 14px;
+    background: rgba(255,255,255,.7);
+    border: 1px solid #e2ebf0;
+}
+
+.controle-mes-premium h3 {
+    min-width: 160px;
+    margin: 0;
+    text-align: center;
+    color: #17364f;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.controle-mes-premium button {
+    width: 38px;
+    height: 38px;
+    border: none;
+    border-radius: 10px;
+    background: #edf6f6;
+    color: #17364f;
+    font-size: 25px;
+    cursor: pointer;
+    transition: .25s;
+}
+
+.controle-mes-premium button:hover {
+    background: #46f0d2;
+    transform: scale(1.05);
+}
+
+.dias-semana-premium {
+    display: grid;
+    grid-template-columns: repeat(7,1fr);
+    margin-bottom: 10px;
+}
+
+.dias-semana-premium span {
+    text-align: center;
+    color: #7890a3;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.dias-calendario-premium {
+    display: grid;
+    grid-template-columns: repeat(7,1fr);
+    gap: 8px;
+}
+
+.dia-premium {
+    position: relative;
+    min-height: 85px;
+    padding: 10px;
+    border: 1px solid rgba(210,223,232,.75);
+    border-radius: 13px;
+    background: rgba(255,255,255,.66);
+    transition: .25s ease;
+    cursor: pointer;
+}
+
+.dia-premium:hover {
+    transform: translateY(-2px);
+    border-color: #46f0d2;
+    background: rgba(240,255,252,.9);
+    box-shadow: 0 7px 15px rgba(15,42,67,.07);
+}
+
+.dia-premium.vazio {
+    background: transparent;
+    border: none;
+    cursor: default;
+    box-shadow: none;
+}
+
+.numero-dia-premium {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 29px;
+    height: 29px;
+    border-radius: 9px;
+    color: #324c61;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.dia-premium.hoje {
+    border-color: rgba(70,240,210,.7);
+    background: rgba(229,255,250,.8);
+}
+
+.dia-premium.hoje .numero-dia-premium {
+    background: linear-gradient(135deg,#46f0d2,#27d8ba);
+    color: #092e3f;
+    box-shadow: 0 5px 12px rgba(70,240,210,.3);
+}
+
+.eventos-dia {
+    display: flex;
+    gap: 5px;
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+}
+
+.evento-ponto {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+}
+
+.evento-ponto.estudo {
+    background: #3b82f6;
+    box-shadow: 0 0 7px rgba(59,130,246,.4);
+}
+
+.evento-ponto.revisao {
+    background: #22c55e;
+    box-shadow: 0 0 7px rgba(34,197,94,.4);
+}
+
+.evento-ponto.simulado {
+    background: #f59e0b;
+    box-shadow: 0 0 7px rgba(245,158,11,.4);
+}
+
+.calendario-legenda-premium {
+    display: flex;
+    gap: 25px;
+    margin-top: 20px;
+    padding-top: 18px;
+    border-top: 1px solid #e9eff3;
+}
+
+.calendario-legenda-premium span {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: #718599;
+    font-size: 11px;
+}
+
+.ponto {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.ponto.estudo { background:#3b82f6; }
+.ponto.revisao { background:#22c55e; }
+.ponto.simulado { background:#f59e0b; }
+
+@media(max-width:700px) {
+    .calendario-topo-premium {
+        flex-direction:column;
+        align-items:flex-start;
+    }
+    .controle-mes-premium {
+        width:100%;
+        justify-content:space-between;
+    }
+    .dia-premium {
+        min-height:55px;
+        padding:5px;
+    }
+    .numero-dia-premium {
+        width:24px;
+        height:24px;
+        font-size:10px;
+    }
+}
+/* =========================
+   CALENDÁRIO MÊS / SEMANA
+========================= */
+
+.acoes-calendario {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.toggle-calendario {
+    width: 45px;
+    height: 45px;
+    border: 1px solid #dce8ec;
+    border-radius: 12px;
+    background: rgba(255,255,255,.75);
+    color: #17364f;
+    font-size: 22px;
+    cursor: pointer;
+    transition: .25s ease;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.toggle-calendario:hover {
+    background: #46f0d2;
+    border-color: #46f0d2;
+    transform: translateY(-2px);
+}
+
+#icone_toggle {
+    display: block;
+    transition: transform .3s ease;
+}
+
+/* quando estiver mostrando só uma semana */
+.calendario-premium.modo-semana #icone_toggle {
+    transform: rotate(180deg);
+}
+
+.calendario-premium.modo-semana {
+    padding-bottom: 22px;
+}
+
+/* animação */
+.dias-calendario-premium {
+    transition: all .3s ease;
+}

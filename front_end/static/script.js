@@ -1,294 +1,330 @@
 document.addEventListener("DOMContentLoaded", function () {
+const calendario = document.querySelector(".calendario-premium");
+const diasCalendario = document.getElementById("dias_calendario");
+const tituloMesAno = document.getElementById("mes_ano");
 
-    // ===============================
-    // CALENDÁRIO
-    // ===============================
+const btnAnterior = document.getElementById("mes_anterior");
+const btnProximo = document.getElementById("proximo_mes");
 
-    const diasCalendario = document.getElementById("dias_calendario");
-    const tituloMesAno = document.getElementById("mes_ano");
-    const btnMesAnterior = document.getElementById("mes_anterior");
-    const btnProximoMes = document.getElementById("proximo_mes");
+const btnToggle = document.getElementById("toggle_calendario");
+const iconeToggle = document.getElementById("icone_toggle");
 
-    let dataCalendario = new Date();
+let dataCalendario = new Date();
 
-    const meses = [
-        "Janeiro",
-        "Fevereiro",
-        "Março",
-        "Abril",
-        "Maio",
-        "Junho",
-        "Julho",
-        "Agosto",
-        "Setembro",
-        "Outubro",
-        "Novembro",
-        "Dezembro"
-    ];
+let modoSemana = false;
 
-    const eventos = {
-        "2026-09-09": ["estudo"],
-        "2026-09-10": ["revisao"],
-        "2026-09-12": ["simulado"],
-        "2026-09-15": ["estudo", "revisao"]
-    };
+const meses = [
+    "Janeiro",
+    "Fevereiro",
+    "Março",
+    "Abril",
+    "Maio",
+    "Junho",
+    "Julho",
+    "Agosto",
+    "Setembro",
+    "Outubro",
+    "Novembro",
+    "Dezembro"
+];
 
-    function gerarCalendario() {
+const eventos = {
+    "2026-09-09": ["estudo"],
+    "2026-09-10": ["revisao"],
+    "2026-09-12": ["simulado"],
+    "2026-09-15": ["estudo", "revisao"]
+};
 
-        if (!diasCalendario || !tituloMesAno) {
-            return;
-        }
 
-        diasCalendario.innerHTML = "";
+// =========================
+// CRIAR UM DIA
+// =========================
 
-        const ano = dataCalendario.getFullYear();
-        const mes = dataCalendario.getMonth();
+function criarDia(data) {
 
-        tituloMesAno.textContent = `${meses[mes]} ${ano}`;
+    const elemento = document.createElement("div");
 
-        const primeiroDia = new Date(
-            ano,
-            mes,
-            1
-        ).getDay();
+    elemento.classList.add("dia-premium");
 
-        const totalDias = new Date(
-            ano,
-            mes + 1,
-            0
-        ).getDate();
+    const hoje = new Date();
 
-        for (let i = 0; i < primeiroDia; i++) {
+    if (
+        data.getDate() === hoje.getDate() &&
+        data.getMonth() === hoje.getMonth() &&
+        data.getFullYear() === hoje.getFullYear()
+    ) {
+        elemento.classList.add("hoje");
+    }
 
-            const vazio = document.createElement("div");
 
-            vazio.classList.add(
-                "dia-calendario",
-                "dia-vazio"
+    const numero = document.createElement("span");
+
+    numero.classList.add("numero-dia-premium");
+
+    numero.textContent = data.getDate();
+
+    elemento.appendChild(numero);
+
+
+    const chave =
+        `${data.getFullYear()}-${String(data.getMonth() + 1).padStart(2, "0")}-${String(data.getDate()).padStart(2, "0")}`;
+
+
+    if (eventos[chave]) {
+
+        const caixaEventos =
+            document.createElement("div");
+
+        caixaEventos.classList.add("eventos-dia");
+
+
+        eventos[chave].forEach(function(tipo) {
+
+            const ponto =
+                document.createElement("span");
+
+            ponto.classList.add(
+                "evento-ponto",
+                tipo
             );
 
-            diasCalendario.appendChild(vazio);
+            caixaEventos.appendChild(ponto);
+
+        });
+
+
+        elemento.appendChild(caixaEventos);
+    }
+
+
+    return elemento;
+}
+
+
+// =========================
+// CALENDÁRIO MENSAL
+// =========================
+
+function gerarMes() {
+
+    diasCalendario.innerHTML = "";
+
+    const ano = dataCalendario.getFullYear();
+    const mes = dataCalendario.getMonth();
+
+    tituloMesAno.textContent =
+        `${meses[mes]} ${ano}`;
+
+    const primeiroDia =
+        new Date(ano, mes, 1).getDay();
+
+    const totalDias =
+        new Date(ano, mes + 1, 0).getDate();
+
+
+    for (let i = 0; i < primeiroDia; i++) {
+
+        const vazio =
+            document.createElement("div");
+
+        vazio.classList.add(
+            "dia-premium",
+            "vazio"
+        );
+
+        diasCalendario.appendChild(vazio);
+    }
+
+
+    for (let dia = 1; dia <= totalDias; dia++) {
+
+        const data =
+            new Date(ano, mes, dia);
+
+        diasCalendario.appendChild(
+            criarDia(data)
+        );
+    }
+}
+
+
+// =========================
+// CALENDÁRIO SEMANAL
+// =========================
+
+function gerarSemana() {
+
+    diasCalendario.innerHTML = "";
+
+    const dataInicio =
+        new Date(dataCalendario);
+
+    const diaSemana =
+        dataInicio.getDay();
+
+
+    // Vai para o domingo da semana atual
+    dataInicio.setDate(
+        dataInicio.getDate() - diaSemana
+    );
+
+
+    const dataFim =
+        new Date(dataInicio);
+
+    dataFim.setDate(
+        dataInicio.getDate() + 6
+    );
+
+
+    // título
+    if (
+        dataInicio.getMonth() ===
+        dataFim.getMonth()
+    ) {
+
+        tituloMesAno.textContent =
+            `${dataInicio.getDate()} - ${dataFim.getDate()} de ${meses[dataFim.getMonth()]} ${dataFim.getFullYear()}`;
+
+    } else {
+
+        tituloMesAno.textContent =
+            `${dataInicio.getDate()} ${meses[dataInicio.getMonth()]} - ${dataFim.getDate()} ${meses[dataFim.getMonth()]}`;
+
+    }
+
+
+    for (let i = 0; i < 7; i++) {
+
+        const data =
+            new Date(dataInicio);
+
+        data.setDate(
+            dataInicio.getDate() + i
+        );
+
+        diasCalendario.appendChild(
+            criarDia(data)
+        );
+    }
+}
+
+
+// =========================
+// ATUALIZAR
+// =========================
+
+function gerarCalendario() {
+
+    if (modoSemana) {
+
+        gerarSemana();
+
+    } else {
+
+        gerarMes();
+
+    }
+}
+
+
+// =========================
+// SETA PARA DIMINUIR
+// =========================
+
+btnToggle.addEventListener(
+    "click",
+    function() {
+
+        modoSemana =
+            !modoSemana;
+
+        calendario.classList.toggle(
+            "modo-semana",
+            modoSemana
+        );
+
+
+        if (modoSemana) {
+
+            btnToggle.title =
+                "Mostrar calendário mensal";
+
+            iconeToggle.textContent = "⌄";
+
+        } else {
+
+            btnToggle.title =
+                "Mostrar somente a semana";
+
+            iconeToggle.textContent = "⌃";
+
         }
 
-        for (let dia = 1; dia <= totalDias; dia++) {
 
-            const elementoDia = document.createElement("div");
+        gerarCalendario();
 
-            elementoDia.classList.add(
-                "dia-calendario"
+    }
+);
+
+
+// =========================
+// VOLTAR
+// =========================
+
+btnAnterior.addEventListener(
+    "click",
+    function() {
+
+        if (modoSemana) {
+
+            dataCalendario.setDate(
+                dataCalendario.getDate() - 7
             );
 
-            const numero = document.createElement("span");
+        } else {
 
-            numero.classList.add(
-                "numero-dia"
+            dataCalendario.setMonth(
+                dataCalendario.getMonth() - 1
             );
 
-            numero.textContent = dia;
-
-            elementoDia.appendChild(numero);
-
-            const chave =
-                `${ano}-${String(mes + 1).padStart(2, "0")}-${String(dia).padStart(2, "0")}`;
-
-            if (eventos[chave]) {
-
-                const marcadores =
-                    document.createElement("div");
-
-                marcadores.classList.add(
-                    "marcadores"
-                );
-
-                eventos[chave].forEach(function (tipo) {
-
-                    const marcador =
-                        document.createElement("span");
-
-                    marcador.classList.add(
-                        "marcador",
-                        tipo
-                    );
-
-                    marcadores.appendChild(
-                        marcador
-                    );
-                });
-
-                elementoDia.appendChild(
-                    marcadores
-                );
-            }
-
-            diasCalendario.appendChild(
-                elementoDia
-            );
         }
+
+        gerarCalendario();
+
     }
-
-    if (btnMesAnterior) {
-
-        btnMesAnterior.addEventListener(
-            "click",
-            function () {
-
-                dataCalendario.setMonth(
-                    dataCalendario.getMonth() - 1
-                );
-
-                gerarCalendario();
-            }
-        );
-    }
-
-    if (btnProximoMes) {
-
-        btnProximoMes.addEventListener(
-            "click",
-            function () {
-
-                dataCalendario.setMonth(
-                    dataCalendario.getMonth() + 1
-                );
-
-                gerarCalendario();
-            }
-        );
-    }
-
-    gerarCalendario();
+);
 
 
-    // ===============================
-    // CRONÔMETRO
-    // ===============================
+// =========================
+// AVANÇAR
+// =========================
 
-    const cronometro =
-        document.getElementById("cronometro");
+btnProximo.addEventListener(
+    "click",
+    function() {
 
-    const btnIniciar =
-        document.getElementById("btn_iniciar");
+        if (modoSemana) {
 
-    const btnPausar =
-        document.getElementById("btn_pausar");
-
-    const btnZerar =
-        document.getElementById("btn_zerar");
-
-    const statusCronometro =
-        document.getElementById("status_cronometro");
-
-    let segundos = 0;
-
-    let intervalo = null;
-
-
-    function mostrarTempo() {
-
-        const horas =
-            Math.floor(segundos / 3600);
-
-        const minutos =
-            Math.floor(
-                (segundos % 3600) / 60
+            dataCalendario.setDate(
+                dataCalendario.getDate() + 7
             );
 
-        const segundosRestantes =
-            segundos % 60;
+        } else {
 
-        if (cronometro) {
+            dataCalendario.setMonth(
+                dataCalendario.getMonth() + 1
+            );
 
-            cronometro.textContent =
-                String(horas).padStart(2, "0")
-                + ":" +
-                String(minutos).padStart(2, "0")
-                + ":" +
-                String(segundosRestantes).padStart(2, "0");
-        }
-    }
-
-
-    function iniciarCronometro() {
-
-        if (intervalo !== null) {
-            return;
         }
 
-        if (statusCronometro) {
-            statusCronometro.textContent =
-                "Estudando";
-        }
+        gerarCalendario();
 
-        intervalo = setInterval(
-            function () {
-
-                segundos++;
-
-                mostrarTempo();
-
-            },
-            1000
-        );
     }
+);
 
 
-    function pausarCronometro() {
-
-        clearInterval(intervalo);
-
-        intervalo = null;
-
-        if (statusCronometro) {
-            statusCronometro.textContent =
-                "Pausado";
-        }
-    }
-
-
-    function zerarCronometro() {
-
-        clearInterval(intervalo);
-
-        intervalo = null;
-
-        segundos = 0;
-
-        mostrarTempo();
-
-        if (statusCronometro) {
-            statusCronometro.textContent =
-                "Aguardando";
-        }
-    }
-
-
-    if (btnIniciar) {
-
-        btnIniciar.addEventListener(
-            "click",
-            iniciarCronometro
-        );
-    }
-
-
-    if (btnPausar) {
-
-        btnPausar.addEventListener(
-            "click",
-            pausarCronometro
-        );
-    }
-
-
-    if (btnZerar) {
-
-        btnZerar.addEventListener(
-            "click",
-            zerarCronometro
-        );
-    }
-
-
+gerarCalendario();
     // ===============================
     // MENSAGEM DO DIA
     // ===============================
