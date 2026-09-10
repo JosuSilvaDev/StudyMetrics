@@ -110,32 +110,49 @@
         </article>
        </article>
 
-    <article class="card-cronometro">
-        <h2>Sessão atual</h2>
-        <p class="cronometro-texto">Use o cronômetro para controlar seu tempo líquido de estudo.</p>
-
-        <div id="cronometro">00:00:00</div>
-
-        <div class="cronometro-acoes">
-            <button type="button" class="btn-principal" id="btn_iniciar">Iniciar</button>
-            <button type="button" class="btn-secundario" id="btn_pausar">Pausar</button>
-            <button type="button" class="btn-finalizar" id="btn_zerar">Zerar</button>
-        </div>
-    <article>
-        <div class="sessao-atual-info">
+    <article class="cronometro-premium"> <!--Cronometro-->
+        <div class="cronometro-cabecalho">
             <div>
-                <span>Status</span>
-                <strong id="status_cronometro">Aguardando</strong>
+                <span class="cronometro-tag">SESSÃO ATUAL</span>
+                <h2>Tempo de foco</h2>
+                <p>Controle seu tempo líquido de estudo.</p>
             </div>
-
-            <div>
-                <span>Objetivo</span>
+            <div class="status-indicador">
+                <span class="status-bolinha"></span>
+                <span id="status_cronometro">Aguardando</span>
+            </div>
+        </div>
+        <div class="cronometro-area">
+            <div class="cronometro-brilho"></div>
+            <div id="cronometro">00:00:00</div>
+            <span class="cronometro-legenda">HORAS · MINUTOS · SEGUNDOS</span>
+        </div>
+        <div class="cronometro-acoes-premium">
+            <button type="button" id="btn_iniciar" class="btn-cronometro iniciar">
+                <span class="icone-botao">▶</span>
+                Iniciar
+            </button>
+            <button type="button" id="btn_pausar" class="btn-cronometro pausar">
+                <span class="icone-botao">Ⅱ</span>
+                Pausar
+            </button>
+            <button type="button" id="btn_zerar" class="btn-cronometro zerar">
+                <span class="icone-botao">↻</span>
+                Zerar
+            </button>
+        </div>
+        <div class="cronometro-dados">
+            <div class="cronometro-dado">
+                <span>Modo</span>
                 <strong>Tempo líquido</strong>
+            </div>
+            <div class="cronometro-dado">
+                <span>Objetivo</span>
+                <strong>Manter o foco</strong>
             </div>
         </div>
     </article>
-
-    <section class="card-historico-sessoes">
+    <section class="card-historico-sessoes"> <!--Historico de estudo-->
     <div class="titulo-historico">
         <h2>Histórico de sessões</h2>
         <p>Acompanhe sua evolução ao longo dos estudos.</p>

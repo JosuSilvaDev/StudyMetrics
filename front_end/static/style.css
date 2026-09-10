@@ -1022,9 +1022,236 @@ legend {
     }
 }
 
+                                                        /* =========================
+                                                        SESSÃO DE ESTUDO
+                                                        ========================= */
+
 /* =========================
-   SESSÃO DE ESTUDO
+   FUNDO GERAL DA PÁGINA
 ========================= */
+body {
+    background: linear-gradient(135deg, #eef2f7 0%, #dde7f2 50%, #eaf7f4 100%);
+}
+
+/* =========================
+   CARDS PRINCIPAIS
+========================= */
+.card-sessao,
+.card-cronometro,
+.card-calendario-estudo,
+.card-historico-sessoes {
+    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 22px;
+    box-shadow: 0 10px 30px rgba(15, 42, 67, 0.08);
+    padding: 28px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card-sessao:hover,
+.card-cronometro:hover,
+.card-calendario-estudo:hover,
+.card-historico-sessoes:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 35px rgba(15, 42, 67, 0.12);
+}
+
+/* =========================
+   TÍTULOS DOS CARDS
+========================= */
+.card-sessao legend,
+.card-calendario-estudo h2,
+.card-cronometro h2,
+.card-historico-sessoes h2 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #0f2a43;
+}
+
+.card-calendario-estudo p,
+.card-cronometro p,
+.card-historico-sessoes p {
+    color: #5f7187;
+}
+
+/* =========================
+   FORMULÁRIO MAIS BONITO
+========================= */
+.card-sessao form fieldset {
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+.campo {
+    margin-bottom: 18px;
+}
+
+.campo label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #17324d;
+}
+
+.campo input,
+.campo select,
+.campo textarea {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1px solid #d6e0ea;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.75);
+    color: #17324d;
+    font-size: 15px;
+    font-family: "Poppins", sans-serif;
+    outline: none;
+    transition: all 0.25s ease;
+    box-sizing: border-box;
+}
+
+.campo input::placeholder,
+.campo textarea::placeholder {
+    color: #8a9bad;
+}
+
+.campo input:focus,
+.campo select:focus,
+.campo textarea:focus {
+    border-color: #46f0d2;
+    box-shadow: 0 0 0 4px rgba(70, 240, 210, 0.18);
+    background: rgba(255, 255, 255, 0.95);
+}
+
+/* =========================
+   GRIDS DOS CAMPOS
+========================= */
+.tempo-grid,
+.questoes-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+/* =========================
+   BOTÃO PRINCIPAL
+========================= */
+.btn-principal {
+    background: linear-gradient(135deg, #46f0d2, #2fd3b7);
+    color: #0f2a43;
+    border: none;
+    border-radius: 14px;
+    padding: 14px 22px;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: "Poppins", sans-serif;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(70, 240, 210, 0.28);
+    transition: all 0.25s ease;
+}
+
+.btn-principal:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(70, 240, 210, 0.35);
+}
+
+/* =========================
+   BOTÕES SECUNDÁRIOS
+========================= */
+.btn-secundario,
+.btn-finalizar {
+    border-radius: 14px;
+    padding: 14px 22px;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: "Poppins", sans-serif;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.btn-secundario {
+    background: rgba(255, 255, 255, 0.75);
+    color: #17324d;
+    border: 1px solid #d6e0ea;
+}
+
+.btn-secundario:hover {
+    background: #ffffff;
+    transform: translateY(-2px);
+}
+
+.btn-finalizar {
+    background: rgba(255, 105, 105, 0.12);
+    color: #d93434;
+    border: 1px solid rgba(217, 52, 52, 0.18);
+}
+
+.btn-finalizar:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 105, 105, 0.18);
+}
+
+/* =========================
+   CRONÔMETRO
+========================= */
+#cronometro {
+    font-size: 54px;
+    font-weight: 700;
+    text-align: center;
+    color: #0f2a43;
+    letter-spacing: 4px;
+    margin: 40px 0 30px;
+}
+
+.cronometro-acoes {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+.sessao-atual-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+.sessao-atual-info div {
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(214, 224, 234, 0.7);
+    border-radius: 14px;
+    padding: 16px;
+}
+
+.sessao-atual-info span {
+    display: block;
+    font-size: 12px;
+    color: #7b8da1;
+    margin-bottom: 5px;
+}
+
+.sessao-atual-info strong {
+    color: #17324d;
+    font-size: 15px;
+}
+
+/* =========================
+   RESPONSIVIDADE
+========================= */
+@media (max-width: 900px) {
+    .tempo-grid,
+    .questoes-grid,
+    .sessao-atual-info {
+        grid-template-columns: 1fr;
+    }
+
+    .cronometro-acoes {
+        flex-wrap: wrap;
+    }
+}
 
 .sessao-grid {
     display: grid;
@@ -1773,8 +2000,8 @@ legend {
     border-radius: 15px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.05);
 }
-
-.card-cronometro {
+/*Cronometo*/
+.card-cronometro {  
     background: #ffffff !important;
     padding: 30px !important;
     border-radius: 15px !important;
@@ -1875,5 +2102,364 @@ legend {
 
     .card-cronometro {
         min-height: 400px;
+    }
+}
+
+/* =========================================
+   CRONÔMETRO PREMIUM - STUDYMETRICS
+========================================= */
+
+.cronometro-premium {
+    position: relative;
+    overflow: hidden;
+    min-height: 520px;
+    padding: 30px;
+    border-radius: 24px;
+    background:
+        radial-gradient(circle at 80% 10%, rgba(70, 240, 210, 0.18), transparent 32%),
+        linear-gradient(145deg, #102f49 0%, #0d253b 55%, #091d30 100%);
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow:
+        0 20px 45px rgba(15, 42, 67, 0.20),
+        inset 0 1px 0 rgba(255,255,255,0.05);
+    display: flex;
+    flex-direction: column;
+    color: white;
+}
+
+/* brilho decorativo */
+
+.cronometro-premium::before {
+    content: "";
+    position: absolute;
+    width: 250px;
+    height: 250px;
+    right: -100px;
+    top: -110px;
+    border-radius: 50%;
+    background: rgba(70, 240, 210, 0.08);
+    filter: blur(5px);
+}
+
+.cronometro-premium::after {
+    content: "";
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    left: -90px;
+    bottom: -90px;
+    border-radius: 50%;
+    background: rgba(59, 130, 246, 0.08);
+}
+
+/* CABEÇALHO */
+
+.cronometro-cabecalho {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.cronometro-tag {
+    display: inline-block;
+    margin-bottom: 7px;
+    color: #46f0d2;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.7px;
+}
+
+.cronometro-cabecalho h2 {
+    margin: 0;
+    color: #ffffff;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.cronometro-cabecalho p {
+    margin-top: 5px;
+    color: #9fb4c6;
+    font-size: 13px;
+}
+
+/* STATUS */
+
+.status-indicador {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 12px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.07);
+    color: #cbd8e4;
+    font-size: 12px;
+}
+
+.status-bolinha {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #46f0d2;
+    box-shadow: 0 0 10px rgba(70,240,210,0.8);
+}
+
+/* ÁREA DO CRONÔMETRO */
+
+.cronometro-area {
+    position: relative;
+    z-index: 2;
+    margin: 65px auto 40px;
+    width: 100%;
+    text-align: center;
+}
+
+.cronometro-brilho {
+    position: absolute;
+    width: 280px;
+    height: 100px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(70,240,210,0.08);
+    filter: blur(40px);
+    border-radius: 50%;
+}
+
+.cronometro-premium #cronometro {
+    position: relative;
+    z-index: 2;
+    margin: 0;
+    color: #ffffff;
+    font-size: clamp(42px, 5vw, 64px);
+    font-weight: 600;
+    letter-spacing: 7px;
+    font-variant-numeric: tabular-nums;
+    text-shadow:
+        0 0 18px rgba(70,240,210,0.15),
+        0 5px 20px rgba(0,0,0,0.25);
+}
+
+.cronometro-legenda {
+    position: relative;
+    z-index: 2;
+    display: block;
+    margin-top: 10px;
+    color: #6f8ba0;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 2px;
+}
+
+/* BOTÕES */
+
+.cronometro-acoes-premium {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+.btn-cronometro {
+    min-width: 105px;
+    padding: 12px 17px;
+    border-radius: 13px;
+    font-family: "Poppins", sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.25s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 7px;
+}
+
+.btn-cronometro:hover {
+    transform: translateY(-2px);
+}
+
+.btn-cronometro.iniciar {
+    border: none;
+    background: linear-gradient(135deg, #46f0d2, #29d9bd);
+    color: #08293e;
+    box-shadow: 0 8px 20px rgba(70,240,210,0.20);
+}
+
+.btn-cronometro.iniciar:hover {
+    box-shadow: 0 10px 28px rgba(70,240,210,0.35);
+}
+
+.btn-cronometro.pausar {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: #d8e4ec;
+}
+
+.btn-cronometro.pausar:hover {
+    background: rgba(255,255,255,0.12);
+}
+
+.btn-cronometro.zerar {
+    background: rgba(149, 35, 35, 0.419);
+    border: 1px solid rgba(239,68,68,0.18);
+    color: #664242;
+}
+
+.btn-cronometro.zerar:hover {
+    background: rgba(227, 4, 4, 0.2);
+}
+
+.icone-botao {
+    font-size: 12px;
+}
+
+/* DADOS INFERIORES */
+
+.cronometro-dados {
+    position: relative;
+    z-index: 2;
+    margin-top: auto;
+    padding-top: 35px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.cronometro-dado {
+    padding: 14px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.06);
+}
+
+.cronometro-dado span {
+    display: block;
+    margin-bottom: 4px;
+    color: #7892a6;
+    font-size: 10px;
+}
+
+.cronometro-dado strong {
+    color: #dce7ef;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+/* =========================================
+   CARD DA NOVA SESSÃO PREMIUM - Cronometro
+========================================= */
+
+.card-sessao {
+    position: relative;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,0.92),
+            rgba(245,252,251,0.76)
+        );
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255,255,255,0.8);
+    border-radius: 24px;
+    padding: 32px;
+    box-shadow: 0 15px 35px rgba(15,42,67,0.08);
+}
+
+.card-sessao legend {
+    margin-bottom: 25px;
+    color: #102f49;
+    font-size: 22px;
+    font-weight: 650;
+}
+
+.card-sessao .campo label {
+    color: #29455d;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.card-sessao .campo input,
+.card-sessao .campo select,
+.card-sessao .campo textarea {
+    background: rgba(255,255,255,0.72);
+    border: 1px solid #dbe6ec;
+    border-radius: 13px;
+    padding: 13px 15px;
+    box-shadow: inset 0 1px 2px rgba(15,42,67,0.02);
+    transition: 0.25s ease;
+}
+
+.card-sessao .campo input:hover,
+.card-sessao .campo select:hover,
+.card-sessao .campo textarea:hover {
+    border-color: #b7d8d2;
+}
+
+.card-sessao .campo input:focus,
+.card-sessao .campo select:focus,
+.card-sessao .campo textarea:focus {
+    background: white;
+    border-color: #46f0d2;
+    box-shadow: 0 0 0 4px rgba(70,240,210,0.12);
+}
+
+/* BOTÃO SALVAR */
+
+.card-sessao .btn-principal {
+    padding: 13px 22px;
+    border-radius: 13px;
+    border: none;
+    color: #0b3042;
+    font-weight: 700;
+    background: linear-gradient(135deg, #46f0d2, #30d8bc);
+    box-shadow: 0 8px 18px rgba(70,240,210,0.18);
+}
+
+.card-sessao .btn-principal:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(70,240,210,0.28);
+}
+
+/* GRID */
+
+.sessao-grid {
+    display: grid;
+    grid-template-columns: 1.35fr 1fr;
+    gap: 25px;
+    align-items: stretch;
+}
+
+/* RESPONSIVO */
+
+@media (max-width: 1000px) {
+    .sessao-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .cronometro-cabecalho {
+        flex-direction: column;
+    }
+
+    .cronometro-acoes-premium {
+        flex-direction: column;
+    }
+
+    .btn-cronometro {
+        width: 100%;
+    }
+
+    .cronometro-dados {
+        grid-template-columns: 1fr;
+    }
+
+    .cronometro-premium #cronometro {
+        font-size: 38px;
+        letter-spacing: 4px;
     }
 }
