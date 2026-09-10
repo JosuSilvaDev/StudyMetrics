@@ -226,3 +226,29 @@ btnZerar.addEventListener(
     "click",
     zerarCronometro
 );
+// StudyMetrics — alternador de modo noturno
+// Guarda a preferência em localStorage e aplica em data-tema no <html>.
+(function () {
+    var CHAVE = 'studymetrics-tema';
+
+    function aplicarTema(tema) {
+        document.documentElement.setAttribute('data-tema', tema);
+    }
+
+    // Aplica o tema salvo assim que o DOM estiver pronto para receber o listener
+    // (o valor inicial já foi aplicado de forma síncrona no <head> de cada página).
+    document.addEventListener('DOMContentLoaded', function () {
+        var botao = document.getElementById('botao_tema');
+        if (!botao) return;
+
+        botao.addEventListener('click', function () {
+            var atual = document.documentElement.getAttribute('data-tema') === 'escuro' ? 'claro' : 'escuro';
+            aplicarTema(atual);
+            try {
+                localStorage.setItem(CHAVE, atual);
+            } catch (e) {
+                // localStorage indisponível — o tema ainda funciona nesta sessão.
+            }
+        });
+    });
+})();
