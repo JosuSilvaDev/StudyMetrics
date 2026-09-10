@@ -252,3 +252,54 @@ btnZerar.addEventListener(
         });
     });
 })();
+
+const frases = [
+    {
+        texto: "A constância transforma pequenos esforços em grandes resultados.",
+        categoria: "Constância"
+    },
+
+    {
+        texto: "Você não precisa estar motivado todos os dias. Precisa continuar.",
+        categoria: "Disciplina"
+    },
+
+    {
+        texto: "Concentre sua energia no que você consegue fazer hoje.",
+        categoria: "Foco"
+    },
+
+    {
+        texto: "Um erro mostra exatamente onde o próximo aprendizado deve começar.",
+        categoria: "Evolução"
+    },
+
+    {
+        texto: "Uma tentativa difícil ainda é uma tentativa que faz você avançar.",
+        categoria: "Persistência"
+    },
+
+    {
+        texto: "Não conte apenas as horas estudadas. Observe o quanto você evoluiu.",
+        categoria: "Evolução"
+    }
+];
+
+function carregarFraseDoDia() {
+
+    const hoje = new Date();
+
+    const dia = hoje.getDate();
+
+    const indice = dia % frases.length;
+
+    const frase = frases[indice];
+
+    document.getElementById("frase_do_dia").textContent =
+        `“${frase.texto}”`;
+
+    document.getElementById("categoria_frase").textContent =
+        frase.categoria;
+}
+
+carregarFraseDoDia();
