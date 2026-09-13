@@ -2751,3 +2751,104 @@ body {
 .dias-calendario-premium {
     transition: all .3s ease;
 }
+
+
+
+
+
+.oculto {
+    display: none;
+}
+
+.titulo-meta {
+    margin: 5px 0 12px;
+    color: #29455d;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.resultado-sessao {
+    margin-top: 25px;
+    padding: 30px;
+    border-radius: 24px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.94),
+            rgba(237,253,249,.8)
+        );
+
+    border: 1px solid rgba(255,255,255,.8);
+
+    box-shadow:
+        0 15px 35px rgba(15,42,67,.08);
+}
+
+.resultado-tag {
+    color: #20bfa7;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.6px;
+}
+
+.resultado-cabecalho h2 {
+    margin: 5px 0;
+    color: #102f49;
+}
+
+.resultado-cabecalho p {
+    color: #708398;
+    font-size: 13px;
+}
+
+.resumo-sessao {
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 15px;
+
+    margin: 25px 0;
+}
+
+.resumo-item {
+    padding: 16px;
+    border-radius: 14px;
+
+    background: rgba(255,255,255,.72);
+
+    border: 1px solid #e3ecef;
+}
+
+.resumo-item span {
+    display: block;
+
+    color: #8798a8;
+
+    font-size: 11px;
+}
+
+.resumo-item strong {
+    display: block;
+
+    margin-top: 5px;
+
+    color: #18364e;
+
+    font-size: 14px;
+}
+
+.resultado-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+@media(max-width:800px) {
+    .resumo-sessao {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .resultado-grid {
+        grid-template-columns:1fr;
+    }
+}

@@ -1,12 +1,21 @@
+<!DOCTYPE html>
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sessão de estudo | StudyMetrics</title>
     <link rel="stylesheet" href="static/style.css">
-</head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Monoton&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">    
+
 </head>
 <body>
-<aside class="sidebar"> 
+
+<!-- =========================
+     MENU LATERAL
+========================= -->
+<aside class="sidebar">
     <div class="logo">
         <h1>StudyMetrics</h1>
     </div>
@@ -19,45 +28,61 @@
         <a href="perfil.html" class="menu-item">Perfil</a>
     </nav>
 </aside>
+
+<!-- =========================
+     CONTEÚDO PRINCIPAL
+========================= -->
 <main class="conteudo">
+
+    <!-- CABEÇALHO -->
     <header class="cabecalho-pagina">
         <h1>Sessão de estudo</h1>
         <p>Registre seus estudos e acompanhe seu desempenho.</p>
     </header>
-    <section class="mensagem-dia"> <!--Mensagen do Dia-->
+
+    <!-- =========================
+         MENSAGEM DO DIA
+    ========================= -->
+    <section class="mensagem-dia">
         <div class="mensagem-dia-icone">✦</div>
         <div class="mensagem-dia-conteudo">
             <span>Mensagem do dia</span>
-            <blockquote id="frase_do_dia">“A constância transforma pequenos esforços em grandes resultados.”</blockquote>
+            <blockquote id="frase_do_dia">
+                “A constância transforma pequenos esforços em grandes resultados.”
+            </blockquote>
             <p id="categoria_frase">Constância</p>
         </div>
     </section>
 
-    <section class="calendario-premium"> <!--Celendario 2.0-->        
+    <!-- =========================
+         CALENDÁRIO
+    ========================= -->
+    <section class="calendario-premium">
         <div class="calendario-topo-premium">
-
-            <div class="acoes-calendario"> 
-                <div class="controle-mes-premium">
-                    <button type="button" id="mes_anterior">‹</button>
-                    <h3 id="mes_ano">Setembro 2026</h3>
-                    <button type="button" id="proximo_mes">›</button>
-                </div>
-                <button type="button" id="toggle_calendario" class="toggle-calendario" title="Mostrar somente a semana">
-                    <span id="icone_toggle">⌃</span>
-                </button>
-            </div>
-
             <div>
                 <span class="calendario-tag">PLANEJAMENTO</span>
                 <h2>Calendário de estudos</h2>
                 <p>Acompanhe sessões, revisões e simulados.</p>
             </div>
-            <div class="controle-mes-premium">
-                <button type="button" id="mes_anterior">‹</button>
-                <h3 id="mes_ano">Setembro 2026</h3>
-                <button type="button" id="proximo_mes">›</button>
+
+            <div class="acoes-calendario">
+                <div class="controle-mes-premium">
+                    <button type="button" id="mes_anterior">‹</button>
+                    <h3 id="mes_ano">Setembro 2026</h3>
+                    <button type="button" id="proximo_mes">›</button>
+                </div>
+
+                <button
+                    type="button"
+                    id="toggle_calendario"
+                    class="toggle-calendario"
+                    title="Mostrar somente a semana"
+                >
+                    <span id="icone_toggle">⌃</span>
+                </button>
             </div>
         </div>
+
         <div class="dias-semana-premium">
             <span>DOM</span>
             <span>SEG</span>
@@ -67,160 +92,338 @@
             <span>SEX</span>
             <span>SÁB</span>
         </div>
+
         <div id="dias_calendario" class="dias-calendario-premium"></div>
+
         <div class="calendario-legenda-premium">
             <span><i class="ponto estudo"></i>Sessão</span>
             <span><i class="ponto revisao"></i>Revisão</span>
             <span><i class="ponto simulado"></i>Simulado</span>
         </div>
     </section>
+
+    <!-- =========================
+         PLANEJAMENTO + CRONÔMETRO
+    ========================= -->
     <section class="sessao-grid">
+
+        <!-- PLANEJAR SESSÃO -->
         <article class="card-sessao">
-            <form id="form_sessao">
+            <form id="form_planejamento">
                 <fieldset>
-                    <legend>Nova sessão</legend>
+                    <legend>Planejar sessão</legend>
+
                     <div class="campo">
                         <label for="materia_sessao">Matéria</label>
-                        <select name="materia" id="materia_sessao" required>
+                        <select id="materia_sessao" required>
                             <option value="">Selecione uma matéria</option>
-                            <option value="portugues">Português</option>
-                            <option value="administrativo">Direito Administrativo</option>
-                            <option value="constitucional">Direito Constitucional</option>
-                            <option value="rlm">Raciocínio Lógico</option>
+                            <option value="Português">Português</option>
+                            <option value="Direito Administrativo">Direito Administrativo</option>
+                            <option value="Direito Constitucional">Direito Constitucional</option>
+                            <option value="Raciocínio Lógico">Raciocínio Lógico</option>
                         </select>
                     </div>
+
                     <div class="campo">
                         <label for="assunto_sessao">Assunto</label>
-                        <input type="text" name="assunto" id="assunto_sessao" placeholder="Ex: Concordância verbal" required>
+                        <input
+                            type="text"
+                            id="assunto_sessao"
+                            placeholder="Ex: Crase"
+                            required
+                        >
                     </div>
+
+                    <p class="titulo-meta">Tempo planejado</p>
+
                     <div class="tempo-grid">
                         <div class="campo">
-                            <label for="horas_estudadas">Horas</label>
-                            <input type="number" name="horas" id="horas_estudadas" min="0" placeholder="1">
+                            <label for="horas_planejadas">Horas</label>
+                            <input
+                                type="number"
+                                id="horas_planejadas"
+                                min="0"
+                                placeholder="1"
+                            >
                         </div>
+
                         <div class="campo">
-                            <label for="minutos_estudados">Minutos</label>
-                            <input type="number" name="minutos" id="minutos_estudados" min="0" max="59" placeholder="30">
+                            <label for="minutos_planejados">Minutos</label>
+                            <input
+                                type="number"
+                                id="minutos_planejados"
+                                min="0"
+                                max="59"
+                                placeholder="30"
+                            >
                         </div>
                     </div>
-                    <div class="questoes-grid">
-                        <div class="campo">
-                            <label for="questoes_realizadas">Questões realizadas</label>
-                            <input type="number" name="questoes" id="questoes_realizadas" min="0" placeholder="30">
-                        </div>
-                        <div class="campo">
-                            <label for="acertos">Acertos</label>
-                            <input type="number" name="acertos" id="acertos" min="0" placeholder="24">
-                        </div>
-                    </div>
+
                     <div class="campo">
-                        <label for="observacao_sessao">Observação</label>
-                        <textarea name="observacao" id="observacao_sessao" rows="4" placeholder="Ex: tive dificuldade nas exceções da matéria..."></textarea>
+                        <label for="meta_questoes">Meta de questões</label>
+                        <input
+                            type="number"
+                            id="meta_questoes"
+                            min="0"
+                            placeholder="Ex: 30"
+                        >
                     </div>
-                    <button type="submit" class="btn-principal">Salvar sessão</button>
+
+                    <button type="submit" class="btn-principal">
+                        ▶ Iniciar sessão
+                    </button>
                 </fieldset>
             </form>
         </article>
-       </article>
 
-    <article class="cronometro-premium"> <!--Cronometro-->
-        <div class="cronometro-cabecalho">
-            <div>
-                <span class="cronometro-tag">SESSÃO ATUAL</span>
-                <h2>Tempo de foco</h2>
-                <p>Controle seu tempo líquido de estudo.</p>
+        <!-- CRONÔMETRO -->
+        <article class="cronometro-premium">
+            <div class="cronometro-cabecalho">
+                <div>
+                    <span class="cronometro-tag">SESSÃO ATUAL</span>
+                    <h2>Tempo de foco</h2>
+                    <p>Controle seu tempo líquido de estudo.</p>
+                </div>
+
+                <div class="status-indicador">
+                    <span class="status-bolinha"></span>
+                    <span id="status_cronometro">Aguardando</span>
+                </div>
             </div>
-            <div class="status-indicador">
-                <span class="status-bolinha"></span>
-                <span id="status_cronometro">Aguardando</span>
+
+            <div class="cronometro-area">
+                <div class="cronometro-brilho"></div>
+                <div id="cronometro">00:00:00</div>
+                <span class="cronometro-legenda">
+                    HORAS · MINUTOS · SEGUNDOS
+                </span>
             </div>
-        </div>
-        <div class="cronometro-area">
-            <div class="cronometro-brilho"></div>
-            <div id="cronometro">00:00:00</div>
-            <span class="cronometro-legenda">HORAS · MINUTOS · SEGUNDOS</span>
-        </div>
-        <div class="cronometro-acoes-premium">
-            <button type="button" id="btn_iniciar" class="btn-cronometro iniciar">
-                <span class="icone-botao">▶</span>
-                Iniciar
-            </button>
-            <button type="button" id="btn_pausar" class="btn-cronometro pausar">
-                <span class="icone-botao">Ⅱ</span>
-                Pausar
-            </button>
-            <button type="button" id="btn_zerar" class="btn-cronometro zerar">
-                <span class="icone-botao">↻</span>
-                Zerar
-            </button>
-        </div>
-        <div class="cronometro-dados">
-            <div class="cronometro-dado">
-                <span>Modo</span>
-                <strong>Tempo líquido</strong>
+
+            <div class="cronometro-acoes-premium">
+                <button
+                    type="button"
+                    id="btn_retomar"
+                    class="btn-cronometro iniciar"
+                >
+                    ▶ Retomar
+                </button>
+
+                <button
+                    type="button"
+                    id="btn_pausar"
+                    class="btn-cronometro pausar"
+                >
+                    Ⅱ Pausar
+                </button>
+
+                <button
+                    type="button"
+                    id="btn_finalizar"
+                    class="btn-cronometro zerar"
+                >
+                    ■ Finalizar
+                </button>
             </div>
-            <div class="cronometro-dado">
-                <span>Objetivo</span>
-                <strong>Manter o foco</strong>
+
+            <div class="cronometro-dados">
+                <div class="cronometro-dado">
+                    <span>Modo</span>
+                    <strong>Tempo líquido</strong>
+                </div>
+
+                <div class="cronometro-dado">
+                    <span>Objetivo</span>
+                    <strong>Manter o foco</strong>
+                </div>
             </div>
-        </div>
-    </article>
-    <section class="card-historico-sessoes"> <!--Historico de estudo-->
-    <div class="titulo-historico">
-        <h2>Histórico de sessões</h2>
-        <p>Acompanhe sua evolução ao longo dos estudos.</p>
-    </div>
+        </article>
 
-    <div class="tabela-responsiva">
-        <table class="tabela-sessoes">
-            <thead>
-                <tr>
-                    <th>Data</th>
-                    <th>Matéria</th>
-                    <th>Assunto</th>
-                    <th>Tempo</th>
-                    <th>Questões</th>
-                    <th>Acertos</th>
-                    <th>Desempenho</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                <tr>
-                    <td>09/09/2026</td>
-                    <td>Português</td>
-                    <td>Crase</td>
-                    <td>1h30</td>
-                    <td>30</td>
-                    <td>21</td>
-                    <td><span class="desempenho medio">70%</span></td>
-                </tr>
-
-                <tr>
-                    <td>08/09/2026</td>
-                    <td>Raciocínio Lógico</td>
-                    <td>Probabilidade</td>
-                    <td>1h00</td>
-                    <td>20</td>
-                    <td>11</td>
-                    <td><span class="desempenho ruim">55%</span></td>
-                </tr>
-
-                <tr>
-                    <td>07/09/2026</td>
-                    <td>Direito Administrativo</td>
-                    <td>Atos administrativos</td>
-                    <td>2h00</td>
-                    <td>40</td>
-                    <td>34</td>
-                    <td><span class="desempenho bom">85%</span></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
     </section>
+
+    <!-- =========================
+         RESULTADO DA SESSÃO
+         Começa escondido.
+         O JavaScript mostra quando
+         clicar em "Finalizar".
+    ========================= -->
+    <section id="resultado_sessao" class="resultado-sessao oculto">
+
+        <div class="resultado-cabecalho">
+            <div>
+                <span class="resultado-tag">
+                    SESSÃO FINALIZADA
+                </span>
+
+                <h2>Resultado da sessão</h2>
+
+                <p>
+                    Registre seu desempenho antes de salvar.
+                </p>
+            </div>
+        </div>
+
+        <div class="resumo-sessao">
+
+            <div class="resumo-item">
+                <span>Matéria</span>
+                <strong id="resultado_materia">-</strong>
+            </div>
+
+            <div class="resumo-item">
+                <span>Assunto</span>
+                <strong id="resultado_assunto">-</strong>
+            </div>
+
+            <div class="resumo-item">
+                <span>Tempo planejado</span>
+                <strong id="resultado_tempo_planejado">-</strong>
+            </div>
+
+            <div class="resumo-item">
+                <span>Meta</span>
+                <strong id="resultado_meta_questoes">-</strong>
+            </div>
+
+        </div>
+
+        <form id="form_resultado">
+
+            <div class="resultado-grid">
+
+                <div class="campo">
+                    <label for="questoes_realizadas">
+                        Questões realizadas
+                    </label>
+
+                    <input
+                        type="number"
+                        id="questoes_realizadas"
+                        min="0"
+                        required
+                    >
+                </div>
+
+                <div class="campo">
+                    <label for="acertos">
+                        Acertos
+                    </label>
+
+                    <input
+                        type="number"
+                        id="acertos"
+                        min="0"
+                        required
+                    >
+                </div>
+
+            </div>
+
+            <div class="campo">
+                <label for="observacao_sessao">
+                    Observação
+                </label>
+
+                <textarea
+                    id="observacao_sessao"
+                    rows="4"
+                    placeholder="Ex: ainda estou confundindo algumas regras de crase..."
+                ></textarea>
+            </div>
+
+            <button type="submit" class="btn-principal">
+                Salvar sessão
+            </button>
+
+        </form>
+
+    </section>
+
+    <!-- =========================
+         HISTÓRICO DE SESSÕES
+    ========================= -->
+    <section class="card-historico-sessoes">
+
+        <div class="titulo-historico">
+            <h2>Histórico de sessões</h2>
+            <p>Acompanhe sua evolução ao longo dos estudos.</p>
+        </div>
+
+        <div class="tabela-responsiva">
+
+            <table class="tabela-sessoes">
+
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Matéria</th>
+                        <th>Assunto</th>
+                        <th>Tempo</th>
+                        <th>Questões</th>
+                        <th>Acertos</th>
+                        <th>Desempenho</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td>09/09/2026</td>
+                        <td>Português</td>
+                        <td>Crase</td>
+                        <td>1h30</td>
+                        <td>30</td>
+                        <td>21</td>
+                        <td>
+                            <span class="desempenho medio">
+                                70%
+                            </span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>08/09/2026</td>
+                        <td>Raciocínio Lógico</td>
+                        <td>Probabilidade</td>
+                        <td>1h00</td>
+                        <td>20</td>
+                        <td>11</td>
+                        <td>
+                            <span class="desempenho ruim">
+                                55%
+                            </span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>07/09/2026</td>
+                        <td>Direito Administrativo</td>
+                        <td>Atos administrativos</td>
+                        <td>2h00</td>
+                        <td>40</td>
+                        <td>34</td>
+                        <td>
+                            <span class="desempenho bom">
+                                85%
+                            </span>
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
 </main>
-<script src="static/static/cronometro.js"></script>
+
+<!-- =========================
+     JAVASCRIPT
+========================= -->
+
+<script src="static/cronometro.js"></script>
 <script src="static/script.js"></script>
+
 </body>
 </html>
