@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Responder revisão | StudyMetrics</title>
+
+    <link rel="stylesheet" href="static/style.css">
+</head>
+
+<body>
+
+    <!-- =========================
+         MENU LATERAL
+    ========================== -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            <h1>StudyMetrics</h1>
+        </div>
+
+        <nav class="menu">
+
+            <a href="index.html" class="menu-item">
+                Dashboard
+            </a>
+
+            <a href="materias.html" class="menu-item">
+                Matérias
+            </a>
+
+            <a href="sessao.html" class="menu-item">
+                Sessão de estudo
+            </a>
+
+            <a href="caderno_de_questoes.html" class="menu-item">
+                Caderno de Erros
+            </a>
+
+            <a href="revisoes.html" class="menu-item ativo">
+                Revisões
+            </a>
+
+            <a href="perfil.html" class="menu-item">
+                Perfil
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+    <!-- =========================
+         CONTEÚDO PRINCIPAL
+    ========================== -->
+
+    <main class="conteudo pagina-revisao-questoes">
+
+
+        <!-- =========================
+             TOPO DA REVISÃO
+        ========================== -->
+
+        <header class="cabecalho-revisao-questoes">
+
+            <div>
+
+                <a
+                    href="revisoes.html"
+                    class="voltar-revisoes"
+                >
+                    ← Voltar para revisões
+                </a>
+
+                <span class="revisao-tag">
+                    SESSÃO DE REVISÃO
+                </span>
+
+                <h1 id="titulo_materia">
+                    Português
+                </h1>
+
+                <p id="titulo_assunto">
+                    Interpretação de texto
+                </p>
+
+            </div>
+
+
+            <!-- MODO ESCOLHIDO -->
+
+            <div class="modo-atual">
+
+                <span>
+                    Modo
+                </span>
+
+                <strong id="modo_revisao">
+                    Revisão rápida
+                </strong>
+
+                <small id="quantidade_revisao">
+                    10 questões
+                </small>
+
+            </div>
+
+        </header>
+
+
+        <!-- =========================
+             PROGRESSO DA REVISÃO
+        ========================== -->
+
+        <section class="progresso-revisao">
+
+            <div class="progresso-topo">
+
+                <span id="contador_questoes">
+                    Questão 1 de 10
+                </span>
+
+                <strong id="porcentagem_revisao">
+                    10%
+                </strong>
+
+            </div>
+
+
+            <div class="barra-progresso-revisao">
+
+                <div
+                    id="barra_revisao"
+                    class="barra-progresso-preenchimento"
+                    style="width:10%"
+                >
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             ÁREA DA QUESTÃO
+        ========================== -->
+
+        <section class="area-questao-revisao">
+
+
+            <!-- QUESTÃO -->
+
+            <article class="card-questao-revisao">
+
+                <div class="questao-topo">
+
+                    <span class="numero-questao">
+                        QUESTÃO
+                    </span>
+
+                    <span
+                        id="materia_questao"
+                        class="badge-materia"
+                    >
+                        Português
+                    </span>
+
+                </div>
+
+
+                <!-- ENUNCIADO -->
+
+                <div class="enunciado-questao">
+
+                    <h2 id="enunciado_questao">
+
+                        Leia o texto apresentado e assinale
+                        a alternativa correta de acordo com
+                        as informações fornecidas.
+
+                    </h2>
+
+                </div>
+
+
+                <!-- =========================
+                     RESPOSTA DO USUÁRIO
+                ========================== -->
+
+                <form id="form_resposta_revisao">
+
+
+                    <div class="campo">
+
+                        <label for="resposta_usuario">
+                            Sua resposta
+                        </label>
+
+                        <input
+                            type="text"
+                            id="resposta_usuario"
+                            name="resposta_usuario"
+                            placeholder="Ex: Alternativa C"
+                            autocomplete="off"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- OBSERVAÇÃO OPCIONAL -->
+
+                    <div class="campo">
+
+                        <label for="observacao_revisao">
+
+                            Observação
+
+                            <span class="campo-opcional">
+                                (opcional)
+                            </span>
+
+                        </label>
+
+                        <textarea
+                            id="observacao_revisao"
+                            name="observacao_revisao"
+                            rows="4"
+                            placeholder="Ex: confundi essa regra com outra..."
+                        ></textarea>
+
+                    </div>
+
+
+                    <!-- BOTÃO RESPONDER -->
+
+                    <div class="acoes-questao">
+
+                        <button
+                            type="submit"
+                            id="btn_responder"
+                            class="btn-responder-questao"
+                        >
+                            Responder
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </article>
+
+
+            <!-- =========================
+                 PAINEL LATERAL
+            ========================== -->
+
+            <aside class="painel-revisao">
+
+                <div class="painel-revisao-topo">
+
+                    <span class="revisao-tag">
+                        DESEMPENHO
+                    </span>
+
+                    <h3>
+                        Nesta revisão
+                    </h3>
+
+                </div>
+
+
+                <div class="estatisticas-revisao">
+
+                    <div class="estatistica-item">
+
+                        <span>
+                            Respondidas
+                        </span>
+
+                        <strong id="total_respondidas">
+                            0
+                        </strong>
+
+                    </div>
+
+
+                    <div class="estatistica-item correta">
+
+                        <span>
+                            Acertos
+                        </span>
+
+                        <strong id="total_acertos">
+                            0
+                        </strong>
+
+                    </div>
+
+
+                    <div class="estatistica-item errada">
+
+                        <span>
+                            Erros
+                        </span>
+
+                        <strong id="total_erros_revisao">
+                            0
+                        </strong>
+
+                    </div>
+
+
+                    <div class="estatistica-item">
+
+                        <span>
+                            Aproveitamento
+                        </span>
+
+                        <strong id="aproveitamento_revisao">
+                            0%
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- INFORMAÇÕES DA QUESTÃO -->
+
+                <div class="info-questao-revisao">
+
+                    <span>
+                        Assunto atual
+                    </span>
+
+                    <strong id="assunto_atual">
+                        Interpretação de texto
+                    </strong>
+
+                </div>
+
+            </aside>
+
+        </section>
+
+
+        <!-- =========================
+             RESULTADO DA RESPOSTA
+             
+             Começa escondido.
+             O JavaScript irá mostrar
+             depois da resposta.
+        ========================== -->
+
+        <section
+            id="resultado_resposta"
+            class="resultado-resposta oculto"
+        >
+
+            <div class="resultado-resposta-topo">
+
+                <span
+                    id="icone_resultado"
+                    class="icone-resultado"
+                >
+                    ✓
+                </span>
+
+                <div>
+
+                    <span id="status_resultado">
+                        RESPOSTA CORRETA
+                    </span>
+
+                    <h2 id="mensagem_resultado">
+                        Muito bem!
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <!-- COMPARAÇÃO -->
+
+            <div class="comparacao-respostas">
+
+                <div>
+
+                    <span>
+                        Sua resposta
+                    </span>
+
+                    <strong id="resultado_resposta_usuario">
+                        Alternativa B
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Resposta correta
+                    </span>
+
+                    <strong id="resultado_resposta_correta">
+                        Alternativa C
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- OBSERVAÇÃO ORIGINAL -->
+
+            <div
+                id="bloco_observacao_original"
+                class="observacao-original"
+            >
+
+                <span>
+                    Anotação do Caderno de Erros
+                </span>
+
+                <p id="observacao_original">
+
+                    Revisar a diferença entre os conceitos
+                    antes da próxima tentativa.
+
+                </p>
+
+            </div>
+
+
+            <!-- OBSERVAÇÃO DA REVISÃO -->
+
+            <div
+                id="bloco_observacao_atual"
+                class="observacao-atual"
+            >
+
+                <span>
+                    Sua observação nesta revisão
+                </span>
+
+                <p id="observacao_atual">
+                    Nenhuma observação registrada.
+                </p>
+
+            </div>
+
+
+            <!-- PRÓXIMA QUESTÃO -->
+
+            <div class="acoes-resultado">
+
+                <button
+                    type="button"
+                    id="btn_proxima_questao"
+                    class="btn-proxima-questao"
+                >
+                    Próxima questão →
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             FINAL DA REVISÃO
+             
+             Também começa escondido.
+        ========================== -->
+
+        <section
+            id="fim_revisao"
+            class="fim-revisao oculto"
+        >
+
+            <div class="fim-revisao-conteudo">
+
+                <span class="revisao-tag">
+                    REVISÃO CONCLUÍDA
+                </span>
+
+                <h2>
+                    Sessão finalizada
+                </h2>
+
+                <p>
+                    Veja como foi seu desempenho nesta revisão.
+                </p>
+
+
+                <div class="resumo-final-revisao">
+
+                    <div>
+
+                        <span>
+                            Questões
+                        </span>
+
+                        <strong id="final_questoes">
+                            10
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Acertos
+                        </span>
+
+                        <strong id="final_acertos">
+                            8
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Erros
+                        </span>
+
+                        <strong id="final_erros">
+                            2
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Aproveitamento
+                        </span>
+
+                        <strong id="final_aproveitamento">
+                            80%
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="acoes-final-revisao">
+
+                    <a
+                        href="revisoes.html"
+                        class="btn-voltar-revisoes"
+                    >
+                        Voltar para revisões
+                    </a>
+
+                    <button
+                        type="button"
+                        id="btn_revisar_erros"
+                        class="btn-revisar-erros"
+                    >
+                        Revisar erros novamente
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+    <!-- =========================
+         JAVASCRIPT
+    ========================== -->
+
+    <script src="static/revisao_questoes.js"></script>
+
+</body>
+
+</html>
