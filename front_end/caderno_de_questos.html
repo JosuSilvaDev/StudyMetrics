@@ -17,8 +17,10 @@
 
 <body>
 
+    <!-- =========================
+         MENU LATERAL
+    ========================== -->
     <aside class="sidebar">
-
         <div class="logo">
             <h1>StudyMetrics</h1>
         </div>
@@ -27,246 +29,460 @@
             <a href="index.html" class="menu-item">Dashboard</a>
             <a href="materias.html" class="menu-item">Matérias</a>
             <a href="sessao.html" class="menu-item">Sessão de estudo</a>
-            <a href="caderno_de_questoes.html" class="menu-item ativo">Caderno de erros</a>
+            <a href="caderno_de_questoes.html" class="menu-item ativo">Caderno de Erros</a>
             <a href="revisoes.html" class="menu-item">Revisões</a>
             <a href="perfil.html" class="menu-item">Perfil</a>
         </nav>
-
     </aside>
 
+    <!-- =========================
+         CONTEÚDO PRINCIPAL
+    ========================== -->
     <main class="conteudo">
 
-        <header class="cabecalho-pagina">
+        <!-- CABEÇALHO -->
+        <header class="cabecalho-pagina cabecalho-erros">
+            <div>
+                <span class="pagina-tag">🧠 APRENDER COM OS ERROS</span>
+                <h1>Caderno de Erros</h1>
+                <p>
+                    Registre apenas as questões que você errou e descubra
+                    quais dificuldades aparecem com mais frequência.
+                </p>
+            </div>
 
-            <h1>Caderno de erros</h1>
-
-            <p>
-                Registre suas questões erradas e descubra quais dificuldades mais se repetem.
-            </p>
-
+            <div class="icone-pagina">
+                🎯
+            </div>
         </header>
 
-        <section class="caderno-erros-container">
+        <!-- =========================
+             RESUMO
+        ========================== -->
+        <section class="resumo-erros">
 
-            <!-- FORMULÁRIO -->
+            <article class="card-resumo">
+                <div class="resumo-icone">❌</div>
+                <div>
+                    <span>Erros registrados</span>
+                    <strong id="total_erros">12</strong>
+                </div>
+            </article>
 
-            <article class="card-caderno-erros">
+            <article class="card-resumo">
+                <div class="resumo-icone">🔁</div>
+                <div>
+                    <span>Para revisar</span>
+                    <strong id="total_revisoes">5</strong>
+                </div>
+            </article>
 
-                <form>
+            <article class="card-resumo">
+                <div class="resumo-icone">⚠️</div>
+                <div>
+                    <span>Motivo mais frequente</span>
+                    <strong id="motivo_principal">Interpretação</strong>
+                </div>
+            </article>
 
-                    <h2>Registrar erro</h2>
+        </section>
 
-                    <label for="questao">
-                        Digite a questão:
-                    </label>
+        <!-- =========================
+             FORMULÁRIO DE ERRO
+        ========================== -->
+        <section class="area-caderno">
 
-                    <input
-                        type="text"
-                        id="questao"
-                        name="questao"
-                        placeholder="Digite ou cole o enunciado"
-                    >
+            <article class="card-registrar-erro">
 
-                    <label for="disciplina">
-                        Disciplina:
-                    </label>
+                <div class="titulo-card">
+                    <div>
+                        <span class="card-tag">NOVA QUESTÃO</span>
+                        <h2>Registrar erro ✍️</h2>
+                        <p>
+                            Cadastre somente questões que realmente valem a pena revisar.
+                        </p>
+                    </div>
+                </div>
 
-                    <select
-                        name="disciplina"
-                        id="disciplina"
-                    >
+                <form id="form_erro">
 
-                        <option value="">
-                            Selecione uma disciplina
-                        </option>
-
-                        <option value="portugues">
-                            Português
-                        </option>
-
-                        <option value="administrativo">
-                            Direito Administrativo
-                        </option>
-
-                        <option value="rlm">
-                            Raciocínio Lógico
-                        </option>
-
-                    </select>
-
-
-                    <label for="assunto">
-                        Assunto:
-                    </label>
-
-                    <input
-                        type="text"
-                        name="assunto"
-                        id="assunto"
-                        placeholder="Ex: Concordância verbal"
-                    >
-
-
-                    <h3>Motivo do erro</h3>
-
-
-                    <div class="motivos">
-
-                        <label>
-                            <input
-                                type="radio"
-                                name="motivo_erro"
-                                value="nao_sabia"
-                            >
-                            Não sabia
+                    <!-- QUESTÃO -->
+                    <div class="campo">
+                        <label for="questao">
+                            📄 Enunciado da questão
                         </label>
 
+                        <textarea
+                            id="questao"
+                            name="questao"
+                            rows="5"
+                            placeholder="Cole aqui o enunciado da questão..."
+                            required
+                        ></textarea>
+                    </div>
 
-                        <label>
-                            <input
-                                type="radio"
-                                name="motivo_erro"
-                                value="esqueci"
+                    <!-- MATÉRIA E ASSUNTO -->
+                    <div class="campos-duplos">
+
+                        <div class="campo">
+                            <label for="disciplina">
+                                📚 Matéria
+                            </label>
+
+                            <select
+                                name="disciplina"
+                                id="disciplina"
+                                required
                             >
-                            Esqueci
-                        </label>
+                                <option value="">
+                                    Selecione uma matéria
+                                </option>
 
+                                <option value="portugues">
+                                    Português
+                                </option>
 
-                        <label>
+                                <option value="administrativo">
+                                    Direito Administrativo
+                                </option>
+
+                                <option value="constitucional">
+                                    Direito Constitucional
+                                </option>
+
+                                <option value="rlm">
+                                    Raciocínio Lógico
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="campo">
+                            <label for="assunto">
+                                📝 Assunto
+                            </label>
+
                             <input
-                                type="radio"
-                                name="motivo_erro"
-                                value="interpretacao"
+                                type="text"
+                                name="assunto"
+                                id="assunto"
+                                placeholder="Ex: Crase"
+                                required
                             >
-                            Interpretação
-                        </label>
-
-
-                        <label>
-                            <input
-                                type="radio"
-                                name="motivo_erro"
-                                value="desatencao"
-                            >
-                            Desatenção
-                        </label>
-
-
-                        <label>
-                            <input
-                                type="radio"
-                                name="motivo_erro"
-                                value="confusao"
-                            >
-                            Confusão entre conceitos
-                        </label>
-
-
-                        <label>
-                            <input
-                                type="radio"
-                                name="motivo_erro"
-                                value="calculo"
-                            >
-                            Erro de cálculo
-                        </label>
-
-
-                        <label>
-                            <input
-                                type="radio"
-                                name="motivo_erro"
-                                value="chute"
-                            >
-                            Chute
-                        </label>
+                        </div>
 
                     </div>
 
+                    <!-- MOTIVO DO ERRO -->
+                    <div class="campo">
 
-                    <label for="resposta_correta">
-                        Resposta correta:
+                        <label class="titulo-motivos">
+                            🤔 Por que você errou?
+                        </label>
+
+                        <div class="motivos">
+
+                            <label class="motivo-card">
+                                <input
+                                    type="radio"
+                                    name="motivo_erro"
+                                    value="nao_sabia"
+                                    required
+                                >
+                                <span class="emoji-motivo">❓</span>
+                                <span>Não sabia</span>
+                            </label>
+
+                            <label class="motivo-card">
+                                <input
+                                    type="radio"
+                                    name="motivo_erro"
+                                    value="esqueci"
+                                >
+                                <span class="emoji-motivo">🧠</span>
+                                <span>Esqueci</span>
+                            </label>
+
+                            <label class="motivo-card">
+                                <input
+                                    type="radio"
+                                    name="motivo_erro"
+                                    value="interpretacao"
+                                >
+                                <span class="emoji-motivo">📖</span>
+                                <span>Interpretação</span>
+                            </label>
+
+                            <label class="motivo-card">
+                                <input
+                                    type="radio"
+                                    name="motivo_erro"
+                                    value="desatencao"
+                                >
+                                <span class="emoji-motivo">👀</span>
+                                <span>Desatenção</span>
+                            </label>
+
+                            <label class="motivo-card">
+                                <input
+                                    type="radio"
+                                    name="motivo_erro"
+                                    value="confusao"
+                                >
+                                <span class="emoji-motivo">🔀</span>
+                                <span>Confusão</span>
+                            </label>
+
+                            <label class="motivo-card">
+                                <input
+                                    type="radio"
+                                    name="motivo_erro"
+                                    value="calculo"
+                                >
+                                <span class="emoji-motivo">🧮</span>
+                                <span>Erro de cálculo</span>
+                            </label>
+
+                            <label class="motivo-card">
+                                <input
+                                    type="radio"
+                                    name="motivo_erro"
+                                    value="chute"
+                                >
+                                <span class="emoji-motivo">🎲</span>
+                                <span>Chute</span>
+                            </label>
+
+                        </div>
+                    </div>
+
+                    <!-- RESPOSTA -->
+                    <div class="campo">
+                        <label for="resposta_correta">
+                            ✅ Resposta correta
+                        </label>
+
+                        <input
+                            type="text"
+                            name="resposta_correta"
+                            id="resposta_correta"
+                            placeholder="Ex: Alternativa C"
+                            required
+                        >
+                    </div>
+
+                    <!-- OBSERVAÇÃO -->
+                    <div class="campo">
+                        <label for="observacao_erro">
+                            💡 O que você aprendeu com esse erro?
+                        </label>
+
+                        <textarea
+                            name="observacao"
+                            id="observacao_erro"
+                            rows="4"
+                            placeholder="Ex: revisar regras de crase antes de pronomes..."
+                        ></textarea>
+                    </div>
+
+                    <!-- ADICIONAR À REVISÃO -->
+                    <label class="card-adicionar-revisao">
+
+                        <input
+                            type="checkbox"
+                            id="adicionar_revisao"
+                            name="adicionar_revisao"
+                        >
+
+                        <div class="revisao-icone">
+                            🔁
+                        </div>
+
+                        <div>
+                            <strong>Adicionar às revisões</strong>
+
+                            <span>
+                                Quero revisar essa questão novamente depois.
+                            </span>
+                        </div>
+
                     </label>
 
-                    <input
-                        type="text"
-                        name="resposta_correta"
-                        id="resposta_correta"
-                        placeholder="Ex: Alternativa C"
+                    <!-- BOTÃO -->
+                    <button
+                        type="submit"
+                        class="btn-salvar-erro"
                     >
-
-
-                    <label for="observacao_erro">
-                        Observação:
-                    </label>
-
-                    <textarea
-                        name="observacao"
-                        id="observacao_erro"
-                        rows="4"
-                        placeholder="Por que você errou? O que precisa revisar?"
-                    ></textarea>
-
-
-                    <button type="submit">
-                        Salvar erro
+                        💾 Salvar erro
                     </button>
 
                 </form>
 
             </article>
 
+        </section>
 
-            <!-- TABELA -->
+        <!-- =========================
+             ERROS REGISTRADOS
+        ========================== -->
+        <section class="card-erros-registrados">
 
-            <section id="tabela_de_questao">
+            <div class="titulo-secao">
 
-                <h2>Questões mais erradas</h2>
+                <div>
+                    <span class="card-tag">
+                        HISTÓRICO
+                    </span>
 
-                <table>
+                    <h2>
+                        Erros registrados 📋
+                    </h2>
+
+                    <p>
+                        Consulte as questões que você precisa dominar.
+                    </p>
+                </div>
+
+                <div class="filtros-erros">
+                    <button class="filtro ativo">
+                        Todos
+                    </button>
+
+                    <button class="filtro">
+                        Para revisar
+                    </button>
+                </div>
+
+            </div>
+
+            <div class="tabela-responsiva">
+
+                <table class="tabela-erros">
 
                     <thead>
-
                         <tr>
-                            <th>Questão</th>
-                            <th>Enunciado</th>
-                            <th>Disciplina</th>
+                            <th>Data</th>
+                            <th>Matéria</th>
+                            <th>Assunto</th>
                             <th>Motivo</th>
-                            <th>Erros</th>
+                            <th>Revisar</th>
                         </tr>
-
                     </thead>
-
 
                     <tbody>
 
                         <tr>
-                            <td>1</td>
-                            <td>Enunciado da questão...</td>
+                            <td>13/09/2026</td>
                             <td>Português</td>
-                            <td>Esqueci</td>
-                            <td>10</td>
+                            <td>Crase</td>
+
+                            <td>
+                                <span class="badge-motivo">
+                                    📖 Interpretação
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="badge-revisao">
+                                    🔁 Sim
+                                </span>
+                            </td>
                         </tr>
 
-
                         <tr>
-                            <td>2</td>
-                            <td>Enunciado da questão...</td>
+                            <td>12/09/2026</td>
                             <td>Raciocínio Lógico</td>
-                            <td>Não sabia</td>
-                            <td>1</td>
+                            <td>Probabilidade</td>
+
+                            <td>
+                                <span class="badge-motivo">
+                                    ❓ Não sabia
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="badge-nao">
+                                    Não
+                                </span>
+                            </td>
                         </tr>
 
                     </tbody>
 
                 </table>
 
-            </section>
+            </div>
+
+        </section>
+
+        <!-- =========================
+             MOTIVOS MAIS FREQUENTES
+        ========================== -->
+        <section class="card-estatisticas-erros">
+
+            <div class="titulo-secao">
+                <div>
+                    <span class="card-tag">
+                        ANÁLISE
+                    </span>
+
+                    <h2>
+                        Motivos mais frequentes 📊
+                    </h2>
+
+                    <p>
+                        Entenda o que mais está prejudicando seu desempenho.
+                    </p>
+                </div>
+            </div>
+
+            <div class="lista-motivos">
+
+                <div class="linha-motivo">
+                    <div class="motivo-info">
+                        <span>📖 Interpretação</span>
+                        <strong>8</strong>
+                    </div>
+
+                    <div class="barra">
+                        <div
+                            class="barra-progresso"
+                            style="width:80%"
+                        ></div>
+                    </div>
+                </div>
+
+                <div class="linha-motivo">
+                    <div class="motivo-info">
+                        <span>❓ Não sabia</span>
+                        <strong>6</strong>
+                    </div>
+
+                    <div class="barra">
+                        <div
+                            class="barra-progresso"
+                            style="width:60%"
+                        ></div>
+                    </div>
+                </div>
+
+                <div class="linha-motivo">
+                    <div class="motivo-info">
+                        <span>👀 Desatenção</span>
+                        <strong>4</strong>
+                    </div>
+
+                    <div class="barra">
+                        <div
+                            class="barra-progresso"
+                            style="width:40%"
+                        ></div>
+                    </div>
+                </div>
+
+            </div>
 
         </section>
 
     </main>
 
 </body>
-
-</html>
