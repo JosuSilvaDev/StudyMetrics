@@ -640,166 +640,52 @@
          em "Iniciar revisão".
     ========================================== -->
 
-    <section
-        id="escolher_modo_revisao"
-        class="modal-modo oculto"
-    >
+    <div id="escolher_modo_revisao" class="modal-modo oculto">
 
-        <div class="modal-modo-conteudo">
+    <div class="modal-modo-conteudo">
 
+        <h2>Escolha o modo de revisão</h2>
 
-            <!-- CABEÇALHO DO MODAL -->
+        <div class="modos-revisao">
 
-            <div class="modal-modo-topo">
+            <button
+                type="button"
+                class="modo-revisao"
+                data-modo="rapida"
+                data-quantidade="10"
+            >
+                <strong>Rápida</strong>
+                <span>10 questões</span>
+            </button>
 
-                <div>
+            <button
+                type="button"
+                class="modo-revisao"
+                data-modo="normal"
+                data-quantidade="30"
+            >
+                <strong>Normal</strong>
+                <span>30 questões</span>
+            </button>
 
-                    <span class="revisao-tag">
-                        PREPARAR REVISÃO
-                    </span>
-
-                    <h2>
-                        Escolha o modo de revisão
-                    </h2>
-
-                    <p id="revisao_selecionada">
-                        Matéria • Assunto
-                    </p>
-
-                </div>
-
-
-                <button
-                    type="button"
-                    id="fechar_modo"
-                    class="fechar-modal"
-                >
-                    ×
-                </button>
-
-            </div>
-
-
-            <!-- =========================
-                 MODOS DE REVISÃO
-            ========================== -->
-
-            <div class="modos-revisao">
-
-
-                <!-- RÁPIDA -->
-
-                <button
-                    type="button"
-                    class="modo-revisao"
-                    data-quantidade="10"
-                    data-modo="rapida"
-                >
-
-                    <span class="modo-icone">
-                        ⚡
-                    </span>
-
-                    <strong>
-                        Revisão rápida
-                    </strong>
-
-                    <span class="quantidade-questoes">
-                        10 questões
-                    </span>
-
-                    <small>
-                        Para revisar rapidamente
-                        seus principais erros.
-                    </small>
-
-                </button>
-
-
-                <!-- NORMAL -->
-
-                <button
-                    type="button"
-                    class="modo-revisao destaque"
-                    data-quantidade="30"
-                    data-modo="normal"
-                >
-
-                    <span class="modo-recomendado">
-                        RECOMENDADA
-                    </span>
-
-                    <span class="modo-icone">
-                        📚
-                    </span>
-
-                    <strong>
-                        Revisão normal
-                    </strong>
-
-                    <span class="quantidade-questoes">
-                        30 questões
-                    </span>
-
-                    <small>
-                        Uma sessão equilibrada
-                        para consolidar o conteúdo.
-                    </small>
-
-                </button>
-
-
-                <!-- COMPLETA -->
-
-                <button
-                    type="button"
-                    class="modo-revisao"
-                    data-quantidade="60"
-                    data-modo="completa"
-                >
-
-                    <span class="modo-icone">
-                        🔥
-                    </span>
-
-                    <strong>
-                        Revisão completa
-                    </strong>
-
-                    <span class="quantidade-questoes">
-                        60 questões
-                    </span>
-
-                    <small>
-                        Uma revisão mais longa
-                        e aprofundada.
-                    </small>
-
-                </button>
-
-            </div>
-
-
-            <!-- AVISO -->
-
-            <p class="aviso-quantidade">
-
-                Se houver menos questões disponíveis
-                do que o modo escolhido, serão utilizadas
-                todas as questões disponíveis.
-
-            </p>
+            <button
+                type="button"
+                class="modo-revisao"
+                data-modo="completa"
+                data-quantidade="60"
+            >
+                <strong>Completa</strong>
+                <span>60 questões</span>
+            </button>
 
         </div>
-
-    </section>
-
-
+    </div>
     <!-- =========================
          JAVASCRIPT
     ========================== -->
 
     <script src="static/js/revisao_questoes.js"></script>
+    <script src="static/js/revisao.js"></script>
 
 </body>
 

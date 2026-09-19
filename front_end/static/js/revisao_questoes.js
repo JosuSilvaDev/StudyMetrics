@@ -1,827 +1,1183 @@
-document.addEventListener("DOMContentLoaded",function(){
-
-// =========================================================
-// ELEMENTOS DA PÁGINA
-// =========================================================
-
-const tituloMateria=document.getElementById("titulo_materia");
-const tituloAssunto=document.getElementById("titulo_assunto");
-const modoRevisao=document.getElementById("modo_revisao");
-const quantidadeRevisao=document.getElementById("quantidade_revisao");
-
-const contadorQuestoes=document.getElementById("contador_questoes");
-const porcentagemRevisao=document.getElementById("porcentagem_revisao");
-const barraRevisao=document.getElementById("barra_revisao");
-
-const materiaQuestao=document.getElementById("materia_questao");
-const enunciadoQuestao=document.getElementById("enunciado_questao");
-const assuntoAtual=document.getElementById("assunto_atual");
-
-const formResposta=document.getElementById("form_resposta_revisao");
-const respostaUsuario=document.getElementById("resposta_usuario");
-const observacaoRevisao=document.getElementById("observacao_revisao");
-const btnResponder=document.getElementById("btn_responder");
-
-const totalRespondidas=document.getElementById("total_respondidas");
-const totalAcertos=document.getElementById("total_acertos");
-const totalErros=document.getElementById("total_erros_revisao");
-const aproveitamentoRevisao=document.getElementById("aproveitamento_revisao");
-
-const resultadoResposta=document.getElementById("resultado_resposta");
-const iconeResultado=document.getElementById("icone_resultado");
-const statusResultado=document.getElementById("status_resultado");
-const mensagemResultado=document.getElementById("mensagem_resultado");
-
-const resultadoRespostaUsuario=document.getElementById("resultado_resposta_usuario");
-const resultadoRespostaCorreta=document.getElementById("resultado_resposta_correta");
-
-const observacaoOriginal=document.getElementById("observacao_original");
-const observacaoAtual=document.getElementById("observacao_atual");
-
-const btnProxima=document.getElementById("btn_proxima_questao");
-
-const areaQuestao=document.querySelector(".area-questao-revisao");
-const progressoRevisao=document.querySelector(".progresso-revisao");
-const fimRevisao=document.getElementById("fim_revisao");
-
-const finalQuestoes=document.getElementById("final_questoes");
-const finalAcertos=document.getElementById("final_acertos");
-const finalErros=document.getElementById("final_erros");
-const finalAproveitamento=document.getElementById("final_aproveitamento");
-
-const btnRevisarErros=document.getElementById("btn_revisar_erros");
-
-
-// =========================================================
-// DADOS RECEBIDOS DA PÁGINA DE REVISÕES
-// =========================================================
-
-let revisaoSalva=null;
-
-try{
-    revisaoSalva=JSON.parse(
-        sessionStorage.getItem("revisaoAtual")
-    );
-}catch(erro){
-    console.error("Erro ao carregar revisão:",erro);
-}
-
-
-// Caso abra revisao_questoes.html diretamente
-// usamos estes dados apenas para teste.
-
-const configuracao=revisaoSalva||{
-    materia:"Português",
-    assunto:"Interpretação de texto",
-    modo:"rapida",
-    quantidade:10
-};
-
-
-// =========================================================
-// QUESTÕES DE TESTE
-//
-// Futuramente serão substituídas pelas questões salvas
-// no Caderno de Erros.
-// =========================================================
-
-const questoesTeste=[
-    {
-        id:1,
-        materia:configuracao.materia,
-        assunto:configuracao.assunto,
-        enunciado:"Questão de teste 1. Digite A para responder corretamente.",
-        respostaCorreta:"A",
-        observacaoOriginal:"Questão cadastrada anteriormente no Caderno de Erros."
-    },
-    {
-        id:2,
-        materia:configuracao.materia,
-        assunto:configuracao.assunto,
-        enunciado:"Questão de teste 2. Digite C para responder corretamente.",
-        respostaCorreta:"C",
-        observacaoOriginal:"Revisar o conceito relacionado a esta questão."
-    },
-    {
-        id:3,
-        materia:configuracao.materia,
-        assunto:configuracao.assunto,
-        enunciado:"Questão de teste 3. Digite B para responder corretamente.",
-        respostaCorreta:"B",
-        observacaoOriginal:"Houve confusão entre conceitos."
-    },
-    {
-        id:4,
-        materia:configuracao.materia,
-        assunto:configuracao.assunto,
-        enunciado:"Questão de teste 4. Digite D para responder corretamente.",
-        respostaCorreta:"D",
-        observacaoOriginal:"Questão marcada para revisão."
-    },
-    {
-        id:5,
-        materia:configuracao.materia,
-        assunto:configuracao.assunto,
-        enunciado:"Questão de teste 5. Digite A para responder corretamente.",
-        respostaCorreta:"A",
-        observacaoOriginal:"Erro anterior causado por desatenção."
-    },
-    {
-        id:6,
-        materia:configuracao.materia,
-        assunto:configuracao.assunto,
-        enunciado:"Questão de teste 6. Digite E para responder corretamente.",
-        respostaCorreta:"E",
-        observacaoOriginal:"Revisar novamente antes da prova."
-    },
-    {
-        id:7,
-        materia:configuracao.materia,
-        assunto:configuracao.assunto,
-        enunciado:"Questão de teste 7. Digite B para responder corretamente.",
-        respostaCorreta:"B",
-        observacaoOriginal:"Questão importante."
-    },
-    {
-        id:8,
-        materia:configuracao.materia,
-        assunto:configuracao.assunto,
-        enunciado:"Questão de teste 8. Digite C para responder corretamente.",
-        respostaCorreta:"C",
-        observacaoOriginal:"Conteúdo precisa de reforço."
-    },
-    {
-        id:9,
-        materia:configuracao.materia,
-        assunto:configuracao.assunto,
-        enunciado:"Questão de teste 9. Digite D para responder corretamente.",
-        respostaCorreta:"D",
-        observacaoOriginal:"Erro de interpretação na primeira tentativa."
-    },
-    {
-        id:10,
-        materia:configuracao.materia,
-        assunto:configuracao.assunto,
-        enunciado:"Questão de teste 10. Digite A para responder corretamente.",
-        respostaCorreta:"A",
-        observacaoOriginal:"Última questão de teste."
-    }
-];
-
-
-// =========================================================
-// VARIÁVEIS DA REVISÃO
-// =========================================================
-
-let questoes=[];
-let indiceAtual=0;
-
-let respondidas=0;
-let acertos=0;
-let erros=0;
-
-let questaoRespondida=false;
-
-let questoesErradas=[];
-
-
-// =========================================================
-// NORMALIZAR TEXTO
-//
-// Permite aceitar:
-// A
-// a
-// Alternativa A
-// alternativa a
-// =========================================================
-
-function normalizarResposta(texto){
-
-    return texto
-        .trim()
-        .toLowerCase()
-        .replace("alternativa","")
-        .trim();
-
-}
-
-
-// =========================================================
-// EMBARALHAR QUESTÕES
-// =========================================================
-
-function embaralhar(lista){
-
-    const copia=[...lista];
-
-    for(let i=copia.length-1;i>0;i--){
-
-        const indiceAleatorio=
-            Math.floor(
-                Math.random()*(i+1)
-            );
-
-        [copia[i],copia[indiceAleatorio]]=
-        [copia[indiceAleatorio],copia[i]];
-    }
-
-    return copia;
-
-}
-
-
-// =========================================================
-// NOME DO MODO
-// =========================================================
-
-function nomeModo(modo){
-
-    if(modo==="rapida"){
-        return "Revisão rápida";
-    }
-
-    if(modo==="normal"){
-        return "Revisão normal";
-    }
-
-    if(modo==="completa"){
-        return "Revisão completa";
-    }
-
-    return "Revisão";
-}
-
-
-// =========================================================
-// PREPARAR REVISÃO
-// =========================================================
-
-function prepararRevisao(){
-
-    tituloMateria.textContent=
-        configuracao.materia;
-
-    tituloAssunto.textContent=
-        configuracao.assunto;
-
-    materiaQuestao.textContent=
-        configuracao.materia;
-
-    assuntoAtual.textContent=
-        configuracao.assunto;
-
-    modoRevisao.textContent=
-        nomeModo(configuracao.modo);
-
-
-    // Embaralha as questões
-
-    const embaralhadas=
-        embaralhar(questoesTeste);
-
-
-    // Se pediu 30 questões mas só existem 10,
-    // utiliza somente as disponíveis.
-
-    const quantidadeFinal=
-        Math.min(
-            configuracao.quantidade,
-            embaralhadas.length
+document.addEventListener("DOMContentLoaded", function () {
+
+    const STORAGE_ERROS = "studymetrics_erros";
+    const STORAGE_REVISOES = "studymetrics_revisoes";
+
+    const $ = (id) => document.getElementById(id);
+
+    const tituloMateria = $("titulo_materia");
+    const tituloAssunto = $("titulo_assunto");
+    const modoRevisao = $("modo_revisao");
+    const quantidadeRevisao = $("quantidade_revisao");
+
+    const contadorQuestoes = $("contador_questoes");
+    const porcentagemRevisao = $("porcentagem_revisao");
+    const barraRevisao = $("barra_revisao");
+
+    const materiaQuestao = $("materia_questao");
+    const enunciadoQuestao = $("enunciado_questao");
+    const assuntoAtual = $("assunto_atual");
+
+    const formResposta = $("form_resposta_revisao");
+    const respostaUsuario = $("resposta_usuario");
+    const observacaoRevisao = $("observacao_revisao");
+    const btnResponder = $("btn_responder");
+
+    const resultadoResposta = $("resultado_resposta");
+    const iconeResultado = $("icone_resultado");
+    const statusResultado = $("status_resultado");
+    const mensagemResultado = $("mensagem_resultado");
+
+    const resultadoRespostaUsuario =
+        $("resultado_resposta_usuario");
+
+    const resultadoRespostaCorreta =
+        $("resultado_resposta_correta");
+
+    const observacaoOriginal =
+        $("observacao_original");
+
+    const observacaoAtual =
+        $("observacao_atual");
+
+    const blocoObservacaoOriginal =
+        $("bloco_observacao_original");
+
+    const blocoObservacaoAtual =
+        $("bloco_observacao_atual");
+
+    const btnProximaQuestao =
+        $("btn_proxima_questao");
+
+    const totalRespondidas =
+        $("total_respondidas");
+
+    const totalAcertos =
+        $("total_acertos");
+
+    const totalErros =
+        $("total_erros_revisao");
+
+    const aproveitamento =
+        $("aproveitamento_revisao");
+
+    const fimRevisao =
+        $("fim_revisao");
+
+    const finalQuestoes =
+        $("final_questoes");
+
+    const finalAcertos =
+        $("final_acertos");
+
+    const finalErros =
+        $("final_erros");
+
+    const finalAproveitamento =
+        $("final_aproveitamento");
+
+    const btnRevisarErros =
+        $("btn_revisar_erros");
+
+
+    /* =========================================
+       CONFIGURAÇÃO DA REVISÃO
+    ========================================= */
+
+    let config =
+        carregarJSONSession("revisaoAtual") || {
+
+            materia: "",
+            assunto: "",
+            modo: "rapida",
+            quantidade: 10
+
+        };
+
+
+    /* =========================================
+       BUSCA QUESTÕES DO CADERNO DE ERROS
+    ========================================= */
+
+    let bancoErros =
+        carregarJSONLocal(STORAGE_ERROS);
+
+    let fila =
+        prepararQuestoes(
+            bancoErros,
+            config
         );
 
 
-    questoes=
-        embaralhadas.slice(
-            0,
-            quantidadeFinal
-        );
+    let indiceAtual = 0;
 
+    let acertos = 0;
 
-    quantidadeRevisao.textContent=
-        questoes.length+" questões";
+    let erros = 0;
 
+    let respondidas = 0;
 
-    carregarQuestao();
+    let errosDaRevisao = [];
 
-}
+    let respostaProcessada = false;
 
 
-// =========================================================
-// CARREGAR QUESTÃO
-// =========================================================
+    preencherCabecalho();
 
-function carregarQuestao(){
 
-    questaoRespondida=false;
+    if (fila.length === 0) {
 
-    resultadoResposta.classList.add(
-        "oculto"
-    );
+        mostrarSemQuestoes();
 
+        return;
+    }
 
-    formResposta.style.display="block";
 
+    renderizarQuestao();
 
-    respostaUsuario.disabled=false;
 
-    observacaoRevisao.disabled=false;
+    /* =========================================
+       RESPONDER QUESTÃO
+    ========================================= */
 
-    btnResponder.disabled=false;
+    formResposta.addEventListener(
+        "submit",
+        function (event) {
 
+            event.preventDefault();
 
-    respostaUsuario.value="";
+            if (respostaProcessada) {
+                return;
+            }
 
-    observacaoRevisao.value="";
+            const resposta =
+                respostaUsuario.value.trim();
 
+            if (!resposta) {
+                return;
+            }
 
-    const questao=
-        questoes[indiceAtual];
+            const questao =
+                fila[indiceAtual];
 
 
-    enunciadoQuestao.textContent=
-        questao.enunciado;
+            const correta =
+                respostasEquivalentes(
+                    resposta,
+                    questao.respostaCorreta || ""
+                );
 
 
-    materiaQuestao.textContent=
-        questao.materia;
+            respondidas++;
 
+            respostaProcessada = true;
 
-    assuntoAtual.textContent=
-        questao.assunto;
 
+            if (correta) {
 
-    atualizarProgresso();
+                acertos++;
 
+                atualizarEstatisticaErro(
+                    questao.id,
+                    true
+                );
 
-    respostaUsuario.focus();
+            } else {
 
-}
+                erros++;
 
+                errosDaRevisao.push(
+                    questao
+                );
 
-// =========================================================
-// ATUALIZAR PROGRESSO
-// =========================================================
+                atualizarEstatisticaErro(
+                    questao.id,
+                    false
+                );
 
-function atualizarProgresso(){
+            }
 
-    const numeroAtual=
-        indiceAtual+1;
 
+            atualizarPainel();
 
-    const total=
-        questoes.length;
 
-
-    const porcentagem=
-        Math.round(
-            (numeroAtual/total)*100
-        );
-
-
-    contadorQuestoes.textContent=
-        `Questão ${numeroAtual} de ${total}`;
-
-
-    porcentagemRevisao.textContent=
-        porcentagem+"%";
-
-
-    barraRevisao.style.width=
-        porcentagem+"%";
-
-}
-
-
-// =========================================================
-// RESPONDER QUESTÃO
-// =========================================================
-
-formResposta.addEventListener(
-    "submit",
-    function(event){
-
-        event.preventDefault();
-
-
-        if(questaoRespondida){
-            return;
-        }
-
-
-        const resposta=
-            respostaUsuario.value.trim();
-
-
-        if(resposta===""){
-
-            alert(
-                "Digite sua resposta."
-            );
-
-            return;
-        }
-
-
-        const questao=
-            questoes[indiceAtual];
-
-
-        const respostaNormalizada=
-            normalizarResposta(resposta);
-
-
-        const corretaNormalizada=
-            normalizarResposta(
-                questao.respostaCorreta
+            mostrarResultado(
+                questao,
+                resposta,
+                correta
             );
 
 
-        const acertou=
-            respostaNormalizada===
-            corretaNormalizada;
+            respostaUsuario.disabled =
+                true;
 
+            observacaoRevisao.disabled =
+                true;
 
-        respondidas++;
-
-
-        if(acertou){
-
-            acertos++;
-
-        }else{
-
-            erros++;
-
-            questoesErradas.push(
-                questao
-            );
+            btnResponder.disabled =
+                true;
 
         }
-
-
-        questaoRespondida=true;
-
-
-        mostrarResultado(
-            questao,
-            resposta,
-            acertou
-        );
-
-
-        atualizarEstatisticas();
-
-    }
-);
-
-
-// =========================================================
-// MOSTRAR RESULTADO
-// =========================================================
-
-function mostrarResultado(
-    questao,
-    resposta,
-    acertou
-){
-
-    resultadoResposta.classList.remove(
-        "oculto"
     );
 
 
-    resultadoRespostaUsuario.textContent=
-        resposta;
+    /* =========================================
+       PRÓXIMA QUESTÃO
+    ========================================= */
+
+    btnProximaQuestao.addEventListener(
+        "click",
+        function () {
+
+            if (!respostaProcessada) {
+                return;
+            }
 
 
-    resultadoRespostaCorreta.textContent=
-        questao.respostaCorreta;
+            indiceAtual++;
 
 
-    observacaoOriginal.textContent=
-        questao.observacaoOriginal||
-        "Nenhuma anotação anterior.";
+            if (
+                indiceAtual >=
+                fila.length
+            ) {
+
+                finalizarRevisao();
+
+                return;
+            }
 
 
-    const novaObservacao=
-        observacaoRevisao.value.trim();
-
-
-    observacaoAtual.textContent=
-        novaObservacao||
-        "Nenhuma observação registrada.";
-
-
-    if(acertou){
-
-        iconeResultado.textContent="✓";
-
-        statusResultado.textContent=
-            "RESPOSTA CORRETA";
-
-        mensagemResultado.textContent=
-            "Muito bem!";
-
-        resultadoResposta.classList.remove(
-            "resultado-errado"
-        );
-
-        resultadoResposta.classList.add(
-            "resultado-correto"
-        );
-
-    }else{
-
-        iconeResultado.textContent="×";
-
-        statusResultado.textContent=
-            "RESPOSTA INCORRETA";
-
-        mensagemResultado.textContent=
-            "Essa questão ainda precisa de atenção.";
-
-        resultadoResposta.classList.remove(
-            "resultado-correto"
-        );
-
-        resultadoResposta.classList.add(
-            "resultado-errado"
-        );
-
-    }
-
-
-    respostaUsuario.disabled=true;
-
-    observacaoRevisao.disabled=true;
-
-    btnResponder.disabled=true;
-
-
-    resultadoResposta.scrollIntoView({
-        behavior:"smooth",
-        block:"center"
-    });
-
-}
-
-
-// =========================================================
-// ESTATÍSTICAS
-// =========================================================
-
-function atualizarEstatisticas(){
-
-    totalRespondidas.textContent=
-        respondidas;
-
-
-    totalAcertos.textContent=
-        acertos;
-
-
-    totalErros.textContent=
-        erros;
-
-
-    let porcentagem=0;
-
-
-    if(respondidas>0){
-
-        porcentagem=
-            Math.round(
-                (acertos/respondidas)*100
-            );
-
-    }
-
-
-    aproveitamentoRevisao.textContent=
-        porcentagem+"%";
-
-}
-
-
-// =========================================================
-// PRÓXIMA QUESTÃO
-// =========================================================
-
-btnProxima.addEventListener(
-    "click",
-    function(){
-
-        indiceAtual++;
-
-
-        if(
-            indiceAtual>=questoes.length
-        ){
-
-            finalizarRevisao();
-
-            return;
+            renderizarQuestao();
 
         }
-
-
-        carregarQuestao();
-
-
-        window.scrollTo({
-            top:0,
-            behavior:"smooth"
-        });
-
-    }
-);
-
-
-// =========================================================
-// FINALIZAR REVISÃO
-// =========================================================
-
-function finalizarRevisao(){
-
-    areaQuestao.style.display="none";
-
-    resultadoResposta.classList.add(
-        "oculto"
     );
 
 
-    progressoRevisao.style.display="none";
+    /* =========================================
+       REVISAR SOMENTE OS ERROS
+    ========================================= */
+
+    btnRevisarErros.addEventListener(
+        "click",
+        function () {
+
+            if (
+                errosDaRevisao.length === 0
+            ) {
+                return;
+            }
 
 
-    fimRevisao.classList.remove(
-        "oculto"
-    );
+            fila =
+                embaralhar(
+                    [...errosDaRevisao]
+                );
 
 
-    const aproveitamento=
-        respondidas>0
-        ?Math.round(
-            (acertos/respondidas)*100
-        )
-        :0;
+            indiceAtual = 0;
+
+            acertos = 0;
+
+            erros = 0;
+
+            respondidas = 0;
+
+            errosDaRevisao = [];
 
 
-    finalQuestoes.textContent=
-        respondidas;
+            fimRevisao.classList.add(
+                "oculto"
+            );
 
 
-    finalAcertos.textContent=
-        acertos;
-
-
-    finalErros.textContent=
-        erros;
-
-
-    finalAproveitamento.textContent=
-        aproveitamento+"%";
-
-
-    salvarResultadoRevisao(
-        aproveitamento
-    );
-
-
-    fimRevisao.scrollIntoView({
-        behavior:"smooth"
-    });
-
-}
-
-
-// =========================================================
-// SALVAR RESUMO LOCALMENTE
-// =========================================================
-
-function salvarResultadoRevisao(
-    aproveitamento
-){
-
-    const resultado={
-        data:new Date().toLocaleDateString(
-            "pt-BR"
-        ),
-
-        materia:configuracao.materia,
-
-        assunto:configuracao.assunto,
-
-        modo:configuracao.modo,
-
-        questoes:respondidas,
-
-        acertos:acertos,
-
-        erros:erros,
-
-        aproveitamento:
-            aproveitamento
-    };
-
-
-    let historico=[];
-
-
-    try{
-
-        historico=
-            JSON.parse(
-                localStorage.getItem(
-                    "studymetrics_revisoes"
+            document
+                .querySelector(
+                    ".area-questao-revisao"
                 )
-            )||[];
-
-    }catch(erro){
-
-        historico=[];
-
-    }
+                ?.classList.remove(
+                    "oculto"
+                );
 
 
-    historico.push(
-        resultado
+            document
+                .querySelector(
+                    ".progresso-revisao"
+                )
+                ?.classList.remove(
+                    "oculto"
+                );
+
+
+            renderizarQuestao();
+
+            atualizarPainel();
+
+        }
     );
 
 
-    localStorage.setItem(
-        "studymetrics_revisoes",
-        JSON.stringify(historico)
-    );
+    /* =========================================
+       PREPARAR QUESTÕES
+    ========================================= */
 
-}
+    function prepararQuestoes(
+        errosSalvos,
+        configuracao
+    ) {
 
-
-// =========================================================
-// REVISAR SOMENTE OS ERROS
-// =========================================================
-
-btnRevisarErros.addEventListener(
-    "click",
-    function(){
-
-        if(
-            questoesErradas.length===0
-        ){
-
-            alert(
-                "Você não errou nenhuma questão nesta revisão."
+        const materia =
+            normalizar(
+                configuracao.materia || ""
             );
 
-            return;
+
+        const assunto =
+            normalizar(
+                configuracao.assunto || ""
+            );
+
+
+        let elegiveis =
+            errosSalvos.filter(
+                function (erro) {
+
+                    return (
+                        erro &&
+                        erro.revisar === true
+                    );
+
+                }
+            );
+
+
+        /* FILTRO POR MATÉRIA */
+
+        if (materia) {
+
+            elegiveis =
+                elegiveis.filter(
+                    function (erro) {
+
+                        return (
+
+                            normalizar(
+                                erro.materia
+                            ) === materia ||
+
+                            normalizar(
+                                erro.materiaValor
+                            ) === materia
+
+                        );
+
+                    }
+                );
 
         }
 
 
-        questoes=
-            embaralhar(
-                questoesErradas
-            );
+        /* FILTRO POR ASSUNTO */
+
+        if (assunto) {
+
+            elegiveis =
+                elegiveis.filter(
+                    function (erro) {
+
+                        return (
+
+                            normalizar(
+                                erro.assunto
+                            ) === assunto
+
+                        );
+
+                    }
+                );
+
+        }
 
 
-        indiceAtual=0;
-
-        respondidas=0;
-
-        acertos=0;
-
-        erros=0;
-
-        questoesErradas=[];
+        const limite =
+            Number(
+                configuracao.quantidade
+            ) || 10;
 
 
-        fimRevisao.classList.add(
+        return embaralhar(
+            elegiveis
+        ).slice(
+            0,
+            Math.min(
+                limite,
+                elegiveis.length
+            )
+        );
+
+    }
+
+
+    /* =========================================
+       CABEÇALHO
+    ========================================= */
+
+    function preencherCabecalho() {
+
+        const nomesModo = {
+
+            rapida:
+                "Revisão rápida",
+
+            normal:
+                "Revisão normal",
+
+            completa:
+                "Revisão completa"
+
+        };
+
+
+        tituloMateria.textContent =
+            config.materia ||
+            "Revisão";
+
+
+        tituloAssunto.textContent =
+            config.assunto ||
+            "Questões marcadas para revisão";
+
+
+        modoRevisao.textContent =
+            nomesModo[
+                config.modo
+            ] || "Revisão";
+
+
+        quantidadeRevisao.textContent =
+            `${fila.length} ${
+                fila.length === 1
+                    ? "questão"
+                    : "questões"
+            }`;
+
+    }
+
+
+    /* =========================================
+       MOSTRAR QUESTÃO
+    ========================================= */
+
+    function renderizarQuestao() {
+
+        const questao =
+            fila[indiceAtual];
+
+
+        respostaProcessada =
+            false;
+
+
+        tituloMateria.textContent =
+            questao.materia ||
+            config.materia ||
+            "Revisão";
+
+
+        tituloAssunto.textContent =
+            questao.assunto ||
+            config.assunto ||
+            "Sem assunto";
+
+
+        materiaQuestao.textContent =
+            questao.materia ||
+            "Matéria";
+
+
+        assuntoAtual.textContent =
+            questao.assunto ||
+            "Sem assunto";
+
+
+        enunciadoQuestao.textContent =
+            questao.enunciado ||
+            "Questão sem enunciado.";
+
+
+        respostaUsuario.value = "";
+
+        observacaoRevisao.value = "";
+
+
+        respostaUsuario.disabled =
+            false;
+
+        observacaoRevisao.disabled =
+            false;
+
+        btnResponder.disabled =
+            false;
+
+
+        respostaUsuario.focus();
+
+
+        resultadoResposta.classList.add(
             "oculto"
         );
 
 
-        areaQuestao.style.display="grid";
+        const atual =
+            indiceAtual + 1;
 
-        progressoRevisao.style.display="block";
-
-
-        atualizarEstatisticas();
-
-        carregarQuestao();
+        const total =
+            fila.length;
 
 
-        window.scrollTo({
-            top:0,
-            behavior:"smooth"
-        });
+        const percentual =
+            Math.round(
+                (atual / total) * 100
+            );
+
+
+        contadorQuestoes.textContent =
+            `Questão ${atual} de ${total}`;
+
+
+        porcentagemRevisao.textContent =
+            `${percentual}%`;
+
+
+        barraRevisao.style.width =
+            `${percentual}%`;
 
     }
-);
 
 
-// =========================================================
-// INICIAR
-// =========================================================
+    /* =========================================
+       RESULTADO DA QUESTÃO
+    ========================================= */
 
-prepararRevisao();
+    function mostrarResultado(
+        questao,
+        resposta,
+        correta
+    ) {
+
+        resultadoResposta.classList.remove(
+            "oculto"
+        );
+
+
+        iconeResultado.textContent =
+            correta
+                ? "✓"
+                : "✕";
+
+
+        statusResultado.textContent =
+            correta
+                ? "RESPOSTA CORRETA"
+                : "RESPOSTA INCORRETA";
+
+
+        mensagemResultado.textContent =
+            correta
+                ? "Muito bem!"
+                : "Revise este ponto antes de seguir.";
+
+
+        resultadoRespostaUsuario.textContent =
+            resposta;
+
+
+        resultadoRespostaCorreta.textContent =
+            questao.respostaCorreta ||
+            "Não informada";
+
+
+        /* OBSERVAÇÃO DO CADERNO */
+
+        if (
+            questao.observacao &&
+            questao.observacao.trim()
+        ) {
+
+            blocoObservacaoOriginal
+                .classList.remove(
+                    "oculto"
+                );
+
+
+            observacaoOriginal.textContent =
+                questao.observacao;
+
+        } else {
+
+            blocoObservacaoOriginal
+                .classList.add(
+                    "oculto"
+                );
+
+        }
+
+
+        /* OBSERVAÇÃO DA REVISÃO */
+
+        const anotacaoAtual =
+            observacaoRevisao
+                .value
+                .trim();
+
+
+        if (anotacaoAtual) {
+
+            blocoObservacaoAtual
+                .classList.remove(
+                    "oculto"
+                );
+
+
+            observacaoAtual.textContent =
+                anotacaoAtual;
+
+        } else {
+
+            blocoObservacaoAtual
+                .classList.add(
+                    "oculto"
+                );
+
+        }
+
+
+        if (
+            indiceAtual ===
+            fila.length - 1
+        ) {
+
+            btnProximaQuestao.textContent =
+                "Finalizar revisão";
+
+        } else {
+
+            btnProximaQuestao.textContent =
+                "Próxima questão →";
+
+        }
+
+    }
+
+
+    /* =========================================
+       ESTATÍSTICAS
+    ========================================= */
+
+    function atualizarPainel() {
+
+        totalRespondidas.textContent =
+            respondidas;
+
+
+        totalAcertos.textContent =
+            acertos;
+
+
+        totalErros.textContent =
+            erros;
+
+
+        const percentual =
+            respondidas > 0
+                ? Math.round(
+                    (acertos /
+                    respondidas)
+                    * 100
+                )
+                : 0;
+
+
+        aproveitamento.textContent =
+            `${percentual}%`;
+
+    }
+
+
+    /* =========================================
+       FINALIZAR
+    ========================================= */
+
+    function finalizarRevisao() {
+
+        const percentual =
+            respondidas > 0
+                ? Math.round(
+                    (acertos /
+                    respondidas)
+                    * 100
+                )
+                : 0;
+
+
+        finalQuestoes.textContent =
+            respondidas;
+
+
+        finalAcertos.textContent =
+            acertos;
+
+
+        finalErros.textContent =
+            erros;
+
+
+        finalAproveitamento.textContent =
+            `${percentual}%`;
+
+
+        document
+            .querySelector(
+                ".area-questao-revisao"
+            )
+            ?.classList.add(
+                "oculto"
+            );
+
+
+        document
+            .querySelector(
+                ".progresso-revisao"
+            )
+            ?.classList.add(
+                "oculto"
+            );
+
+
+        resultadoResposta.classList.add(
+            "oculto"
+        );
+
+
+        fimRevisao.classList.remove(
+            "oculto"
+        );
+
+
+        btnRevisarErros.disabled =
+            errosDaRevisao.length === 0;
+
+
+        if (
+            errosDaRevisao.length
+        ) {
+
+            btnRevisarErros.textContent =
+                `Revisar ${
+                    errosDaRevisao.length
+                } erro${
+                    errosDaRevisao.length > 1
+                        ? "s"
+                        : ""
+                } novamente`;
+
+        } else {
+
+            btnRevisarErros.textContent =
+                "Nenhum erro para revisar";
+
+        }
+
+
+        salvarResumoRevisao(
+            percentual
+        );
+
+    }
+
+
+    /* =========================================
+       SALVAR RESULTADO DA REVISÃO
+    ========================================= */
+
+    function salvarResumoRevisao(
+        percentual
+    ) {
+
+        const historico =
+            carregarJSONLocal(
+                STORAGE_REVISOES
+            );
+
+
+        historico.push({
+
+            id:
+                Date.now(),
+
+            data:
+                new Date()
+                    .toLocaleDateString(
+                        "pt-BR"
+                    ),
+
+            materia:
+                config.materia ||
+                "Geral",
+
+            assunto:
+                config.assunto ||
+                "Questões marcadas",
+
+            modo:
+                config.modo ||
+                "rapida",
+
+            quantidade:
+                respondidas,
+
+            acertos:
+                acertos,
+
+            erros:
+                erros,
+
+            aproveitamento:
+                percentual
+
+        });
+
+
+        localStorage.setItem(
+            STORAGE_REVISOES,
+            JSON.stringify(
+                historico
+            )
+        );
+
+    }
+
+
+    /* =========================================
+       ATUALIZA QUESTÃO NO CADERNO
+    ========================================= */
+
+    function atualizarEstatisticaErro(
+        id,
+        acertou
+    ) {
+
+        const indice =
+            bancoErros.findIndex(
+                function (item) {
+
+                    return (
+                        item.id === id
+                    );
+
+                }
+            );
+
+
+        if (indice === -1) {
+            return;
+        }
+
+
+        bancoErros[indice]
+            .vezesRevisada =
+
+            Number(
+                bancoErros[indice]
+                    .vezesRevisada || 0
+            ) + 1;
+
+
+        if (acertou) {
+
+            bancoErros[indice]
+                .acertosRevisao =
+
+                Number(
+                    bancoErros[indice]
+                        .acertosRevisao || 0
+                ) + 1;
+
+        } else {
+
+            bancoErros[indice]
+                .errosRevisao =
+
+                Number(
+                    bancoErros[indice]
+                        .errosRevisao || 0
+                ) + 1;
+
+        }
+
+
+        localStorage.setItem(
+            STORAGE_ERROS,
+            JSON.stringify(
+                bancoErros
+            )
+        );
+
+    }
+
+
+    /* =========================================
+       SEM QUESTÕES
+    ========================================= */
+
+    function mostrarSemQuestoes() {
+
+        tituloMateria.textContent =
+            config.materia ||
+            "Revisão";
+
+
+        tituloAssunto.textContent =
+            config.assunto ||
+            "Questões marcadas para revisão";
+
+
+        materiaQuestao.textContent =
+            "Sem questões";
+
+
+        assuntoAtual.textContent =
+            config.assunto ||
+            "—";
+
+
+        enunciadoQuestao.textContent =
+            "Nenhuma questão marcada para revisão foi encontrada para esta matéria e assunto.";
+
+
+        contadorQuestoes.textContent =
+            "Questão 0 de 0";
+
+
+        porcentagemRevisao.textContent =
+            "0%";
+
+
+        barraRevisao.style.width =
+            "0%";
+
+
+        quantidadeRevisao.textContent =
+            "0 questões";
+
+
+        respostaUsuario.disabled =
+            true;
+
+
+        observacaoRevisao.disabled =
+            true;
+
+
+        btnResponder.disabled =
+            true;
+
+    }
+
+
+    /* =========================================
+       COMPARAÇÃO DAS RESPOSTAS
+    ========================================= */
+
+    function respostasEquivalentes(
+        respostaA,
+        respostaB
+    ) {
+
+        const a =
+            normalizarResposta(
+                respostaA
+            );
+
+
+        const b =
+            normalizarResposta(
+                respostaB
+            );
+
+
+        if (a === b) {
+            return true;
+        }
+
+
+        const letraA =
+            extrairAlternativa(a);
+
+
+        const letraB =
+            extrairAlternativa(b);
+
+
+        return Boolean(
+            letraA &&
+            letraB &&
+            letraA === letraB
+        );
+
+    }
+
+
+    function normalizarResposta(
+        valor
+    ) {
+
+        return normalizar(
+            valor
+        )
+            .replace(
+                /^alternativa\s+/,
+                ""
+            )
+            .replace(
+                /^opcao\s+/,
+                ""
+            )
+            .trim();
+
+    }
+
+
+    function extrairAlternativa(
+        valor
+    ) {
+
+        const match =
+            valor.match(
+                /\b([a-e])\b/i
+            );
+
+
+        return match
+            ? match[1].toLowerCase()
+            : "";
+
+    }
+
+
+    function normalizar(valor) {
+
+        return String(
+            valor ?? ""
+        )
+            .normalize("NFD")
+            .replace(
+                /[\u0300-\u036f]/g,
+                ""
+            )
+            .trim()
+            .toLowerCase()
+            .replace(
+                /\s+/g,
+                " "
+            );
+
+    }
+
+
+    /* =========================================
+       EMBARALHAR QUESTÕES
+    ========================================= */
+
+    function embaralhar(array) {
+
+        for (
+            let i =
+                array.length - 1;
+
+            i > 0;
+
+            i--
+        ) {
+
+            const j =
+                Math.floor(
+                    Math.random() *
+                    (i + 1)
+                );
+
+
+            [
+                array[i],
+                array[j]
+            ] = [
+                array[j],
+                array[i]
+            ];
+
+        }
+
+
+        return array;
+
+    }
+
+
+    /* =========================================
+       LOCAL STORAGE
+    ========================================= */
+
+    function carregarJSONLocal(
+        chave
+    ) {
+
+        try {
+
+            const valor =
+                JSON.parse(
+                    localStorage.getItem(
+                        chave
+                    )
+                );
+
+
+            return Array.isArray(
+                valor
+            )
+                ? valor
+                : [];
+
+        } catch {
+
+            return [];
+
+        }
+
+    }
+
+
+    /* =========================================
+       SESSION STORAGE
+    ========================================= */
+
+    function carregarJSONSession(
+        chave
+    ) {
+
+        try {
+
+            return JSON.parse(
+                sessionStorage.getItem(
+                    chave
+                )
+            );
+
+        } catch {
+
+            return null;
+
+        }
+
+    }
 
 });
