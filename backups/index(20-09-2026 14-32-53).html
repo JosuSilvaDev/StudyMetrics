@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard | StudyMetrics</title>
+
+    <!-- CSS PRINCIPAL -->
+    <link rel="stylesheet" href="static/css/style.css">
+    <!-- BOOTSTRAP ICONS -->
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    >
+
+    <!-- CHART.JS -->
+    <script
+        src="https://cdn.jsdelivr.net/npm/chart.js"
+        defer
+    ></script>
+
+    <!-- JAVASCRIPT DO DASHBOARD -->
+    <script
+        src="static/dashboard.js"
+        defer
+    ></script>
+    <link href="https://fonts.googleapis.com/css2?family=Monoton&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+</head>
+
+<body>
+
+    <!-- ================= MENU LATERAL ================= -->
+
+<aside class="sidebar">
+
+    <!-- Logo -->
+    <div class="logo">
+
+    <div class="logo-simbolo">
+        <i class="bi bi-graph-up-arrow"></i>
+    </div>
+
+    <div class="logo-texto">
+        <strong>Study</strong><span>Metrics</span>
+    </div>
+
+    </div>
+
+
+    <!-- Menu -->
+    <nav class="menu">
+
+        <a href="index.html" class="menu-item ativo">
+            <i class="fa-solid fa-chart-line"></i>
+            <span>Dashboard</span>
+        </a>
+
+        <a href="materias.html" class="menu-item">
+            <i class="fa-solid fa-book"></i>
+            <span>Matérias</span>
+        </a>
+
+        <a href="sessao.html" class="menu-item">
+            <i class="fa-solid fa-clock"></i>
+            <span>Sessão de Estudo</span>
+        </a>
+
+        <a href="questao.html" class="menu-item">
+            <i class="fa-solid fa-circle-xmark"></i>
+            <span>Caderno de Erros</span>
+        </a>
+
+        <a href="revisoes.html" class="menu-item">
+            <i class="fa-solid fa-rotate"></i>
+            <span>Revisões</span>
+        </a>
+
+        <a href="perfil.html" class="menu-item">
+            <i class="fa-solid fa-user"></i>
+            <span>Perfil</span>
+        </a>
+
+    </nav>
+
+</aside>
+
+
+
+    <!-- ================= CONTEÚDO ================= -->
+    <main class="conteudo dashboard">
+
+        <!-- CABEÇALHO -->
+        <header class="dashboard-topo">
+
+            <div>
+                <span class="dashboard-tag">VISÃO GERAL</span>
+                <h1>Seu desempenho</h1>
+                <p>
+                    Acompanhe sua evolução e mantenha seu planejamento
+                    de estudos em dia.
+                </p>
+            </div>
+
+            <div class="dashboard-data">
+
+                <i class="bi bi-calendar3"></i>
+
+                <div>
+                    <span>Hoje</span>
+                    <strong id="data_atual">--</strong>
+                </div>
+
+            </div>
+
+        </header>
+
+        <!-- DESTAQUE -->
+        <section class="dashboard-hero">
+
+            <div class="hero-conteudo">
+
+                <span class="hero-tag">RESUMO DO DIA</span>
+
+                <h2>
+                    Continue construindo sua evolução.
+                </h2>
+
+                <p>
+                    Pequenas sessões consistentes geram resultados
+                    maiores ao longo do tempo.
+                </p>
+
+                <div class="hero-acoes">
+
+                    <a
+                        href="sessao.html"
+                        class="btn-dashboard-principal"
+                    >
+                        <i class="bi bi-play-fill"></i>
+                        Iniciar sessão
+                    </a>
+
+                    <a
+                        href="revisoes.html"
+                        class="btn-dashboard-secundario"
+                    >
+                        <i class="bi bi-arrow-repeat"></i>
+                        Fazer revisão
+                    </a>
+
+                </div>
+
+            </div>
+
+            <div class="hero-ilustracao">
+                <div class="hero-circulo">
+                    <i class="bi bi-graph-up-arrow"></i>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- MÉTRICAS -->
+        <section class="dashboard-metricas">
+
+            <article class="metrica-card">
+
+                <div class="metrica-icone azul">
+                    <i class="bi bi-clock-history"></i>
+                </div>
+
+                <div class="metrica-conteudo">
+                    <span>Tempo estudado</span>
+                    <strong id="total_tempo">0h 00min</strong>
+                    <small>Esta semana</small>
+                </div>
+
+            </article>
+
+            <article class="metrica-card">
+
+                <div class="metrica-icone verde">
+                    <i class="bi bi-list-check"></i>
+                </div>
+
+                <div class="metrica-conteudo">
+                    <span>Questões realizadas</span>
+                    <strong id="total_questoes">0</strong>
+                    <small>Esta semana</small>
+                </div>
+
+            </article>
+
+            <article class="metrica-card">
+
+                <div class="metrica-icone roxo">
+                    <i class="bi bi-bullseye"></i>
+                </div>
+
+                <div class="metrica-conteudo">
+                    <span>Aproveitamento</span>
+                    <strong id="media_aproveitamento">0%</strong>
+                    <small>Média geral</small>
+                </div>
+
+            </article>
+
+            <article class="metrica-card">
+
+                <div class="metrica-icone vermelho">
+                    <i class="bi bi-exclamation-triangle"></i>
+                </div>
+
+                <div class="metrica-conteudo">
+                    <span>Erros registrados</span>
+                    <strong id="total_erros_dashboard">0</strong>
+                    <small>Caderno de Erros</small>
+                </div>
+
+            </article>
+
+        </section>
+
+        <!-- GRÁFICOS -->
+        <section class="dashboard-grid-principal">
+
+            <!-- HORAS ESTUDADAS -->
+            <article class="dashboard-card grafico-principal">
+
+                <div class="dashboard-card-topo">
+
+                    <div>
+                        <span class="dashboard-card-tag">
+                            PRODUTIVIDADE
+                        </span>
+
+                        <h2>Horas estudadas</h2>
+
+                        <p>
+                            Seu tempo de estudo nos últimos dias.
+                        </p>
+                    </div>
+
+                    <select
+                        id="periodo_grafico"
+                        class="dashboard-select"
+                    >
+                        <option value="7">7 dias</option>
+                        <option value="30">30 dias</option>
+                    </select>
+
+                </div>
+
+                <div class="grafico-container">
+                    <canvas id="grafico_horas"></canvas>
+                </div>
+
+            </article>
+
+            <!-- APROVEITAMENTO -->
+            <article class="dashboard-card desempenho-geral">
+
+                <div class="dashboard-card-topo">
+
+                    <div>
+                        <span class="dashboard-card-tag">
+                            DESEMPENHO
+                        </span>
+
+                        <h2>Aproveitamento</h2>
+                    </div>
+
+                </div>
+
+                <div class="grafico-donut">
+
+                    <canvas id="grafico_aproveitamento"></canvas>
+
+                    <div class="donut-centro">
+                        <strong id="donut_porcentagem">0%</strong>
+                        <span>média</span>
+                    </div>
+
+                </div>
+
+                <div class="desempenho-legenda">
+
+                    <div>
+                        <span class="legenda-circulo acertos"></span>
+                        Acertos
+                    </div>
+
+                    <div>
+                        <span class="legenda-circulo erros"></span>
+                        Erros
+                    </div>
+
+                </div>
+
+            </article>
+
+        </section>
+
+        <!-- MATÉRIAS + ATENÇÃO -->
+        <section class="dashboard-grid-secundario">
+
+            <!-- DESEMPENHO POR MATÉRIA -->
+            <article class="dashboard-card">
+
+                <div class="dashboard-card-topo">
+
+                    <div>
+                        <span class="dashboard-card-tag">
+                            MATÉRIAS
+                        </span>
+
+                        <h2>Desempenho por matéria</h2>
+
+                        <p>
+                            Veja onde seu rendimento está melhor ou pior.
+                        </p>
+                    </div>
+
+                </div>
+
+                <div
+                    id="lista_desempenho_materias"
+                    class="lista-desempenho"
+                >
+
+                    <!-- PORTUGUÊS -->
+                    <div class="materia-desempenho">
+
+                        <div class="materia-info">
+                            <span>Português</span>
+                            <strong>0%</strong>
+                        </div>
+
+                        <div class="materia-barra">
+                            <div
+                                class="materia-progresso"
+                                style="width:0%"
+                            ></div>
+                        </div>
+
+                    </div>
+
+                    <!-- DIREITO ADMINISTRATIVO -->
+                    <div class="materia-desempenho">
+
+                        <div class="materia-info">
+                            <span>Direito Administrativo</span>
+                            <strong>0%</strong>
+                        </div>
+
+                        <div class="materia-barra">
+                            <div
+                                class="materia-progresso"
+                                style="width:0%"
+                            ></div>
+                        </div>
+
+                    </div>
+
+                    <!-- DIREITO CONSTITUCIONAL -->
+                    <div class="materia-desempenho">
+
+                        <div class="materia-info">
+                            <span>Direito Constitucional</span>
+                            <strong>0%</strong>
+                        </div>
+
+                        <div class="materia-barra">
+                            <div
+                                class="materia-progresso"
+                                style="width:0%"
+                            ></div>
+                        </div>
+
+                    </div>
+
+                    <!-- RACIOCÍNIO LÓGICO -->
+                    <div class="materia-desempenho">
+
+                        <div class="materia-info">
+                            <span>Raciocínio Lógico</span>
+                            <strong>0%</strong>
+                        </div>
+
+                        <div class="materia-barra">
+                            <div
+                                class="materia-progresso"
+                                style="width:0%"
+                            ></div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+            <!-- PRECISA DE ATENÇÃO -->
+            <article class="dashboard-card card-atencao">
+
+                <div class="dashboard-card-topo">
+
+                    <div>
+                        <span class="dashboard-card-tag">
+                            FOCO
+                        </span>
+
+                        <h2>Precisa de atenção</h2>
+
+                        <p>
+                            Assuntos com maior dificuldade.
+                        </p>
+                    </div>
+
+                </div>
+
+                <div
+                    id="lista_atencao"
+                    class="lista-atencao"
+                >
+
+                    <div class="atencao-vazia">
+
+                        <i class="bi bi-check-circle"></i>
+
+                        <div>
+                            <strong>
+                                Nenhum alerta ainda
+                            </strong>
+
+                            <span>
+                                Seus dados aparecerão aqui conforme você estudar.
+                            </span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+        </section>
+
+        <!-- REVISÕES + ATIVIDADE RECENTE -->
+        <section class="dashboard-grid-inferior">
+
+            <!-- PRÓXIMAS REVISÕES -->
+            <article class="dashboard-card">
+
+                <div class="dashboard-card-topo">
+
+                    <div>
+                        <span class="dashboard-card-tag">
+                            AGENDA
+                        </span>
+
+                        <h2>Próximas revisões</h2>
+                    </div>
+
+                    <a
+                        href="revisoes.html"
+                        class="link-dashboard"
+                    >
+                        Ver todas
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+
+                </div>
+
+                <div
+                    id="proximas_revisoes"
+                    class="lista-proximas-revisoes"
+                >
+
+                    <div class="dashboard-vazio">
+                        <i class="bi bi-calendar-check"></i>
+                        <p>Nenhuma revisão programada.</p>
+                    </div>
+
+                </div>
+
+            </article>
+
+            <!-- ATIVIDADE RECENTE -->
+            <article class="dashboard-card">
+
+                <div class="dashboard-card-topo">
+
+                    <div>
+                        <span class="dashboard-card-tag">
+                            HISTÓRICO
+                        </span>
+
+                        <h2>Atividade recente</h2>
+                    </div>
+
+                </div>
+
+                <div
+                    id="atividade_recente"
+                    class="atividade-recente"
+                >
+
+                    <div class="dashboard-vazio">
+                        <i class="bi bi-clock-history"></i>
+                        <p>Nenhuma atividade registrada.</p>
+                    </div>
+
+                </div>
+
+            </article>
+
+        </section>
+
+    </main>
+
+</body>
+</html>

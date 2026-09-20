@@ -1,166 +1,985 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Matérias | StudyMetrics</title>
 
-    <!-- FONTES -->
+    <!-- =========================
+         FONTES
+    ========================== -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
 
     <link
         href="https://fonts.googleapis.com/css2?family=Monoton&family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet"
     >
 
-    <!-- CSS PRINCIPAL -->
-    <link rel="stylesheet" href="static/css/style.css">
-
-    <!-- BOOTSTRAP ICONS -->
+    <!-- =========================
+         BOOTSTRAP ICONS
+    ========================== -->
     <link
         rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
     >
+
+    <!-- =========================
+         CSS PRINCIPAL
+    ========================== -->
+    <link>
+    <a href="materias.html" class="menu-item ativo">
+        <i class="bi bi-journal-bookmark-fill"></i>
+        <span>Matérias</span>
+    </a>
+    <link rel="stylesheet" href="static/css/style.css">
 </head>
+
+
 <body>
-    <aside class="sidebar">
-        <div class="logo">
-            <h1>StudyMetrics</h1>
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+    <!-- ================= MENU LATERAL ================= -->
+<!-- ================= MENU LATERAL ================= -->
+<aside class="sidebar">
+
+    <!-- LOGO -->
+    <div class="logo">
+
+        <div class="logo-simbolo">
+            <i class="bi bi-graph-up-arrow"></i>
         </div>
-        <nav class="menu">
 
-            <a href="index.html" class="menu-item">
-                <i class="bi bi-grid-1x2-fill"></i>
-                <span>Dashboard</span>
-            </a>
+        <div class="logo-texto">
+            <strong>Study</strong><span>Metrics</span>
+        </div>
 
-            <a href="materias.html" class="menu-item">
-                <i class="bi bi-journal-bookmark-fill"></i>
-                <span>Matérias</span>
-            </a>
+    </div>
 
-            <a href="sessao.html" class="menu-item">
-                <i class="bi bi-stopwatch-fill"></i>
-                <span>Sessão de estudo</span>
-            </a>
 
-            <a href="caderno_de_questos.html" class="menu-item">
-                <i class="bi bi-journal-x"></i>
-                <span>Caderno de Erros</span>
-            </a>
+    <!-- MENU -->
+    <nav class="menu">
 
-            <a href="revisao.html" class="menu-item">
-                <i class="bi bi-arrow-repeat"></i>
-                <span>Revisões</span>
-            </a>
+        <a href="index.html" class="menu-item">
+            <i class="bi bi-grid-1x2-fill"></i>
+            <span>Dashboard</span>
+        </a>
 
-            <a href="perfil.html" class="menu-item">
-                <i class="bi bi-person-circle"></i>
-                <span>Perfil</span>
-            </a>
-        </nav>
-    </aside>
+        <a href="materias.html" class="menu-item">
+            <i class="bi bi-journal-bookmark-fill"></i>
+            <span>Matérias</span>
+        </a>
+
+        <a href="sessao.html" class="menu-item">
+            <i class="bi bi-stopwatch-fill"></i>
+            <span>Sessão de estudo</span>
+        </a>
+
+        <a href="caderno_de_questos.html" class="menu-item">
+            <i class="bi bi-journal-x"></i>
+            <span>Caderno de Erros</span>
+        </a>
+
+        <a href="revisao.html" class="menu-item">
+            <i class="bi bi-arrow-repeat"></i>
+            <span>Revisões</span>
+        </a>
+
+        <a href="perfil.html" class="menu-item">
+            <i class="bi bi-person-circle"></i>
+            <span>Perfil</span>
+        </a>
+
+    </nav>
+
+</aside>
+
+
+
+    <!-- =====================================================
+         CONTEÚDO PRINCIPAL
+    ====================================================== -->
+
     <main class="conteudo">
+
+        <!-- =================================================
+             CABEÇALHO
+        ================================================== -->
+
         <header class="cabecalho-pagina">
-            <h1>Matérias</h1>
-            <p>Cadastre e organize os conteúdos que você está estudando.</p>
+
+            <div>
+
+                <span class="pagina-identificacao">
+                    <i class="bi bi-journal-bookmark"></i>
+                    Organização
+                </span>
+
+                <h1>Matérias</h1>
+
+                <p>
+                    Organize suas disciplinas, assuntos e prioridades
+                    para acompanhar melhor sua evolução.
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="btn-principal"
+                id="btnNovaMateria"
+            >
+
+                <i class="bi bi-plus-lg"></i>
+
+                Nova matéria
+
+            </button>
+
         </header>
-        <section class="materias-grid">
-            <div class="card-materia">
-                <form>
-                    <fieldset>
-                        <legend>Adicionar matéria</legend>
-                        <div class="campo">
-                            <label for="materia">Matéria</label>
-                            <input type="text" name="materia" id="materia" placeholder="Ex: Português" required>
-                        </div>
-                        <div class="campo">
-                            <label for="assunto">Assunto</label>
-                            <input type="text" name="assunto" id="assunto" placeholder="Ex: Concordância verbal" required>
-                        </div>
-                        <div class="campo">
-                            <label for="material">Material de estudo</label>
-                            <input type="text" name="material" id="material" placeholder="Ex: PDF, curso, livro...">
-                        </div>
-                        <div class="campo">
-                            <label for="link_material">Link do material</label>
-                            <input type="url" name="link_material" id="link_material" placeholder="https://...">
-                        </div>
-                        <button type="submit" class="btn-principal">Salvar matéria</button>
-                    </fieldset>
-                </form>
+
+
+
+        <!-- =================================================
+             RESUMO DAS MATÉRIAS
+        ================================================== -->
+
+        <section class="resumo-materias">
+
+
+            <!-- Total -->
+            <article class="card-resumo">
+
+                <div class="card-resumo-icone">
+
+                    <i class="bi bi-journal-bookmark-fill"></i>
+
+                </div>
+
+                <div>
+
+                    <span>Total de matérias</span>
+
+                    <strong id="totalMaterias">
+                        2
+                    </strong>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- Prioridade alta -->
+            <article class="card-resumo">
+
+                <div class="card-resumo-icone">
+
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+
+                </div>
+
+                <div>
+
+                    <span>Prioridade alta</span>
+
+                    <strong id="totalPrioridadeAlta">
+                        1
+                    </strong>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- Maior dificuldade -->
+            <article class="card-resumo">
+
+                <div class="card-resumo-icone">
+
+                    <i class="bi bi-graph-down-arrow"></i>
+
+                </div>
+
+                <div>
+
+                    <span>Maior dificuldade</span>
+
+                    <strong>
+                        Português
+                    </strong>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- Média de desempenho -->
+            <article class="card-resumo">
+
+                <div class="card-resumo-icone">
+
+                    <i class="bi bi-graph-up-arrow"></i>
+
+                </div>
+
+                <div>
+
+                    <span>Desempenho médio</span>
+
+                    <strong id="mediaDesempenho">
+                        67%
+                    </strong>
+
+                </div>
+
+            </article>
+
+        </section>
+
+
+
+        <!-- =================================================
+             FORMULÁRIO DE CADASTRO
+        ================================================== -->
+
+        <section class="secao-cadastro">
+
+            <div class="titulo-secao">
+
+                <div>
+
+                    <span class="subtitulo">
+                        Cadastro
+                    </span>
+
+                    <h2>Adicionar matéria</h2>
+
+                    <p>
+                        Preencha as informações da disciplina que você
+                        deseja acompanhar.
+                    </p>
+
+                </div>
+
             </div>
-            <div class="card-materia">
-                <form>
-                    <fieldset>
-                        <legend>Nível de dificuldade</legend>
-                        <div class="lista-dificuldade">
-                            <label class="dificuldade-opcao">
-                                <input type="radio" name="nivel_dificuldade" id="dificil" value="dificil">
-                                <span>Difícil</span>
-                            </label>
-                            <label class="dificuldade-opcao">
-                                <input type="radio" name="nivel_dificuldade" id="medio" value="medio">
-                                <span>Médio</span>
-                            </label>
-                            <label class="dificuldade-opcao">
-                                <input type="radio" name="nivel_dificuldade" id="facil" value="facil">
-                                <span>Fácil</span>
-                            </label>
+
+
+
+            <!--
+                Agora existe apenas UM formulário.
+                Assim todos os dados serão salvos juntos.
+            -->
+
+            <form
+                id="formMateria"
+                class="form-materia"
+            >
+
+
+                <div class="materias-grid">
+
+
+                    <!-- =====================================
+                         DADOS DA MATÉRIA
+                    ====================================== -->
+
+                    <div class="card-materia">
+
+                        <div class="card-titulo">
+
+                            <div class="card-titulo-icone">
+
+                                <i class="bi bi-book-fill"></i>
+
+                            </div>
+
+                            <div>
+
+                                <h3>Informações da matéria</h3>
+
+                                <p>
+                                    Defina a disciplina e o conteúdo estudado.
+                                </p>
+
+                            </div>
+
                         </div>
+
+
+
                         <div class="campo">
-                            <label for="prioridade">Prioridade</label>
-                            <select name="prioridade" id="prioridade">
-                                <option value="">Selecione</option>
-                                <option value="alta">Alta</option>
-                                <option value="media">Média</option>
-                                <option value="baixa">Baixa</option>
+
+                            <label for="materia">
+
+                                Matéria
+
+                                <span class="obrigatorio">
+                                    *
+                                </span>
+
+                            </label>
+
+                            <input
+                                type="text"
+                                name="materia"
+                                id="materia"
+                                placeholder="Ex: Português"
+                                required
+                            >
+
+                        </div>
+
+
+
+                        <div class="campo">
+
+                            <label for="assunto">
+
+                                Assunto
+
+                                <span class="obrigatorio">
+                                    *
+                                </span>
+
+                            </label>
+
+                            <input
+                                type="text"
+                                name="assunto"
+                                id="assunto"
+                                placeholder="Ex: Concordância verbal"
+                                required
+                            >
+
+                        </div>
+
+
+
+                        <div class="campo">
+
+                            <label for="material">
+                                Material de estudo
+                            </label>
+
+                            <input
+                                type="text"
+                                name="material"
+                                id="material"
+                                placeholder="Ex: PDF, curso, livro..."
+                            >
+
+                        </div>
+
+
+
+                        <div class="campo">
+
+                            <label for="link_material">
+                                Link do material
+                            </label>
+
+                            <div class="input-com-icone">
+
+                                <i class="bi bi-link-45deg"></i>
+
+                                <input
+                                    type="url"
+                                    name="link_material"
+                                    id="link_material"
+                                    placeholder="https://..."
+                                >
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- =====================================
+                         CONFIGURAÇÕES
+                    ====================================== -->
+
+                    <div class="card-materia">
+
+                        <div class="card-titulo">
+
+                            <div class="card-titulo-icone">
+
+                                <i class="bi bi-sliders"></i>
+
+                            </div>
+
+                            <div>
+
+                                <h3>Configuração de estudo</h3>
+
+                                <p>
+                                    Informe dificuldade e prioridade.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- Dificuldade -->
+
+                        <div class="campo">
+
+                            <label>
+                                Nível de dificuldade
+                            </label>
+
+
+                            <div class="lista-dificuldade">
+
+
+                                <label class="dificuldade-opcao dificil">
+
+                                    <input
+                                        type="radio"
+                                        name="nivel_dificuldade"
+                                        value="dificil"
+                                    >
+
+                                    <span>
+
+                                        <i class="bi bi-fire"></i>
+
+                                        Difícil
+
+                                    </span>
+
+                                </label>
+
+
+
+                                <label class="dificuldade-opcao medio">
+
+                                    <input
+                                        type="radio"
+                                        name="nivel_dificuldade"
+                                        value="medio"
+                                    >
+
+                                    <span>
+
+                                        <i class="bi bi-dash-circle"></i>
+
+                                        Médio
+
+                                    </span>
+
+                                </label>
+
+
+
+                                <label class="dificuldade-opcao facil">
+
+                                    <input
+                                        type="radio"
+                                        name="nivel_dificuldade"
+                                        value="facil"
+                                    >
+
+                                    <span>
+
+                                        <i class="bi bi-check-circle"></i>
+
+                                        Fácil
+
+                                    </span>
+
+                                </label>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- Prioridade -->
+
+                        <div class="campo">
+
+                            <label for="prioridade">
+                                Prioridade
+                            </label>
+
+                            <select
+                                name="prioridade"
+                                id="prioridade"
+                            >
+
+                                <option value="">
+                                    Selecione uma prioridade
+                                </option>
+
+                                <option value="alta">
+                                    Alta
+                                </option>
+
+                                <option value="media">
+                                    Média
+                                </option>
+
+                                <option value="baixa">
+                                    Baixa
+                                </option>
+
                             </select>
+
                         </div>
+
+
+
+                        <!-- Observações -->
+
                         <div class="campo">
-                            <label for="observacao">Observações</label>
-                            <textarea name="observacao" id="observacao" rows="4" placeholder="Ex: Tenho dificuldade nesse assunto..."></textarea>
+
+                            <label for="observacao">
+                                Observações
+                            </label>
+
+                            <textarea
+                                name="observacao"
+                                id="observacao"
+                                rows="4"
+                                placeholder="Ex: Tenho dificuldade neste assunto e preciso fazer mais questões..."
+                            ></textarea>
+
                         </div>
-                        <button type="submit" class="btn-principal">Salvar configuração</button>
-                    </fieldset>
-                </form>
-            </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =========================================
+                     AÇÕES DO FORMULÁRIO
+                ========================================== -->
+
+                <div class="acoes-formulario">
+
+                    <button
+                        type="reset"
+                        class="btn-secundario"
+                    >
+
+                        <i class="bi bi-x-lg"></i>
+
+                        Limpar
+
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        class="btn-principal"
+                    >
+
+                        <i class="bi bi-check-lg"></i>
+
+                        Salvar matéria
+
+                    </button>
+
+                </div>
+
+            </form>
+
         </section>
+
+
+
+        <!-- =================================================
+             MATÉRIAS CADASTRADAS
+        ================================================== -->
+
         <section class="card-lista-materias">
+
+
+            <!-- Cabeçalho da tabela -->
+
             <div class="titulo-lista">
-                <h2>Matérias cadastradas</h2>
-                <p>Seus conteúdos aparecerão aqui.</p>
+
+                <div>
+
+                    <span class="subtitulo">
+                        Disciplinas
+                    </span>
+
+                    <h2>Matérias cadastradas</h2>
+
+                    <p>
+                        Consulte e gerencie os conteúdos do seu plano de estudo.
+                    </p>
+
+                </div>
+
             </div>
-            <table class="tabela-materias">
-                <thead>
-                    <tr>
-                        <th>Matéria</th>
-                        <th>Assunto</th>
-                        <th>Dificuldade</th>
-                        <th>Prioridade</th>
-                        <th>Desempenho</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Português</td>
-                        <td>Interpretação de texto</td>
-                        <td>Difícil</td>
-                        <td>Alta</td>
-                        <td>58%</td>
-                    </tr>
-                    <tr>
-                        <td>Direito Administrativo</td>
-                        <td>Atos administrativos</td>
-                        <td>Médio</td>
-                        <td>Média</td>
-                        <td>76%</td>
-                    </tr>
-                </tbody>
-            </table>
+
+
+
+            <!-- =================================================
+                 PESQUISA E FILTROS
+            ================================================== -->
+
+            <div class="filtros-materias">
+
+
+                <!-- Pesquisa -->
+
+                <div class="campo-pesquisa">
+
+                    <i class="bi bi-search"></i>
+
+                    <input
+                        type="search"
+                        id="pesquisarMateria"
+                        placeholder="Pesquisar matéria ou assunto..."
+                    >
+
+                </div>
+
+
+
+                <!-- Filtro dificuldade -->
+
+                <select id="filtroDificuldade">
+
+                    <option value="">
+                        Todas as dificuldades
+                    </option>
+
+                    <option value="dificil">
+                        Difícil
+                    </option>
+
+                    <option value="medio">
+                        Médio
+                    </option>
+
+                    <option value="facil">
+                        Fácil
+                    </option>
+
+                </select>
+
+
+
+                <!-- Filtro prioridade -->
+
+                <select id="filtroPrioridade">
+
+                    <option value="">
+                        Todas as prioridades
+                    </option>
+
+                    <option value="alta">
+                        Alta
+                    </option>
+
+                    <option value="media">
+                        Média
+                    </option>
+
+                    <option value="baixa">
+                        Baixa
+                    </option>
+
+                </select>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 TABELA
+            ================================================== -->
+
+            <div class="tabela-container">
+
+                <table class="tabela-materias">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Matéria</th>
+
+                            <th>Assunto</th>
+
+                            <th>Dificuldade</th>
+
+                            <th>Prioridade</th>
+
+                            <th>Desempenho</th>
+
+                            <th>Ações</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="listaMaterias">
+
+
+                        <!-- =====================================
+                             MATÉRIA 1
+                        ====================================== -->
+
+                        <tr>
+
+                            <td>
+
+                                <div class="materia-nome">
+
+                                    <div class="materia-icone">
+
+                                        <i class="bi bi-book"></i>
+
+                                    </div>
+
+                                    <span>
+                                        Português
+                                    </span>
+
+                                </div>
+
+                            </td>
+
+
+                            <td>
+                                Interpretação de texto
+                            </td>
+
+
+                            <td>
+
+                                <span class="badge dificuldade-dificil">
+
+                                    Difícil
+
+                                </span>
+
+                            </td>
+
+
+                            <td>
+
+                                <span class="badge prioridade-alta">
+
+                                    Alta
+
+                                </span>
+
+                            </td>
+
+
+                            <td>
+
+                                <div class="desempenho">
+
+                                    <span>
+                                        58%
+                                    </span>
+
+                                    <div class="barra-progresso">
+
+                                        <div
+                                            class="barra-preenchimento"
+                                            style="width: 58%;"
+                                        ></div>
+
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+
+                            <td>
+
+                                <div class="acoes-tabela">
+
+                                    <button
+                                        type="button"
+                                        class="btn-acao"
+                                        title="Editar matéria"
+                                    >
+
+                                        <i class="bi bi-pencil"></i>
+
+                                    </button>
+
+
+                                    <button
+                                        type="button"
+                                        class="btn-acao excluir"
+                                        title="Excluir matéria"
+                                    >
+
+                                        <i class="bi bi-trash"></i>
+
+                                    </button>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+
+
+                        <!-- =====================================
+                             MATÉRIA 2
+                        ====================================== -->
+
+                        <tr>
+
+                            <td>
+
+                                <div class="materia-nome">
+
+                                    <div class="materia-icone">
+
+                                        <i class="bi bi-book"></i>
+
+                                    </div>
+
+                                    <span>
+                                        Direito Administrativo
+                                    </span>
+
+                                </div>
+
+                            </td>
+
+
+                            <td>
+                                Atos administrativos
+                            </td>
+
+
+                            <td>
+
+                                <span class="badge dificuldade-medio">
+
+                                    Médio
+
+                                </span>
+
+                            </td>
+
+
+                            <td>
+
+                                <span class="badge prioridade-media">
+
+                                    Média
+
+                                </span>
+
+                            </td>
+
+
+                            <td>
+
+                                <div class="desempenho">
+
+                                    <span>
+                                        76%
+                                    </span>
+
+                                    <div class="barra-progresso">
+
+                                        <div
+                                            class="barra-preenchimento"
+                                            style="width: 76%;"
+                                        ></div>
+
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+
+                            <td>
+
+                                <div class="acoes-tabela">
+
+                                    <button
+                                        type="button"
+                                        class="btn-acao"
+                                        title="Editar matéria"
+                                    >
+
+                                        <i class="bi bi-pencil"></i>
+
+                                    </button>
+
+
+                                    <button
+                                        type="button"
+                                        class="btn-acao excluir"
+                                        title="Excluir matéria"
+                                    >
+
+                                        <i class="bi bi-trash"></i>
+
+                                    </button>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
         </section>
+
     </main>
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+         Ativaremos depois para salvar matérias,
+         pesquisar, editar, excluir etc.
+    ====================================================== -->
+
+    <script src="static/js/materias.js"></script>
+    <script src="static/js/menu.js"></script>
+
 </body>
+
 </html>

@@ -28,7 +28,7 @@
     <!-- CSS -->
     <link
         rel="stylesheet"
-        href="static/css/style.css"
+        rel="stylesheet" href="static/css/style.css">
     >
 
     <!-- BOOTSTRAP ICONS -->
@@ -45,83 +45,60 @@
          MENU LATERAL
     ========================================== -->
 
-    <aside class="sidebar">
+    <!-- ================= MENU LATERAL ================= -->
+<!-- ================= MENU LATERAL ================= -->
+<aside class="sidebar">
 
-        <div class="logo">
+    <!-- LOGO -->
+    <div class="logo">
 
-            <div class="logo-icone">
-                <i class="bi bi-bar-chart-fill"></i>
-            </div>
-
-            <h1>StudyMetrics</h1>
-
+        <div class="logo-simbolo">
+            <i class="bi bi-graph-up-arrow"></i>
         </div>
 
+        <div class="logo-texto">
+            <strong>Study</strong><span>Metrics</span>
+        </div>
 
-        <nav class="menu">
-
-            <!-- DASHBOARD -->
-            <a
-                href="index.html"
-                class="menu-item"
-            >
-                <i class="bi bi-grid-1x2-fill"></i>
-                <span>Dashboard</span>
-            </a>
+    </div>
 
 
-            <!-- MATÉRIAS -->
-            <a
-                href="materias.html"
-                class="menu-item"
-            >
-                <i class="bi bi-journal-bookmark-fill"></i>
-                <span>Matérias</span>
-            </a>
+    <!-- MENU -->
+    <nav class="menu">
 
+        <a href="index.html" class="menu-item">
+            <i class="bi bi-grid-1x2-fill"></i>
+            <span>Dashboard</span>
+        </a>
 
-            <!-- SESSÃO -->
-            <a
-                href="sessao.html"
-                class="menu-item"
-            >
-                <i class="bi bi-stopwatch-fill"></i>
-                <span>Sessão de estudo</span>
-            </a>
+        <a href="materias.html" class="menu-item">
+            <i class="bi bi-journal-bookmark-fill"></i>
+            <span>Matérias</span>
+        </a>
 
+        <a href="sessao.html" class="menu-item">
+            <i class="bi bi-stopwatch-fill"></i>
+            <span>Sessão de estudo</span>
+        </a>
 
-            <!-- CADERNO DE ERROS -->
-            <a
-                href="caderno_de_questoes.html"
-                class="menu-item"
-            >
-                <i class="bi bi-journal-x"></i>
-                <span>Caderno de Erros</span>
-            </a>
+        <a href="caderno_de_questos.html" class="menu-item">
+            <i class="bi bi-journal-x"></i>
+            <span>Caderno de Erros</span>
+        </a>
 
+        <a href="revisao.html" class="menu-item">
+            <i class="bi bi-arrow-repeat"></i>
+            <span>Revisões</span>
+        </a>
 
-            <!-- REVISÕES -->
-            <a
-                href="revisoes.html"
-                class="menu-item ativo"
-            >
-                <i class="bi bi-arrow-repeat"></i>
-                <span>Revisões</span>
-            </a>
+        <a href="perfil.html" class="menu-item">
+            <i class="bi bi-person-circle"></i>
+            <span>Perfil</span>
+        </a>
 
+    </nav>
 
-            <!-- PERFIL -->
-            <a
-                href="perfil.html"
-                class="menu-item"
-            >
-                <i class="bi bi-person-circle"></i>
-                <span>Perfil</span>
-            </a>
-
-        </nav>
-
-    </aside>
+</aside>
 
 
     <!-- =========================================
@@ -641,6 +618,7 @@
 
     <script src="static/js/revisao.js"></script>
     <script src="static/js/revisao_questoes.js"></script>
+    <script src="static/js/menu.js"></script>
 
 
 </body>
