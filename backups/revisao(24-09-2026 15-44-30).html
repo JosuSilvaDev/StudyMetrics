@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revisões | StudyMetrics</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Monoton&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/css/style.css"> 
+    <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+>
+</head>
+<body>
+
+    <!-- =========================
+         MENU LATERAL
+    ========================== -->
+
+    <!-- ================= MENU LATERAL ================= -->
+    <!-- ================= MENU LATERAL ================= -->
+<!-- ================= MENU LATERAL ================= -->
+<aside class="sidebar">
+
+    <!-- LOGO -->
+    <div class="logo">
+
+        <div class="logo-simbolo">
+            <i class="bi bi-graph-up-arrow"></i>
+        </div>
+
+        <div class="logo-texto">
+            <strong>Study</strong><span>Metrics</span>
+        </div>
+
+    </div>
+
+
+    <!-- MENU -->
+    <nav class="menu">
+
+        <a href="index.html" class="menu-item">
+            <i class="bi bi-grid-1x2-fill"></i>
+            <span>Dashboard</span>
+        </a>
+
+        <a href="materias.html" class="menu-item">
+            <i class="bi bi-journal-bookmark-fill"></i>
+            <span>Matérias</span>
+        </a>
+
+        <a href="sessao.html" class="menu-item">
+            <i class="bi bi-stopwatch-fill"></i>
+            <span>Sessão de estudo</span>
+        </a>
+
+        <a href="caderno_de_questos.html" class="menu-item">
+            <i class="bi bi-journal-x"></i>
+            <span>Caderno de Erros</span>
+        </a>
+
+        <a href="revisao.html" class="menu-item">
+            <i class="bi bi-arrow-repeat"></i>
+            <span>Revisões</span>
+        </a>
+
+        <a href="perfil.html" class="menu-item">
+            <i class="bi bi-person-circle"></i>
+            <span>Perfil</span>
+        </a>
+
+    </nav>
+
+</aside>
+
+
+    <!-- =========================
+         CONTEÚDO PRINCIPAL
+    ========================== -->
+
+    <main class="conteudo">
+
+
+        <!-- =========================
+             CABEÇALHO
+        ========================== -->
+
+        <header class="cabecalho-pagina">
+
+            <h1>Revisões</h1>
+
+            <p>
+                Revise seus erros, fortaleça seus conhecimentos
+                e acompanhe sua evolução.
+            </p>
+
+        </header>
+
+
+        <!-- =========================
+             RESUMO DAS REVISÕES
+        ========================== -->
+
+        <section class="resumo-revisoes">
+
+            <article class="card-resumo-revisao">
+
+                <span class="icone-resumo">
+                    🔁
+                </span>
+
+                <div>
+                    <span>Para hoje</span>
+
+                    <strong>
+                        3
+                    </strong>
+                </div>
+
+            </article>
+
+
+            <article class="card-resumo-revisao">
+
+                <span class="icone-resumo">
+                    ⚠️
+                </span>
+
+                <div>
+                    <span>Atrasadas</span>
+
+                    <strong>
+                        1
+                    </strong>
+                </div>
+
+            </article>
+
+
+            <article class="card-resumo-revisao">
+
+                <span class="icone-resumo">
+                    📅
+                </span>
+
+                <div>
+                    <span>Esta semana</span>
+
+                    <strong>
+                        8
+                    </strong>
+                </div>
+
+            </article>
+
+
+            <article class="card-resumo-revisao">
+
+                <span class="icone-resumo">
+                    ✅
+                </span>
+
+                <div>
+                    <span>Concluídas</span>
+
+                    <strong>
+                        15
+                    </strong>
+                </div>
+
+            </article>
+
+        </section>
+
+
+        <!-- =========================
+             REVISÕES PARA HOJE
+        ========================== -->
+
+        <section class="card-revisoes-hoje">
+
+            <!-- TÍTULO -->
+
+            <div class="topo-revisoes">
+
+                <div>
+
+                    <span class="revisao-tag">
+                        PLANO DO DIA
+                    </span>
+
+                    <h2>
+                        Revisões para hoje
+                    </h2>
+
+                    <p>
+                        Comece pelos assuntos com maior prioridade.
+                    </p>
+
+                </div>
+
+
+                <!-- FILTRO -->
+
+                <select id="filtro_revisoes">
+
+                    <option value="todas">
+                        Todas
+                    </option>
+
+                    <option value="alta">
+                        Prioridade alta
+                    </option>
+
+                    <option value="hoje">
+                        Hoje
+                    </option>
+
+                    <option value="atrasadas">
+                        Atrasadas
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- =========================
+                 CARDS DAS REVISÕES
+            ========================== -->
+
+            <div class="lista-revisoes">
+
+
+                <!-- PORTUGUÊS -->
+
+               
+
+
+                
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             PRÓXIMAS REVISÕES
+        ========================== -->
+
+        <section class="card-proximas-revisoes">
+
+            <div class="titulo-secao-revisao">
+
+                <span class="revisao-tag">
+                    AGENDA
+                </span>
+
+                <h2>
+                    Próximas revisões
+                </h2>
+
+                <p>
+                    Veja o que está programado para os próximos dias.
+                </p>
+
+            </div>
+
+
+            <div class="tabela-responsiva">
+
+                <table class="tabela-revisoes">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Data
+                            </th>
+
+                            <th>
+                                Matéria
+                            </th>
+
+                            <th>
+                                Assunto
+                            </th>
+
+                            <th>
+                                Etapa
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                14/09/2026
+                            </td>
+
+                            <td>
+                                Português
+                            </td>
+
+                            <td>
+                                Concordância verbal
+                            </td>
+
+                            <td>
+                                R1
+                            </td>
+
+                            <td>
+                                <span class="status-revisao">
+                                    Programada
+                                </span>
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                15/09/2026
+                            </td>
+
+                            <td>
+                                Raciocínio Lógico
+                            </td>
+
+                            <td>
+                                Probabilidade
+                            </td>
+
+                            <td>
+                                R2
+                            </td>
+
+                            <td>
+                                <span class="status-revisao">
+                                    Programada
+                                </span>
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================================
+         MODAL - ESCOLHER MODO DA REVISÃO
+
+         Começa escondido.
+         O JavaScript irá abrir quando clicarmos
+         em "Iniciar revisão".
+    ========================================== -->
+
+    <div id="escolher_modo_revisao" class="modal-modo oculto">
+
+    <div class="modal-modo-conteudo">
+
+        <h2>Escolha o modo de revisão</h2>
+
+        <div class="modos-revisao">
+
+            <button
+                type="button"
+                class="modo-revisao"
+                data-modo="rapida"
+                data-quantidade="10"
+            >
+                <strong>Rápida</strong>
+                <span>10 questões</span>
+            </button>
+
+            <button
+                type="button"
+                class="modo-revisao"
+                data-modo="normal"
+                data-quantidade="30"
+            >
+                <strong>Normal</strong>
+                <span>30 questões</span>
+            </button>
+
+            <button
+                type="button"
+                class="modo-revisao"
+                data-modo="completa"
+                data-quantidade="60"
+            >
+                <strong>Completa</strong>
+                <span>60 questões</span>
+            </button>
+
+        </div>
+    </div>
+    <!-- =========================
+         JAVASCRIPT
+    ========================== -->
+
+    <script src="static/js/revisao_questoes.js"></script>
+    <script src="static/js/revisao.js"></script>
+    <script src="static/js/menu.js"></script>
+
+</body>
+
+</html>
+</html>
