@@ -8,12 +8,16 @@
     <title>Dashboard | StudyMetrics</title>
 
     <!-- CSS PRINCIPAL -->
-    <link rel="stylesheet" href="static/css/style.css">
-    <!-- BOOTSTRAP ICONS -->
+   <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
     <link
         rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
     >
+    
 
     <!-- CHART.JS -->
     <script
@@ -23,7 +27,7 @@
 
     <!-- JAVASCRIPT DO DASHBOARD -->
     <script
-        src="static/dashboard.js"
+        src="{{ url_for('static', filename='js/dashboard.js') }}"
         defer
     ></script>
     <link href="https://fonts.googleapis.com/css2?family=Monoton&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -32,6 +36,7 @@
     <link rel="preconnect"
           href="https://fonts.gstatic.com"
           crossorigin>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body>
@@ -525,6 +530,6 @@
         </section>
 
     </main>
-<script src="static/js/menu.js"></script>
+<script src="{{ url_for('static', filename='js/menu.js') }}"></script>
 </body>
 </html>

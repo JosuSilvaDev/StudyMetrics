@@ -235,57 +235,285 @@
 
 
                 <!-- PORTUGUÊS -->
-                <div class="lista-revisoes">
 
-                    {% for revisao in lista_de_revisoes %}
+                <article class="card-revisao prioridade-alta">
 
-                    <article class="card-revisao prioridade-{{ revisao.status }}">
+                    <div class="card-revisao-topo">
 
-                        <div class="card-revisao-topo">
-                            <span class="badge-materia">{{ revisao.materia }}</span>
-                            <span class="badge-prioridade {{ revisao.status }}">
-                                {{ revisao.status }}
+                        <span class="badge-materia">
+                            Português
+                        </span>
+
+                        <span class="badge-prioridade alta">
+                            Prioridade alta
+                        </span>
+
+                    </div>
+
+
+                    <h3>
+                        Interpretação de texto
+                    </h3>
+
+                    <p class="descricao-revisao">
+                        Revisar erros anteriores e testar
+                        novamente seus conhecimentos.
+                    </p>
+
+
+                    <div class="dados-revisao">
+
+                        <div>
+
+                            <span>
+                                Etapa
                             </span>
+
+                            <strong>
+                                R2 • 7 dias
+                            </strong>
+
                         </div>
 
-                        <h3>{{ revisao.assunto }}</h3>
 
-                        <p class="descricao-revisao">
-                            Revisar erros anteriores e testar novamente seus conhecimentos.
-                        </p>
+                        <div>
 
-                        <div class="dados-revisao">
-                            <div>
-                                <span>Etapa</span>
-                                <strong>{{ revisao.etapa }}</strong>
-                            </div>
-                            <div>
-                                <span>Desempenho</span>
-                                <strong>{{ revisao.desempenho }}%</strong>
-                            </div>
-                            <div>
-                                <span>Última revisão</span>
-                                <strong>{{ revisao.data_ultima_revisao }}</strong>
-                            </div>
+                            <span>
+                                Desempenho
+                            </span>
+
+                            <strong>
+                                58%
+                            </strong>
+
                         </div>
 
-                        <div class="acoes-revisao">
-                            <button type="button" class="btn-secundario">Ver erros</button>
-                            <button
-                                type="button"
-                                class="btn-iniciar-revisao"
-                                data-materia="{{ revisao.materia }}"
-                                data-assunto="{{ revisao.assunto }}"
-                            >
-                                Iniciar revisão
-                            </button>
+
+                        <div>
+
+                            <span>
+                                Última revisão
+                            </span>
+
+                            <strong>
+                                02/09/2026
+                            </strong>
+
                         </div>
 
-                    </article>
+                    </div>
 
-                    {% endfor %}
 
-                </div>
+                    <div class="acoes-revisao">
+
+                        <button
+                            type="button"
+                            class="btn-secundario"
+                        >
+                            Ver erros
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="btn-iniciar-revisao"
+                            data-materia="Português"
+                            data-assunto="Interpretação de texto"
+                        >
+                            Iniciar revisão
+                        </button>
+
+                    </div>
+
+                </article>
+
+
+                <!-- DIREITO ADMINISTRATIVO -->
+
+                <article class="card-revisao">
+
+                    <div class="card-revisao-topo">
+
+                        <span class="badge-materia">
+                            Direito Administrativo
+                        </span>
+
+                        <span class="badge-prioridade hoje">
+                            Hoje
+                        </span>
+
+                    </div>
+
+
+                    <h3>
+                        Atos administrativos
+                    </h3>
+
+                    <p class="descricao-revisao">
+                        Recupere os conceitos estudados
+                        e pratique novamente as questões erradas.
+                    </p>
+
+
+                    <div class="dados-revisao">
+
+                        <div>
+
+                            <span>
+                                Etapa
+                            </span>
+
+                            <strong>
+                                R1 • 1 dia
+                            </strong>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                Desempenho
+                            </span>
+
+                            <strong>
+                                74%
+                            </strong>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                Último estudo
+                            </span>
+
+                            <strong>
+                                08/09/2026
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="acoes-revisao">
+
+                        <button
+                            type="button"
+                            class="btn-secundario"
+                        >
+                            Ver matéria
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="btn-iniciar-revisao"
+                            data-materia="Direito Administrativo"
+                            data-assunto="Atos administrativos"
+                        >
+                            Iniciar revisão
+                        </button>
+
+                    </div>
+
+                </article>
+
+
+                <!-- DIREITO CONSTITUCIONAL -->
+
+                <article class="card-revisao">
+
+                    <div class="card-revisao-topo">
+
+                        <span class="badge-materia">
+                            Constitucional
+                        </span>
+
+                        <span class="badge-prioridade hoje">
+                            Hoje
+                        </span>
+
+                    </div>
+
+
+                    <h3>
+                        Direitos fundamentais
+                    </h3>
+
+                    <p class="descricao-revisao">
+                        Revise os erros desse assunto
+                        e teste sua retenção.
+                    </p>
+
+
+                    <div class="dados-revisao">
+
+                        <div>
+
+                            <span>
+                                Etapa
+                            </span>
+
+                            <strong>
+                                R3 • 30 dias
+                            </strong>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                Desempenho
+                            </span>
+
+                            <strong>
+                                86%
+                            </strong>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                Última revisão
+                            </span>
+
+                            <strong>
+                                10/08/2026
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="acoes-revisao">
+
+                        <button
+                            type="button"
+                            class="btn-secundario"
+                        >
+                            Ver matéria
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="btn-iniciar-revisao"
+                            data-materia="Direito Constitucional"
+                            data-assunto="Direitos fundamentais"
+                        >
+                            Iniciar revisão
+                        </button>
+
+                    </div>
+
+                </article>
 
             </div>
 
