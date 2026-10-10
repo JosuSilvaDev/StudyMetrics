@@ -1,8 +1,8 @@
 import sqlite3
 from pathlib import Path
 
-BASE_DIR = Path(__file__).resolve().parent
-DATABASE = BASE_DIR / "database" / "studymetrics.db"
+# O banco fica sempre dentro de back_end/database/
+DATABASE = Path(__file__).parent / "database" / "studymetrics.db"
 
 
 def get_db():
@@ -23,10 +23,10 @@ def init_db():
             assunto TEXT NOT NULL,
             material TEXT,
             link_material TEXT,
-            dificuldade TEXT,
-            prioridade TEXT,
+            dificuldade TEXT DEFAULT 'medio',
+            prioridade TEXT DEFAULT 'normal',
             observacao TEXT,
-            criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            criado_em TEXT DEFAULT CURRENT_TIMESTAMP
         )
     """)
 
