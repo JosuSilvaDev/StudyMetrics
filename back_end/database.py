@@ -29,6 +29,33 @@ def init_db():
             criado_em TEXT DEFAULT CURRENT_TIMESTAMP
         )
     """)
+    conn.execute("""
+    CREATE TABLE IF NOT EXISTS sessoes (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        materia TEXT NOT NULL,
+        assunto TEXT NOT NULL,
+        tempo_planejado INTEGER DEFAULT 0,
+        tempo_segundos INTEGER DEFAULT 0,
+        meta_questoes INTEGER DEFAULT 0,
+        questoes_realizadas INTEGER DEFAULT 0,
+        acertos INTEGER DEFAULT 0,
+        observacao TEXT,
+        criado_em TEXT DEFAULT CURRENT_TIMESTAMP
+    )
+""")
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS erros (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            questao TEXT NOT NULL,
+            materia TEXT NOT NULL,
+            assunto TEXT NOT NULL,
+            motivo TEXT NOT NULL,
+            resposta_correta TEXT NOT NULL,
+            observacao TEXT,
+            para_revisar INTEGER DEFAULT 0,
+            criado_em TEXT DEFAULT CURRENT_TIMESTAMP
+        )
+    """)    
 
     conn.commit()
     conn.close()
