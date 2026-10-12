@@ -269,60 +269,48 @@ btnToggle.addEventListener(
 
 
 // =========================
-// VOLTAR
+// =========================
+// AVANÇAR
 // =========================
 
-btnAnterior.addEventListener(
-    "click",
-    function() {
+btnProximo.addEventListener("click", function () {
 
-        if (modoSemana) {
+    if (modoSemana) {
 
-            dataCalendario.setDate(
-                dataCalendario.getDate() - 7
-            );
+        dataCalendario.setDate(dataCalendario.getDate() + 7);
 
-        } else {
+    } else {
 
-            dataCalendario.setMonth(
-                dataCalendario.getMonth() - 1
-            );
-
-        }
-
-        gerarCalendario();
+        dataCalendario.setDate(1);
+        dataCalendario.setMonth(dataCalendario.getMonth() + 1);
 
     }
-);
+
+    gerarCalendario();
+
+});
 
 
 // =========================
 // AVANÇAR
 // =========================
 
-btnProximo.addEventListener(
-    "click",
-    function() {
+btnProximo.addEventListener("click", function () {
 
-        if (modoSemana) {
+    if (modoSemana) {
 
-            dataCalendario.setDate(
-                dataCalendario.getDate() + 7
-            );
+        dataCalendario.setDate(dataCalendario.getDate() + 7);
 
-        } else {
+    } else {
 
-            dataCalendario.setMonth(
-                dataCalendario.getMonth() + 1
-            );
-
-        }
-
-        gerarCalendario();
+        dataCalendario.setDate(1);
+        dataCalendario.setMonth(dataCalendario.getMonth() + 1);
 
     }
-);
 
+    gerarCalendario();
+
+});
 
 gerarCalendario();
     // ===============================
