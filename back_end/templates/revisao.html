@@ -14,650 +14,316 @@
 >
 </head>
 <body>
-
+ 
     <!-- =========================
          MENU LATERAL
     ========================== -->
-
+ 
     <!-- ================= MENU LATERAL ================= -->
     <!-- ================= MENU LATERAL ================= -->
 <!-- ================= MENU LATERAL ================= -->
 <aside class="sidebar">
-
+ 
     <!-- LOGO -->
     <div class="logo">
-
+ 
         <div class="logo-simbolo">
             <i class="bi bi-graph-up-arrow"></i>
         </div>
-
+ 
         <div class="logo-texto">
             <strong>Study</strong><span>Metrics</span>
         </div>
-
+ 
     </div>
-
-
+ 
+ 
     <!-- MENU -->
     <nav class="menu">
-
+ 
         <a href="index.html" class="menu-item">
             <i class="bi bi-grid-1x2-fill"></i>
             <span>Dashboard</span>
         </a>
-
+ 
         <a href="materias.html" class="menu-item">
             <i class="bi bi-journal-bookmark-fill"></i>
             <span>Matérias</span>
         </a>
-
+ 
         <a href="sessao.html" class="menu-item">
             <i class="bi bi-stopwatch-fill"></i>
             <span>Sessão de estudo</span>
         </a>
-
+ 
         <a href="caderno_de_questos.html" class="menu-item">
             <i class="bi bi-journal-x"></i>
             <span>Caderno de Erros</span>
         </a>
-
+ 
         <a href="revisao.html" class="menu-item">
             <i class="bi bi-arrow-repeat"></i>
             <span>Revisões</span>
         </a>
-
+ 
         <a href="perfil.html" class="menu-item">
             <i class="bi bi-person-circle"></i>
             <span>Perfil</span>
         </a>
-
+ 
     </nav>
-
+ 
 </aside>
-
-
+ 
+ 
     <!-- =========================
          CONTEÚDO PRINCIPAL
     ========================== -->
-
+ 
     <main class="conteudo">
-
-
+ 
+ 
         <!-- =========================
              CABEÇALHO
         ========================== -->
-
+ 
         <header class="cabecalho-pagina">
-
+ 
             <h1>Revisões</h1>
-
+ 
             <p>
                 Revise seus erros, fortaleça seus conhecimentos
                 e acompanhe sua evolução.
             </p>
-
+ 
         </header>
-
-
+ 
+ 
         <!-- =========================
              RESUMO DAS REVISÕES
         ========================== -->
-
+ 
         <section class="resumo-revisoes">
-
+ 
             <article class="card-resumo-revisao">
-
+ 
                 <span class="icone-resumo">
                     🔁
                 </span>
-
+ 
                 <div>
                     <span>Para hoje</span>
-
-                    <strong>
-                        3
+ 
+                    <strong id="total_hoje">
+                        0
                     </strong>
                 </div>
-
+ 
             </article>
-
-
+ 
+ 
             <article class="card-resumo-revisao">
-
+ 
                 <span class="icone-resumo">
                     ⚠️
                 </span>
-
+ 
                 <div>
                     <span>Atrasadas</span>
-
-                    <strong>
-                        1
+ 
+                    <strong id="total_atrasadas">
+                        0
                     </strong>
                 </div>
-
+ 
             </article>
-
-
+ 
+ 
             <article class="card-resumo-revisao">
-
+ 
                 <span class="icone-resumo">
                     📅
                 </span>
-
+ 
                 <div>
                     <span>Esta semana</span>
-
-                    <strong>
-                        8
+ 
+                    <strong id="total_semana">
+                        0
                     </strong>
                 </div>
-
+ 
             </article>
-
-
+ 
+ 
             <article class="card-resumo-revisao">
-
+ 
                 <span class="icone-resumo">
                     ✅
                 </span>
-
+ 
                 <div>
                     <span>Concluídas</span>
-
-                    <strong>
-                        15
+ 
+                    <strong id="total_concluidas">
+                        0
                     </strong>
                 </div>
-
+ 
             </article>
-
+ 
         </section>
-
-
+ 
+ 
         <!-- =========================
              REVISÕES PARA HOJE
         ========================== -->
-
+ 
         <section class="card-revisoes-hoje">
-
+ 
             <!-- TÍTULO -->
-
+ 
             <div class="topo-revisoes">
-
+ 
                 <div>
-
+ 
                     <span class="revisao-tag">
                         PLANO DO DIA
                     </span>
-
+ 
                     <h2>
                         Revisões para hoje
                     </h2>
-
+ 
                     <p>
                         Comece pelos assuntos com maior prioridade.
                     </p>
-
+ 
                 </div>
-
-
+ 
+ 
                 <!-- FILTRO -->
-
+ 
                 <select id="filtro_revisoes">
-
+ 
                     <option value="todas">
                         Todas
                     </option>
-
+ 
                     <option value="alta">
                         Prioridade alta
                     </option>
-
+ 
                     <option value="hoje">
                         Hoje
                     </option>
-
+ 
                     <option value="atrasadas">
                         Atrasadas
                     </option>
-
+ 
                 </select>
-
+ 
             </div>
-
-
+ 
+ 
             <!-- =========================
                  CARDS DAS REVISÕES
+                 (o JavaScript cria os cards aqui)
             ========================== -->
-
-            <div class="lista-revisoes">
-
-
-                <!-- PORTUGUÊS -->
-
-                <article class="card-revisao prioridade-alta">
-
-                    <div class="card-revisao-topo">
-
-                        <span class="badge-materia">
-                            Português
-                        </span>
-
-                        <span class="badge-prioridade alta">
-                            Prioridade alta
-                        </span>
-
-                    </div>
-
-
-                    <h3>
-                        Interpretação de texto
-                    </h3>
-
-                    <p class="descricao-revisao">
-                        Revisar erros anteriores e testar
-                        novamente seus conhecimentos.
-                    </p>
-
-
-                    <div class="dados-revisao">
-
-                        <div>
-
-                            <span>
-                                Etapa
-                            </span>
-
-                            <strong>
-                                R2 • 7 dias
-                            </strong>
-
-                        </div>
-
-
-                        <div>
-
-                            <span>
-                                Desempenho
-                            </span>
-
-                            <strong>
-                                58%
-                            </strong>
-
-                        </div>
-
-
-                        <div>
-
-                            <span>
-                                Última revisão
-                            </span>
-
-                            <strong>
-                                02/09/2026
-                            </strong>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="acoes-revisao">
-
-                        <button
-                            type="button"
-                            class="btn-secundario"
-                        >
-                            Ver erros
-                        </button>
-
-
-                        <button
-                            type="button"
-                            class="btn-iniciar-revisao"
-                            data-materia="Português"
-                            data-assunto="Interpretação de texto"
-                        >
-                            Iniciar revisão
-                        </button>
-
-                    </div>
-
-                </article>
-
-
-                <!-- DIREITO ADMINISTRATIVO -->
-
-                <article class="card-revisao">
-
-                    <div class="card-revisao-topo">
-
-                        <span class="badge-materia">
-                            Direito Administrativo
-                        </span>
-
-                        <span class="badge-prioridade hoje">
-                            Hoje
-                        </span>
-
-                    </div>
-
-
-                    <h3>
-                        Atos administrativos
-                    </h3>
-
-                    <p class="descricao-revisao">
-                        Recupere os conceitos estudados
-                        e pratique novamente as questões erradas.
-                    </p>
-
-
-                    <div class="dados-revisao">
-
-                        <div>
-
-                            <span>
-                                Etapa
-                            </span>
-
-                            <strong>
-                                R1 • 1 dia
-                            </strong>
-
-                        </div>
-
-
-                        <div>
-
-                            <span>
-                                Desempenho
-                            </span>
-
-                            <strong>
-                                74%
-                            </strong>
-
-                        </div>
-
-
-                        <div>
-
-                            <span>
-                                Último estudo
-                            </span>
-
-                            <strong>
-                                08/09/2026
-                            </strong>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="acoes-revisao">
-
-                        <button
-                            type="button"
-                            class="btn-secundario"
-                        >
-                            Ver matéria
-                        </button>
-
-
-                        <button
-                            type="button"
-                            class="btn-iniciar-revisao"
-                            data-materia="Direito Administrativo"
-                            data-assunto="Atos administrativos"
-                        >
-                            Iniciar revisão
-                        </button>
-
-                    </div>
-
-                </article>
-
-
-                <!-- DIREITO CONSTITUCIONAL -->
-
-                <article class="card-revisao">
-
-                    <div class="card-revisao-topo">
-
-                        <span class="badge-materia">
-                            Constitucional
-                        </span>
-
-                        <span class="badge-prioridade hoje">
-                            Hoje
-                        </span>
-
-                    </div>
-
-
-                    <h3>
-                        Direitos fundamentais
-                    </h3>
-
-                    <p class="descricao-revisao">
-                        Revise os erros desse assunto
-                        e teste sua retenção.
-                    </p>
-
-
-                    <div class="dados-revisao">
-
-                        <div>
-
-                            <span>
-                                Etapa
-                            </span>
-
-                            <strong>
-                                R3 • 30 dias
-                            </strong>
-
-                        </div>
-
-
-                        <div>
-
-                            <span>
-                                Desempenho
-                            </span>
-
-                            <strong>
-                                86%
-                            </strong>
-
-                        </div>
-
-
-                        <div>
-
-                            <span>
-                                Última revisão
-                            </span>
-
-                            <strong>
-                                10/08/2026
-                            </strong>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="acoes-revisao">
-
-                        <button
-                            type="button"
-                            class="btn-secundario"
-                        >
-                            Ver matéria
-                        </button>
-
-
-                        <button
-                            type="button"
-                            class="btn-iniciar-revisao"
-                            data-materia="Direito Constitucional"
-                            data-assunto="Direitos fundamentais"
-                        >
-                            Iniciar revisão
-                        </button>
-
-                    </div>
-
-                </article>
-
+ 
+            <div class="lista-revisoes" id="lista_revisoes">
+ 
             </div>
-
+ 
         </section>
-
-
+ 
+ 
         <!-- =========================
              PRÓXIMAS REVISÕES
         ========================== -->
-
+ 
         <section class="card-proximas-revisoes">
-
+ 
             <div class="titulo-secao-revisao">
-
+ 
                 <span class="revisao-tag">
                     AGENDA
                 </span>
-
+ 
                 <h2>
                     Próximas revisões
                 </h2>
-
+ 
                 <p>
                     Veja o que está programado para os próximos dias.
                 </p>
-
+ 
             </div>
-
-
+ 
+ 
             <div class="tabela-responsiva">
-
+ 
                 <table class="tabela-revisoes">
-
+ 
                     <thead>
-
+ 
                         <tr>
-
+ 
                             <th>
                                 Data
                             </th>
-
+ 
                             <th>
                                 Matéria
                             </th>
-
+ 
                             <th>
                                 Assunto
                             </th>
-
+ 
                             <th>
                                 Etapa
                             </th>
-
+ 
                             <th>
                                 Status
                             </th>
-
+ 
                         </tr>
-
+ 
                     </thead>
-
-
-                    <tbody>
-
-                        <tr>
-
-                            <td>
-                                14/09/2026
-                            </td>
-
-                            <td>
-                                Português
-                            </td>
-
-                            <td>
-                                Concordância verbal
-                            </td>
-
-                            <td>
-                                R1
-                            </td>
-
-                            <td>
-                                <span class="status-revisao">
-                                    Programada
-                                </span>
-                            </td>
-
-                        </tr>
-
-
-                        <tr>
-
-                            <td>
-                                15/09/2026
-                            </td>
-
-                            <td>
-                                Raciocínio Lógico
-                            </td>
-
-                            <td>
-                                Probabilidade
-                            </td>
-
-                            <td>
-                                R2
-                            </td>
-
-                            <td>
-                                <span class="status-revisao">
-                                    Programada
-                                </span>
-                            </td>
-
-                        </tr>
-
+ 
+ 
+                    <tbody id="tabela_proximas">
+ 
                     </tbody>
-
+ 
                 </table>
-
+ 
             </div>
-
+ 
         </section>
-
+ 
     </main>
-
-
+ 
+ 
     <!-- =========================================
          MODAL - ESCOLHER MODO DA REVISÃO
-
+ 
          Começa escondido.
          O JavaScript irá abrir quando clicarmos
          em "Iniciar revisão".
     ========================================== -->
-
+ 
     <div id="escolher_modo_revisao" class="modal-modo oculto">
-
+ 
     <div class="modal-modo-conteudo">
-
+ 
         <h2>Escolha o modo de revisão</h2>
-
+ 
         <div class="modos-revisao">
-
+ 
             <button
                 type="button"
                 class="modo-revisao"
@@ -667,7 +333,7 @@
                 <strong>Rápida</strong>
                 <span>10 questões</span>
             </button>
-
+ 
             <button
                 type="button"
                 class="modo-revisao"
@@ -677,7 +343,7 @@
                 <strong>Normal</strong>
                 <span>30 questões</span>
             </button>
-
+ 
             <button
                 type="button"
                 class="modo-revisao"
@@ -687,18 +353,20 @@
                 <strong>Completa</strong>
                 <span>60 questões</span>
             </button>
-
+ 
         </div>
     </div>
+ 
+    </div>
+ 
     <!-- =========================
          JAVASCRIPT
     ========================== -->
-
-    <script src="static/js/revisao_questoes.js"></script>
+ 
     <script src="static/js/revisao.js"></script>
     <script src="static/js/menu.js"></script>
-
+ 
 </body>
-
+ 
 </html>
-</html>
+ 

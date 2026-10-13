@@ -55,7 +55,32 @@ def init_db():
             para_revisar INTEGER DEFAULT 0,
             criado_em TEXT DEFAULT CURRENT_TIMESTAMP
         )
-    """)    
+    """)
+
+
+
+    conn.execute("""
+            CREATE TABLE IF NOT EXISTS revisoes (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                materia TEXT NOT NULL,
+                assunto TEXT,
+                modo TEXT,
+                total_questoes INTEGER DEFAULT 0,
+                acertos INTEGER DEFAULT 0,
+                erros INTEGER DEFAULT 0,
+                criado_em TEXT DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+    
+    conn.execute("""
+            CREATE TABLE IF NOT EXISTS revisoes_itens (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                revisao_id INTEGER NOT NULL,
+                erro_id INTEGER NOT NULL,
+                acertou INTEGER NOT NULL,
+                criado_em TEXT DEFAULT CURRENT_TIMESTAMP
+            )
+        """)   
 
     conn.commit()
     conn.close()

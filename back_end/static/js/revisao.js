@@ -1,1193 +1,259 @@
-document.addEventListener("DOMContentLoaded", function () {
-
-    /* =====================================================
-       CONFIGURAÇÕES
-    ===================================================== */
-
-    const STORAGE_ERROS = "studymetrics_erros";
-    const STORAGE_REVISOES = "studymetrics_revisoes";
-
-    const listaRevisoes =
-        document.getElementById("lista_revisoes");
-
-    const filtroRevisoes =
-        document.getElementById("filtro_revisoes");
-
-    const tabelaHistorico =
-        document.getElementById("tabela_historico_revisoes");
-
-    const modal =
-        document.getElementById("escolher_modo_revisao");
-
-    const totalParaRevisar =
-        document.getElementById("total_para_revisar");
-
-    const totalRevisoesHoje =
-        document.getElementById("total_revisoes_hoje");
-
-    const totalRevisadas =
-        document.getElementById("total_revisadas");
-
-    const mediaAproveitamento =
-        document.getElementById("media_aproveitamento");
-
-
-    /* =====================================================
-       DADOS
-    ===================================================== */
-
-    let erros = carregarArray(STORAGE_ERROS);
-
-    let historico =
-        carregarArray(STORAGE_REVISOES);
-
-    let selecaoAtual = {
-        materia: "",
-        assunto: ""
+// =========================
+// ELEMENTOS DA PÁGINA
+// =========================
+const listaRevisoes = document.getElementById("lista_revisoes");
+const filtroRevisoes = document.getElementById("filtro_revisoes");
+const tabelaProximas = document.getElementById("tabela_proximas");
+const modal = document.getElementById("escolher_modo_revisao");
+ 
+let grupos = [];            // assuntos com questões pendentes
+let grupoEscolhido = null;  // assunto escolhido em "Iniciar revisão"
+ 
+// Evita que um texto digitado vire código HTML
+function escapar(texto) {
+    const div = document.createElement("div");
+    div.textContent = texto ?? "";
+    return div.innerHTML;
+}
+ 
+// Data guardada pelo banco (UTC) -> data local
+function formatarData(criadoEm) {
+    return new Date(criadoEm.replace(" ", "T") + "Z")
+        .toLocaleDateString("pt-BR");
+}
+ 
+// "2026-10-14" -> "14/10/2026"
+function formatarDataIso(iso) {
+    const partes = iso.split("-");
+    return partes[2] + "/" + partes[1] + "/" + partes[0];
+}
+ 
+function textoEtapa(g) {
+    return "R" + g.etapa + " • " + g.intervalo +
+        (g.intervalo === 1 ? " dia" : " dias");
+}
+ 
+// Situação da revisão: atrasada, hoje, prioridade alta ou futura
+function situacao(g) {
+    if (g.dias < 0) {
+        return { classe: "alta", texto: "Atrasada" };
+    }
+ 
+    if (g.dias === 0) {
+        return { classe: "hoje", texto: "Hoje" };
+    }
+ 
+    if (g.prioridade === "alta") {
+        return { classe: "alta", texto: "Prioridade alta" };
+    }
+ 
+    return {
+        classe: "",
+        texto: g.dias === 1 ? "Amanhã" : "Em " + g.dias + " dias"
     };
-
-
-    /* =====================================================
-       INICIAR PÁGINA
-    ===================================================== */
-
-    atualizarResumo();
-
-    montarFiltro();
-
-    renderizarRevisoes();
-
-    renderizarHistorico();
-
-
-    /* =====================================================
-       FILTRO DE MATÉRIAS
-    ===================================================== */
-
-    if (filtroRevisoes) {
-
-        filtroRevisoes.addEventListener(
-            "change",
-            function () {
-
-                renderizarRevisoes(
-                    filtroRevisoes.value
-                );
-
-            }
-        );
-
+}
+ 
+// =========================
+// CARDS
+// =========================
+function desenharCards() {
+    const filtro = filtroRevisoes.value;
+ 
+    const visiveis = grupos.filter(function (g) {
+        if (filtro === "alta") return g.prioridade === "alta";
+        if (filtro === "hoje") return g.dias === 0;
+        if (filtro === "atrasadas") return g.dias < 0;
+        return true;
+    });
+ 
+    if (visiveis.length === 0) {
+        listaRevisoes.innerHTML = `
+            <p>
+                Nenhuma revisão para mostrar. Marque erros com
+                "Adicionar às revisões" no
+                <a href="caderno_de_questos.html">Caderno de Erros</a>.
+            </p>`;
+        return;
     }
-
-
-    /* =====================================================
-       CLIQUES
-    ===================================================== */
-
-    document.addEventListener(
-        "click",
-        function (event) {
-
-            /* =============================================
-               INICIAR REVISÃO
-            ============================================= */
-
-            const botaoIniciar =
-                event.target.closest(
-                    ".btn-iniciar-revisao"
-                );
-
-
-            if (botaoIniciar) {
-
-                selecaoAtual = {
-
-                    materia:
-                        botaoIniciar.dataset.materia || "",
-
-                    assunto:
-                        botaoIniciar.dataset.assunto || ""
-
-                };
-
-
-                if (modal) {
-
-                    modal.classList.remove(
-                        "oculto"
-                    );
-
-                } else {
-
-                    abrirRevisao(
-                        "rapida",
-                        10
-                    );
-
-                }
-
-
-                return;
-
-            }
-
-
-            /* =============================================
-               ESCOLHER MODO
-            ============================================= */
-
-            const botaoModo =
-                event.target.closest(
-                    ".modo-revisao"
-                );
-
-
-            if (botaoModo) {
-
-                const modo =
-                    botaoModo.dataset.modo ||
-                    "rapida";
-
-
-                const quantidade =
-                    Number(
-                        botaoModo.dataset.quantidade
-                    ) || 10;
-
-
-                abrirRevisao(
-                    modo,
-                    quantidade
-                );
-
-
-                return;
-
-            }
-
-
-            /* =============================================
-               FECHAR MODAL
-            ============================================= */
-
-            const fecharModal =
-                event.target.closest(
-                    "[data-fechar-modal]"
-                );
-
-
-            if (
-                fecharModal ||
-                event.target === modal
-            ) {
-
-                fecharModalRevisao();
-
-            }
-
-        }
-    );
-
-
-    /* =====================================================
-       RESUMO SUPERIOR
-    ===================================================== */
-
-    function atualizarResumo() {
-
-        const questoesParaRevisar =
-            erros.filter(
-                function (erro) {
-
-                    return (
-                        erro &&
-                        erro.revisar === true
-                    );
-
-                }
-            );
-
-
-        /* TOTAL PARA REVISAR */
-
-        if (totalParaRevisar) {
-
-            totalParaRevisar.textContent =
-                questoesParaRevisar.length;
-
-        }
-
-
-        /* QUESTÕES JÁ REVISADAS */
-
-        const revisadas =
-            questoesParaRevisar.filter(
-                function (erro) {
-
-                    return (
-                        Number(
-                            erro.vezesRevisada || 0
-                        ) > 0
-                    );
-
-                }
-            );
-
-
-        if (totalRevisadas) {
-
-            totalRevisadas.textContent =
-                revisadas.length;
-
-        }
-
-
-        /* REVISÕES DE HOJE */
-
-        const hoje =
-            dataHojeISO();
-
-
-        const hojeQuantidade =
-            questoesParaRevisar.filter(
-                function (erro) {
-
-                    const data =
-                        erro.dataRevisao ||
-                        erro.proximaRevisao ||
-                        erro.proxima_revisao ||
-                        "";
-
-
-                    return normalizarData(
-                        data
-                    ) === hoje;
-
-                }
-            ).length;
-
-
-        if (totalRevisoesHoje) {
-
-            totalRevisoesHoje.textContent =
-                hojeQuantidade;
-
-        }
-
-
-        /* APROVEITAMENTO */
-
-        if (
-            historico.length === 0
-        ) {
-
-            if (mediaAproveitamento) {
-
-                mediaAproveitamento.textContent =
-                    "0%";
-
-            }
-
-            return;
-
-        }
-
-
-        const valoresValidos =
-            historico
-                .map(
-                    function (item) {
-
-                        return Number(
-                            item.aproveitamento
-                        );
-
-                    }
-                )
-                .filter(
-                    function (valor) {
-
-                        return !Number.isNaN(
-                            valor
-                        );
-
-                    }
-                );
-
-
-        let media = 0;
-
-
-        if (
-            valoresValidos.length > 0
-        ) {
-
-            const soma =
-                valoresValidos.reduce(
-                    function (
-                        total,
-                        valor
-                    ) {
-
-                        return total + valor;
-
-                    },
-                    0
-                );
-
-
-            media =
-                Math.round(
-                    soma /
-                    valoresValidos.length
-                );
-
-        }
-
-
-        if (mediaAproveitamento) {
-
-            mediaAproveitamento.textContent =
-                `${media}%`;
-
-        }
-
-    }
-
-
-    /* =====================================================
-       MONTAR FILTRO
-    ===================================================== */
-
-    function montarFiltro() {
-
-        if (!filtroRevisoes) {
-            return;
-        }
-
-
-        const questoes =
-            erros.filter(
-                function (erro) {
-
-                    return (
-                        erro &&
-                        erro.revisar === true
-                    );
-
-                }
-            );
-
-
-        const materias =
-            [
-                ...new Set(
-                    questoes
-                        .map(
-                            function (erro) {
-
-                                return (
-                                    erro.materia ||
-                                    erro.materiaValor ||
-                                    ""
-                                );
-
-                            }
-                        )
-                        .filter(Boolean)
-                )
-            ];
-
-
-        materias.sort(
-            function (a, b) {
-
-                return a.localeCompare(
-                    b,
-                    "pt-BR"
-                );
-
-            }
-        );
-
-
-        filtroRevisoes.innerHTML =
-            `
-                <option value="todas">
-                    Todas as matérias
-                </option>
-            `;
-
-
-        materias.forEach(
-            function (materia) {
-
-                const option =
-                    document.createElement(
-                        "option"
-                    );
-
-
-                option.value =
-                    materia;
-
-
-                option.textContent =
-                    materia;
-
-
-                filtroRevisoes.appendChild(
-                    option
-                );
-
-            }
-        );
-
-    }
-
-
-    /* =====================================================
-       RENDERIZAR CARDS
-    ===================================================== */
-
-    function renderizarRevisoes(
-        filtro = "todas"
-    ) {
-
-        if (!listaRevisoes) {
-            return;
-        }
-
-
-        let questoes =
-            erros.filter(
-                function (erro) {
-
-                    return (
-                        erro &&
-                        erro.revisar === true
-                    );
-
-                }
-            );
-
-
-        /* FILTRO */
-
-        if (
-            filtro &&
-            filtro !== "todas"
-        ) {
-
-            questoes =
-                questoes.filter(
-                    function (erro) {
-
-                        const materia =
-                            erro.materia ||
-                            erro.materiaValor ||
-                            "";
-
-
-                        return (
-                            materia === filtro
-                        );
-
-                    }
-                );
-
-        }
-
-
-        /* SEM QUESTÕES */
-
-        if (
-            questoes.length === 0
-        ) {
-
-            listaRevisoes.innerHTML =
-                `
-                    <div class="revisao-vazia">
-
-                        <i class="bi bi-journal-check"></i>
-
-                        <div>
-
-                            <strong>
-                                Nenhuma revisão disponível
-                            </strong>
-
-                            <p>
-                                Adicione questões no Caderno de Erros
-                                e marque-as para revisão.
-                            </p>
-
-                            <a
-                                href="caderno_de_questoes.html"
-                                class="btn-secundario"
-                            >
-                                Ir para o Caderno de Erros
-                            </a>
-
-                        </div>
-
-                    </div>
-                `;
-
-
-            return;
-
-        }
-
-
-        /* AGRUPAR POR MATÉRIA + ASSUNTO */
-
-        const grupos = {};
-
-
-        questoes.forEach(
-            function (erro) {
-
-                const materia =
-                    erro.materia ||
-                    erro.materiaValor ||
-                    "Sem matéria";
-
-
-                const assunto =
-                    erro.assunto ||
-                    "Sem assunto";
-
-
-                const chave =
-                    `${materia}|||${assunto}`;
-
-
-                if (!grupos[chave]) {
-
-                    grupos[chave] = {
-
-                        materia:
-                            materia,
-
-                        assunto:
-                            assunto,
-
-                        questoes:
-                            []
-
-                    };
-
-                }
-
-
-                grupos[chave]
-                    .questoes
-                    .push(
-                        erro
-                    );
-
-            }
-        );
-
-
-        listaRevisoes.innerHTML =
-            "";
-
-
-        Object.values(
-            grupos
-        ).forEach(
-            function (grupo) {
-
-                const card =
-                    criarCardRevisao(
-                        grupo
-                    );
-
-
-                listaRevisoes.appendChild(
-                    card
-                );
-
-            }
-        );
-
-    }
-
-
-    /* =====================================================
-       CRIAR CARD
-    ===================================================== */
-
-    function criarCardRevisao(
-        grupo
-    ) {
-
-        const total =
-            grupo.questoes.length;
-
-
-        const revisadas =
-            grupo.questoes.filter(
-                function (questao) {
-
-                    return (
-                        Number(
-                            questao.vezesRevisada || 0
-                        ) > 0
-                    );
-
-                }
-            ).length;
-
-
-        const totalAcertos =
-            grupo.questoes.reduce(
-                function (
-                    soma,
-                    questao
-                ) {
-
-                    return (
-                        soma +
-                        Number(
-                            questao.acertosRevisao || 0
-                        )
-                    );
-
-                },
-                0
-            );
-
-
-        const totalErros =
-            grupo.questoes.reduce(
-                function (
-                    soma,
-                    questao
-                ) {
-
-                    return (
-                        soma +
-                        Number(
-                            questao.errosRevisao || 0
-                        )
-                    );
-
-                },
-                0
-            );
-
-
-        const tentativas =
-            totalAcertos +
-            totalErros;
-
-
-        const desempenho =
-            tentativas > 0
-
-                ? Math.round(
-                    (
-                        totalAcertos /
-                        tentativas
-                    ) * 100
-                )
-
-                : 0;
-
-
-        const card =
-            document.createElement(
-                "article"
-            );
-
-
-        card.className =
-            "card-revisao";
-
-
-        card.dataset.materia =
-            grupo.materia;
-
-
-        card.dataset.assunto =
-            grupo.assunto;
-
-
-        card.innerHTML =
-            `
+ 
+    listaRevisoes.innerHTML = visiveis.map(function (g) {
+        const indice = grupos.indexOf(g);
+        const sit = situacao(g);
+ 
+        const desempenho = g.respondidas > 0
+            ? Math.round((g.acertos / g.respondidas) * 100) + "%"
+            : "-";
+ 
+        const ultima = g.ultima ? formatarData(g.ultima) : "Nunca";
+        const palavra = g.pendentes === 1 ? "questão" : "questões";
+ 
+        return `
+            <article class="card-revisao ${g.prioridade === "alta" ? "prioridade-alta" : ""}">
+ 
                 <div class="card-revisao-topo">
-
+ 
                     <span class="badge-materia">
-                        ${escaparHTML(
-                            grupo.materia
-                        )}
+                        ${escapar(g.materia)}
                     </span>
-
-                    <span class="badge-prioridade hoje">
-                        ${total}
-                        ${
-                            total === 1
-                                ? "questão"
-                                : "questões"
-                        }
+ 
+                    <span class="badge-prioridade ${sit.classe}">
+                        ${sit.texto}
                     </span>
-
+ 
                 </div>
-
-
+ 
                 <h3>
-                    ${escaparHTML(
-                        grupo.assunto
-                    )}
+                    ${escapar(g.assunto)}
                 </h3>
-
-
+ 
                 <p class="descricao-revisao">
-
-                    Questões registradas no
-                    Caderno de Erros para
-                    reforçar este conteúdo.
-
+                    ${g.pendentes} ${palavra} para revisar.
+                    Teste novamente seus conhecimentos.
                 </p>
-
-
+ 
                 <div class="dados-revisao">
-
+ 
                     <div>
-
-                        <span>
-                            DISPONÍVEIS
-                        </span>
-
-                        <strong>
-                            ${total}
-                        </strong>
-
+                        <span>Etapa</span>
+                        <strong>${textoEtapa(g)}</strong>
                     </div>
-
-
+ 
                     <div>
-
-                        <span>
-                            REVISADAS
-                        </span>
-
-                        <strong>
-                            ${revisadas}
-                        </strong>
-
+                        <span>Desempenho</span>
+                        <strong>${desempenho}</strong>
                     </div>
-
-
+ 
                     <div>
-
-                        <span>
-                            DESEMPENHO
-                        </span>
-
-                        <strong>
-                            ${desempenho}%
-                        </strong>
-
+                        <span>Última revisão</span>
+                        <strong>${ultima}</strong>
                     </div>
-
+ 
                 </div>
-
-
+ 
                 <div class="acoes-revisao">
-
-                    <a
-                        href="caderno_de_questoes.html"
-                        class="btn-secundario"
-                    >
-                        Ver questões
+ 
+                    <a href="caderno_de_questos.html" class="btn-secundario">
+                        Ver erros
                     </a>
-
-
+ 
                     <button
                         type="button"
                         class="btn-iniciar-revisao"
-                        data-materia="${escaparAtributo(
-                            grupo.materia
-                        )}"
-                        data-assunto="${escaparAtributo(
-                            grupo.assunto
-                        )}"
+                        data-indice="${indice}"
                     >
-
-                        <i class="bi bi-play-fill"></i>
-
                         Iniciar revisão
-
                     </button>
-
+ 
                 </div>
-            `;
-
-
-        return card;
-
+ 
+            </article>`;
+    }).join("");
+}
+ 
+// =========================
+// PRÓXIMAS REVISÕES
+// =========================
+function desenharProximas() {
+    const futuras = grupos.filter(g => g.dias > 0).slice(0, 10);
+ 
+    if (futuras.length === 0) {
+        tabelaProximas.innerHTML =
+            '<tr><td colspan="5">Nenhuma revisão programada.</td></tr>';
+        return;
     }
-
-
-    /* =====================================================
-       ABRIR REVISÃO
-    ===================================================== */
-
-    function abrirRevisao(
-        modo,
-        quantidade
-    ) {
-
-        if (
-            !selecaoAtual.materia
-        ) {
-
-            alert(
-                "Não foi possível identificar a matéria."
-            );
-
-            return;
-
-        }
-
-
-        const revisaoAtual = {
-
-            materia:
-                selecaoAtual.materia,
-
-            assunto:
-                selecaoAtual.assunto,
-
-            modo:
-                modo,
-
-            quantidade:
-                quantidade
-
-        };
-
-
-        sessionStorage.setItem(
-            "revisaoAtual",
-            JSON.stringify(
-                revisaoAtual
-            )
-        );
-
-
-        window.location.href =
-            "revisao_questoes.html";
-
+ 
+    tabelaProximas.innerHTML = futuras.map(function (g) {
+        return `
+            <tr>
+                <td>${formatarDataIso(g.vence)}</td>
+                <td>${escapar(g.materia)}</td>
+                <td>${escapar(g.assunto)}</td>
+                <td>R${g.etapa}</td>
+                <td>
+                    <span class="status-revisao">
+                        Programada
+                    </span>
+                </td>
+            </tr>`;
+    }).join("");
+}
+ 
+// =========================
+// CARREGAR DADOS DO BANCO
+// =========================
+async function carregarResumo() {
+    try {
+        const resposta = await fetch("/api/revisoes/resumo");
+        const dados = await resposta.json();
+ 
+        document.getElementById("total_hoje").textContent = dados.para_hoje;
+        document.getElementById("total_atrasadas").textContent = dados.atrasadas;
+        document.getElementById("total_semana").textContent = dados.esta_semana;
+        document.getElementById("total_concluidas").textContent = dados.concluidas;
+ 
+        grupos = dados.grupos;
+ 
+        desenharCards();
+        desenharProximas();
+    } catch (erro) {
+        console.error("Erro ao carregar revisões:", erro);
     }
-
-
-    /* =====================================================
-       FECHAR MODAL
-    ===================================================== */
-
-    function fecharModalRevisao() {
-
-        if (!modal) {
-            return;
-        }
-
-
-        modal.classList.add(
-            "oculto"
-        );
-
+}
+ 
+filtroRevisoes.addEventListener("change", desenharCards);
+ 
+// =========================
+// MODAL: ESCOLHER O MODO
+// =========================
+function fecharModal() {
+    modal.classList.add("oculto");
+    grupoEscolhido = null;
+}
+ 
+// Clique em "Iniciar revisão": abre a janela de modos
+listaRevisoes.addEventListener("click", function (evento) {
+    const botao = evento.target.closest(".btn-iniciar-revisao");
+ 
+    if (!botao) {
+        return;
     }
-
-
-    /* =====================================================
-       HISTÓRICO
-    ===================================================== */
-
-    function renderizarHistorico() {
-
-        if (!tabelaHistorico) {
-            return;
-        }
-
-
-        if (
-            historico.length === 0
-        ) {
-
-            tabelaHistorico.innerHTML =
-                `
-                    <tr>
-
-                        <td
-                            colspan="7"
-                            style="text-align:center;"
-                        >
-
-                            Nenhuma revisão realizada ainda.
-
-                        </td>
-
-                    </tr>
-                `;
-
-
-            return;
-
-        }
-
-
-        /* MAIS RECENTE PRIMEIRO */
-
-        const lista =
-            [...historico]
-                .reverse();
-
-
-        tabelaHistorico.innerHTML =
-            "";
-
-
-        lista.forEach(
-            function (item) {
-
-                const linha =
-                    document.createElement(
-                        "tr"
-                    );
-
-
-                linha.innerHTML =
-                    `
-                        <td>
-                            ${escaparHTML(
-                                item.data || "-"
-                            )}
-                        </td>
-
-                        <td>
-                            ${escaparHTML(
-                                item.materia || "-"
-                            )}
-                        </td>
-
-                        <td>
-                            ${escaparHTML(
-                                item.assunto || "-"
-                            )}
-                        </td>
-
-                        <td>
-                            ${Number(
-                                item.quantidade || 0
-                            )}
-                        </td>
-
-                        <td>
-                            ${Number(
-                                item.acertos || 0
-                            )}
-                        </td>
-
-                        <td>
-                            ${Number(
-                                item.erros || 0
-                            )}
-                        </td>
-
-                        <td>
-
-                            <span class="status-revisao">
-
-                                ${Number(
-                                    item.aproveitamento || 0
-                                )}%
-
-                            </span>
-
-                        </td>
-                    `;
-
-
-                tabelaHistorico.appendChild(
-                    linha
-                );
-
-            }
-        );
-
+ 
+    grupoEscolhido = grupos[Number(botao.dataset.indice)];
+ 
+    if (grupoEscolhido) {
+        modal.classList.remove("oculto");
     }
-
-
-    /* =====================================================
-       CARREGAR LOCALSTORAGE
-    ===================================================== */
-
-    function carregarArray(
-        chave
-    ) {
-
-        try {
-
-            const dados =
-                JSON.parse(
-                    localStorage.getItem(
-                        chave
-                    )
-                );
-
-
-            return Array.isArray(
-                dados
-            )
-                ? dados
-                : [];
-
-        } catch (erro) {
-
-            console.error(
-                `Erro ao carregar ${chave}:`,
-                erro
-            );
-
-
-            return [];
-
-        }
-
-    }
-
-
-    /* =====================================================
-       DATA
-    ===================================================== */
-
-    function dataHojeISO() {
-
-        const hoje =
-            new Date();
-
-
-        const ano =
-            hoje.getFullYear();
-
-
-        const mes =
-            String(
-                hoje.getMonth() + 1
-            ).padStart(
-                2,
-                "0"
-            );
-
-
-        const dia =
-            String(
-                hoje.getDate()
-            ).padStart(
-                2,
-                "0"
-            );
-
-
-        return (
-            `${ano}-${mes}-${dia}`
-        );
-
-    }
-
-
-    function normalizarData(
-        data
-    ) {
-
-        if (!data) {
-            return "";
-        }
-
-
-        /* JÁ ESTÁ EM YYYY-MM-DD */
-
-        if (
-            /^\d{4}-\d{2}-\d{2}$/
-                .test(data)
-        ) {
-
-            return data;
-
-        }
-
-
-        /* FORMATO DD/MM/YYYY */
-
-        if (
-            /^\d{2}\/\d{2}\/\d{4}$/
-                .test(data)
-        ) {
-
-            const partes =
-                data.split("/");
-
-
-            return (
-                `${partes[2]}-${partes[1]}-${partes[0]}`
-            );
-
-        }
-
-
-        return "";
-
-    }
-
-
-    /* =====================================================
-       SEGURANÇA DO HTML
-    ===================================================== */
-
-    function escaparHTML(
-        texto
-    ) {
-
-        return String(
-            texto ?? ""
-        )
-            .replaceAll(
-                "&",
-                "&amp;"
-            )
-            .replaceAll(
-                "<",
-                "&lt;"
-            )
-            .replaceAll(
-                ">",
-                "&gt;"
-            )
-            .replaceAll(
-                '"',
-                "&quot;"
-            )
-            .replaceAll(
-                "'",
-                "&#039;"
-            );
-
-    }
-
-
-    function escaparAtributo(
-        texto
-    ) {
-
-        return escaparHTML(
-            texto
-        );
-
-    }
-
 });
+ 
+// Clique em um dos modos: abre a página das questões
+modal.addEventListener("click", function (evento) {
+    // Clicou no fundo escuro (fora da janela)
+    if (evento.target === modal) {
+        fecharModal();
+        return;
+    }
+ 
+    const botao = evento.target.closest(".modo-revisao");
+ 
+    if (!botao || !grupoEscolhido) {
+        return;
+    }
+ 
+    const parametros = new URLSearchParams({
+        materia: grupoEscolhido.materia,
+        assunto: grupoEscolhido.assunto,
+        quantidade: botao.dataset.quantidade,
+        modo: botao.dataset.modo
+    });
+ 
+    window.location.href = "/revisao_questoes.html?" + parametros.toString();
+});
+ 
+document.addEventListener("keydown", function (evento) {
+    if (evento.key === "Escape") {
+        fecharModal();
+    }
+});
+ 
+carregarResumo();
+ 
