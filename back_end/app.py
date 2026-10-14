@@ -688,5 +688,198 @@ def registrar_revisao():
         "mensagem": "Revisão registrada com sucesso."
     }), 201
 
+
+
+
+
+# =========================================================
+# API DO DASHBOARD
+# =========================================================
+
+def porcentagem(acertos, total):
+    """Porcentagem inteira, ou None quando não há questões."""
+    if not total:
+        return None
+
+    return round(acertos * 100 / total)
+
+
+@app.route("/api/dashboard", methods=["GET"])
+def dados_dashboard():
+    conn = get_db()
+
+    try:
+        sessoes = conn.execute("""
+            SELECT materia, assunto, tempo_segundos,
+                   questoes_realizadas, acertos, criado_em
+            FROM sessoes
+        """).fetchall()
+
+        erros = conn.execute("""
+            SELECT materia, assunto, motivo, criado_em
+            FROM erros
+        """).fetchall()
+
+        revisoes = conn.execute("""
+            SELECT materia, assunto, total_questoes, acertos, criado_em
+            FROM revisoes
+            ORDER BY id DESC
+            LIMIT 6
+        """).fetchall()
+
+        nomes_materias = conn.execute(
+            "SELECT DISTINCT nome FROM materias"
+        ).fetchall()
+    finally:
+        conn.close()
+
+    hoje = datetime.now().date()
+
+    # A semana começa no domingo (igual ao calendário do sistema)
+    inicio_semana = hoje - timedelta(days=(hoje.weekday() + 1) % 7)
+
+    segundos_por_dia = {}
+    tempo_semana = 0
+    questoes_semana = 0
+    total_questoes = 0
+    total_acertos = 0
+    por_materia = {}
+    por_assunto = {}
+
+    def grupo_assunto(materia, assunto):
+        chave = (materia.strip().lower(), assunto.strip().lower())
+
+        return por_assunto.setdefault(chave, {
+            "materia": materia,
+            "assunto": assunto,
+            "questoes": 0,
+            "acertos": 0,
+            "erros": 0
+        })
+
+    for s in sessoes:
+        dia = data_local(s["criado_em"])
+        segundos_por_dia[dia] = segundos_por_dia.get(dia, 0) + s["tempo_segundos"]
+
+        if dia >= inicio_semana:
+            tempo_semana += s["tempo_segundos"]
+            questoes_semana += s["questoes_realizadas"]
+
+        total_questoes += s["questoes_realizadas"]
+        total_acertos += s["acertos"]
+
+        da_materia = por_materia.setdefault(
+            s["materia"], {"questoes": 0, "acertos": 0}
+        )
+        da_materia["questoes"] += s["questoes_realizadas"]
+        da_materia["acertos"] += s["acertos"]
+
+        do_assunto = grupo_assunto(s["materia"], s["assunto"])
+        do_assunto["questoes"] += s["questoes_realizadas"]
+        do_assunto["acertos"] += s["acertos"]
+
+    for e in erros:
+        grupo_assunto(e["materia"], e["assunto"])["erros"] += 1
+
+    # Horas por dia (últimos 30 dias; o gráfico de 7 dias usa os 7 últimos)
+    grafico_horas = []
+
+    for i in range(29, -1, -1):
+        dia = hoje - timedelta(days=i)
+        grafico_horas.append({
+            "data": dia.isoformat(),
+            "segundos": segundos_por_dia.get(dia, 0)
+        })
+
+    # Desempenho por matéria (inclui as cadastradas que ainda não têm sessão)
+    nomes = {linha["nome"] for linha in nomes_materias} | set(por_materia)
+    desempenho_materias = []
+
+    for nome in nomes:
+        dados = por_materia.get(nome, {"questoes": 0, "acertos": 0})
+
+        desempenho_materias.append({
+            "materia": nome,
+            "questoes": dados["questoes"],
+            "aproveitamento": porcentagem(dados["acertos"], dados["questoes"])
+        })
+
+    desempenho_materias.sort(key=lambda d: (
+        d["aproveitamento"] is None,
+        -(d["aproveitamento"] or 0),
+        d["materia"]
+    ))
+
+    # Assuntos que precisam de atenção: mais erros e baixo aproveitamento
+    atencao = []
+
+    for a in por_assunto.values():
+        pct = porcentagem(a["acertos"], a["questoes"])
+
+        if a["erros"] > 0 or (pct is not None and pct < 60):
+            atencao.append({
+                "materia": a["materia"],
+                "assunto": a["assunto"],
+                "erros": a["erros"],
+                "aproveitamento": pct
+            })
+
+    atencao.sort(key=lambda a: (
+        -a["erros"],
+        a["aproveitamento"] if a["aproveitamento"] is not None else 101
+    ))
+
+    # Atividade recente (sessões, erros e revisões juntos)
+    atividade = []
+
+    for s in sorted(sessoes, key=lambda s: s["criado_em"], reverse=True)[:6]:
+        atividade.append({
+            "tipo": "sessao",
+            "materia": s["materia"],
+            "assunto": s["assunto"],
+            "segundos": s["tempo_segundos"],
+            "questoes": s["questoes_realizadas"],
+            "acertos": s["acertos"],
+            "criado_em": s["criado_em"]
+        })
+
+    for e in sorted(erros, key=lambda e: e["criado_em"], reverse=True)[:6]:
+        atividade.append({
+            "tipo": "erro",
+            "materia": e["materia"],
+            "assunto": e["assunto"],
+            "motivo": e["motivo"],
+            "criado_em": e["criado_em"]
+        })
+
+    for r in revisoes:
+        atividade.append({
+            "tipo": "revisao",
+            "materia": r["materia"],
+            "assunto": r["assunto"],
+            "questoes": r["total_questoes"],
+            "acertos": r["acertos"],
+            "criado_em": r["criado_em"]
+        })
+
+    atividade.sort(key=lambda a: a["criado_em"], reverse=True)
+
+    # Próximas revisões: usa o mesmo cálculo da página de Revisões
+    proximas_revisoes = resumo_revisoes().get_json()["grupos"][:4]
+
+    return jsonify({
+        "tempo_semana": tempo_semana,
+        "questoes_semana": questoes_semana,
+        "aproveitamento": porcentagem(total_acertos, total_questoes) or 0,
+        "total_acertos": total_acertos,
+        "total_questoes": total_questoes,
+        "total_erros": len(erros),
+        "grafico_horas": grafico_horas,
+        "desempenho_materias": desempenho_materias,
+        "atencao": atencao[:4],
+        "proximas_revisoes": proximas_revisoes,
+        "atividade": atividade[:6]
+    })    
+
 if __name__ == "__main__":
     app.run(debug=True)
