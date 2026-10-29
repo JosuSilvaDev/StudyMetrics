@@ -92,6 +92,10 @@ Tecnologias usadas no projeto:
 
 ## 📁 Principais arquivos
 
+##DIAGRAMA DO BANCO DE DADOS
+<img width="1279" height="1771" alt="image" src="https://github.com/user-attachments/assets/f9222b9f-7bd4-4ece-8009-8530b63ec55f" />
+
+
 - `back_end/app.py`: rotas do Flask e API (por exemplo `/api/materias` e `/api/sessoes`)
 - `database.py`: funções do banco (`init_db`, `get_db`)
 - `database/studymetrics.db`: banco SQLite com todas as tabelas
