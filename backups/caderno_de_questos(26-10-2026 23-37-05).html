@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Caderno de Erros | StudyMetrics</title>
+    <link rel="shortcut icon" href="\backend\" type="image/x-icon">
+    <!-- FONTES -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Monoton&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- CSS PRINCIPAL -->
+    <link rel="stylesheet" href="static/css/style.css">
+
+    <!-- BOOTSTRAP ICONS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+
+<body>
+
+    <!-- ================= MENU LATERAL ================= -->
+    <!-- ================= MENU LATERAL ================= -->
+<aside class="sidebar">
+
+    <!-- LOGO -->
+    <div class="logo">
+
+        <div class="logo-simbolo">
+            <i class="bi bi-graph-up-arrow"></i>
+        </div>
+
+        <div class="logo-texto">
+            <strong>Study</strong><span>Metrics</span>
+        </div>
+
+    </div>
+
+
+    <!-- MENU -->
+    <nav class="menu">
+
+        <a href="index.html" class="menu-item">
+            <i class="bi bi-grid-1x2-fill"></i>
+            <span>Dashboard</span>
+        </a>
+
+        <a href="materias.html" class="menu-item">
+            <i class="bi bi-journal-bookmark-fill"></i>
+            <span>Matérias</span>
+        </a>
+
+        <a href="sessao.html" class="menu-item">
+            <i class="bi bi-stopwatch-fill"></i>
+            <span>Sessão de estudo</span>
+        </a>
+
+        <a href="caderno_de_questos.html" class="menu-item">
+            <i class="bi bi-journal-x"></i>
+            <span>Caderno de Erros</span>
+        </a>
+
+        <a href="revisao.html" class="menu-item">
+            <i class="bi bi-arrow-repeat"></i>
+            <span>Revisões</span>
+        </a>
+
+        <a href="perfil.html" class="menu-item">
+            <i class="bi bi-person-circle"></i>
+            <span>Perfil</span>
+        </a>
+
+    </nav>
+
+    </aside>
+
+    <!-- ================= CONTEÚDO PRINCIPAL ================= -->
+    <main class="conteudo">
+
+        <!-- CABEÇALHO -->
+        <header class="cabecalho-pagina cabecalho-erros">
+
+            <div>
+                <span class="pagina-tag">
+                    <i class="bi bi-lightbulb-fill"></i>
+                    APRENDER COM OS ERROS
+                </span>
+
+                <h1>Caderno de Erros</h1>
+
+                <p>
+                    Registre apenas as questões que você errou e descubra
+                    quais dificuldades aparecem com mais frequência.
+                </p>
+            </div>
+
+            <div class="icone-pagina">
+                <i class="bi bi-bullseye"></i>
+            </div>
+
+        </header>
+
+        <!-- ================= RESUMO ================= -->
+        <section class="resumo-erros">
+
+            <article class="card-resumo">
+                <div class="resumo-icone">
+                    <i class="bi bi-x-circle-fill"></i>
+                </div>
+
+                <div>
+                    <span>Erros registrados</span>
+                    <strong id="total_erros">12</strong>
+                </div>
+            </article>
+
+            <article class="card-resumo">
+                <div class="resumo-icone">
+                    <i class="bi bi-arrow-repeat"></i>
+                </div>
+
+                <div>
+                    <span>Para revisar</span>
+                    <strong id="total_revisoes">5</strong>
+                </div>
+            </article>
+
+            <article class="card-resumo">
+                <div class="resumo-icone">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                </div>
+
+                <div>
+                    <span>Motivo mais frequente</span>
+                    <strong id="motivo_principal">Interpretação</strong>
+                </div>
+            </article>
+
+        </section>
+
+        <!-- ================= REGISTRAR ERRO ================= -->
+        <section class="area-caderno">
+
+            <article class="card-registrar-erro">
+
+                <div class="titulo-card">
+                    <div>
+                        <span class="card-tag">NOVA QUESTÃO</span>
+
+                        <h2>
+                            Registrar erro
+                            <i class="bi bi-pencil-square"></i>
+                        </h2>
+
+                        <p>
+                            Cadastre somente questões que realmente valem a pena revisar.
+                        </p>
+                    </div>
+                </div>
+
+                <form id="form_erro">
+
+                    <!-- ENUNCIADO -->
+                    <div class="campo">
+                        <label for="questao">
+                            <i class="bi bi-file-earmark-text"></i>
+                            Enunciado da questão
+                        </label>
+
+                        <textarea
+                            id="questao"
+                            name="questao"
+                            rows="5"
+                            placeholder="Cole aqui o enunciado da questão..."
+                            required
+                        ></textarea>
+                    </div>
+
+                    <!-- MATÉRIA + ASSUNTO -->
+                    <div class="campos-duplos">
+
+                        <div class="campo">
+                            <label for="disciplina">
+                                <i class="bi bi-book"></i>
+                                Matéria
+                            </label>
+
+                            <select name="disciplina" id="disciplina" required>
+
+                                <option value="">
+                                    Selecione uma matéria
+                                </option>
+
+                                <option value="portugues">
+                                    Português
+                                </option>
+
+                                <option value="administrativo">
+                                    Direito Administrativo
+                                </option>
+
+                                <option value="constitucional">
+                                    Direito Constitucional
+                                </option>
+
+                                <option value="rlm">
+                                    Raciocínio Lógico
+                                </option>
+
+                            </select>
+                        </div>
+
+                        <div class="campo">
+                            <label for="assunto">
+                                <i class="bi bi-journal-text"></i>
+                                Assunto
+                            </label>
+
+                            <input
+                                type="text"
+                                name="assunto"
+                                id="assunto"
+                                placeholder="Ex: Crase"
+                                required
+                            >
+                        </div>
+
+                    </div>
+
+                    <!-- ================= MOTIVO DO ERRO ================= -->
+                    <div class="campo">
+
+                        <label class="titulo-motivos">
+                            <i class="bi bi-question-circle"></i>
+                            Por que você errou?
+                        </label>
+
+                        <div class="motivos">
+
+                            <label class="motivo-card">
+                                <input
+                                    type="radio"
+                                    name="motivo_erro"
+                                    value="nao_sabia"
+                                    required
+                                >
+
+                                <i class="bi bi-question-circle emoji-motivo"></i>
+
+                                <span>Não sabia</span>
+                            </label>
+
+                            <label class="motivo-card">
+                                <input
+                                    type="radio"
+                                    name="motivo_erro"
+                                    value="esqueci"
+                                >
+
+                                <i class="bi bi-clock-history emoji-motivo"></i>
+
+                                <span>Esqueci</span>
+                            </label>
+
+                            <label class="motivo-card">
+                                <input
+                                    type="radio"
+                                    name="motivo_erro"
+                                    value="interpretacao"
+                                >
+
+                                <i class="bi bi-book-half emoji-motivo"></i>
+
+                                <span>Interpretação</span>
+                            </label>
+
+                            <label class="motivo-card">
+                                <input
+                                    type="radio"
+                                    name="motivo_erro"
+                                    value="desatencao"
+                                >
+
+                                <i class="bi bi-eye emoji-motivo"></i>
+
+                                <span>Desatenção</span>
+                            </label>
+
+                            <label class="motivo-card">
+                                <input
+                                    type="radio"
+                                    name="motivo_erro"
+                                    value="confusao"
+                                >
+
+                                <i class="bi bi-shuffle emoji-motivo"></i>
+
+                                <span>Confusão</span>
+                            </label>
+
+                            <label class="motivo-card">
+                                <input
+                                    type="radio"
+                                    name="motivo_erro"
+                                    value="calculo"
+                                >
+
+                                <i class="bi bi-calculator emoji-motivo"></i>
+
+                                <span>Erro de cálculo</span>
+                            </label>
+
+                            <label class="motivo-card">
+                                <input
+                                    type="radio"
+                                    name="motivo_erro"
+                                    value="chute"
+                                >
+
+                                <i class="bi bi-dice-5 emoji-motivo"></i>
+
+                                <span>Chute</span>
+                            </label>
+
+                        </div>
+                    </div>
+
+                    <!-- RESPOSTA CORRETA -->
+                    <div class="campo">
+
+                        <label for="resposta_correta">
+                            <i class="bi bi-check-circle-fill"></i>
+                            Resposta correta
+                        </label>
+
+                        <input
+                            type="text"
+                            name="resposta_correta"
+                            id="resposta_correta"
+                            placeholder="Ex: Alternativa C"
+                            required
+                        >
+
+                    </div>
+
+                    <!-- OBSERVAÇÃO -->
+                    <div class="campo">
+
+                        <label for="observacao_erro">
+                            <i class="bi bi-lightbulb"></i>
+                            O que você aprendeu com esse erro?
+                        </label>
+
+                        <textarea
+                            name="observacao"
+                            id="observacao_erro"
+                            rows="4"
+                            placeholder="Ex: revisar regras de crase antes de pronomes..."
+                        ></textarea>
+
+                    </div>
+
+                    <!-- ADICIONAR À REVISÃO -->
+                    <label class="card-adicionar-revisao">
+
+                        <input
+                            type="checkbox"
+                            id="adicionar_revisao"
+                            name="adicionar_revisao"
+                        >
+
+                        <div class="revisao-icone">
+                            <i class="bi bi-arrow-repeat"></i>
+                        </div>
+
+                        <div>
+                            <strong>Adicionar às revisões</strong>
+
+                            <span>
+                                Quero revisar essa questão novamente depois.
+                            </span>
+                        </div>
+
+                    </label>
+
+                    <!-- SALVAR -->
+                    <button type="submit" class="btn-salvar-erro">
+                        <i class="bi bi-floppy-fill"></i>
+                        Salvar erro
+                    </button>
+
+                </form>
+
+            </article>
+
+        </section>
+
+        <!-- ================= ERROS REGISTRADOS ================= -->
+        <section class="card-erros-registrados">
+
+            <div class="titulo-secao">
+
+                <div>
+                    <span class="card-tag">HISTÓRICO</span>
+
+                    <h2>
+                        Erros registrados
+                        <i class="bi bi-clipboard-data"></i>
+                    </h2>
+
+                    <p>
+                        Consulte as questões que você precisa dominar.
+                    </p>
+                </div>
+
+                <div class="filtros-erros">
+
+                    <button class="filtro ativo">
+                        Todos
+                    </button>
+
+                    <button class="filtro">
+                        Para revisar
+                    </button>
+
+                </div>
+
+            </div>
+
+            <div class="tabela-responsiva">
+
+                <table class="tabela-erros">
+
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Matéria</th>
+                            <th>Assunto</th>
+                            <th>Motivo</th>
+                            <th>Revisar</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+                            <td>13/09/2026</td>
+                            <td>Português</td>
+                            <td>Crase</td>
+
+                            <td>
+                                <span class="badge-motivo">
+                                    <i class="bi bi-book-half"></i>
+                                    Interpretação
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="badge-revisao">
+                                    <i class="bi bi-arrow-repeat"></i>
+                                    Sim
+                                </span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>12/09/2026</td>
+                            <td>Raciocínio Lógico</td>
+                            <td>Probabilidade</td>
+
+                            <td>
+                                <span class="badge-motivo">
+                                    <i class="bi bi-question-circle"></i>
+                                    Não sabia
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="badge-nao">
+                                    Não
+                                </span>
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+        <!-- ================= MOTIVOS MAIS FREQUENTES ================= -->
+        <section class="card-estatisticas-erros">
+
+            <div class="titulo-secao">
+
+                <div>
+                    <span class="card-tag">ANÁLISE</span>
+
+                    <h2>
+                        Motivos mais frequentes
+                        <i class="bi bi-bar-chart-line"></i>
+                    </h2>
+
+                    <p>
+                        Entenda o que mais está prejudicando seu desempenho.
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="lista-motivos">
+
+                <!-- INTERPRETAÇÃO -->
+                <div class="linha-motivo">
+
+                    <div class="motivo-info">
+
+                        <span>
+                            <i class="bi bi-book-half"></i>
+                            Interpretação
+                        </span>
+
+                        <strong>8</strong>
+
+                    </div>
+
+                    <div class="barra">
+                        <div
+                            class="barra-progresso"
+                            style="width:80%"
+                        ></div>
+                    </div>
+
+                </div>
+
+                <!-- NÃO SABIA -->
+                <div class="linha-motivo">
+
+                    <div class="motivo-info">
+
+                        <span>
+                            <i class="bi bi-question-circle"></i>
+                            Não sabia
+                        </span>
+
+                        <strong>6</strong>
+
+                    </div>
+
+                    <div class="barra">
+                        <div
+                            class="barra-progresso"
+                            style="width:60%"
+                        ></div>
+                    </div>
+
+                </div>
+
+                <!-- DESATENÇÃO -->
+                <div class="linha-motivo">
+
+                    <div class="motivo-info">
+
+                        <span>
+                            <i class="bi bi-eye"></i>
+                            Desatenção
+                        </span>
+
+                        <strong>4</strong>
+
+                    </div>
+
+                    <div class="barra">
+                        <div
+                            class="barra-progresso"
+                            style="width:40%"
+                        ></div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- ================= JAVASCRIPT ================= -->
+    <script src="static/js/caderno_de_erro.js"></script>
+    <script src="static/js/menu.js"></script>
+
+</body>
+</html>

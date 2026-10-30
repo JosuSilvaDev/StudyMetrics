@@ -15,7 +15,7 @@ const MOTIVOS = {
     chute: "Chute"
 };
  
-const VERDE = "#22c55e";
+const VERDE = "#1ae163";
 const AMARELO = "#f59e0b";
 const VERMELHO = "#ef4444";
 const AZUL = "#3b82f6";

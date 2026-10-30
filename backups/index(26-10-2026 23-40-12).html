@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+ 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ 
+    <title>Dashboard | StudyMetrics</title>
+
+
+    <link rel="shortcut icon" href="\
+    " type="image/x-icon">
+    <!-- FONTES -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Monoton&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+ 
+    <!-- CSS PRINCIPAL (menu lateral e layout geral) -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+ 
+    <!-- BOOTSTRAP ICONS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+ 
+    <!-- Usa o mesmo tema (claro/escuro) escolhido no resto do sistema -->
+    <script>
+        try {
+            document.documentElement.setAttribute(
+                "data-tema",
+                localStorage.getItem("studymetrics-tema") || "claro"
+            );
+        } catch (erro) {}
+    </script>
+ 
+    <style>
+        /* =========================================================
+           ESTILOS SÓ DESTA PÁGINA (tudo começa com "db-")
+        ========================================================= */
+        .db-pagina {
+            --db-superficie: #ffffff;
+            --db-superficie-2: #f4f7fb;
+            --db-texto: #0f2236;
+            --db-suave: #64748b;
+            --db-borda: #e5ebf3;
+            --db-marca: #14b8a6;
+            --db-azul: #3b82f6;
+            --db-roxo: #8b5cf6;
+            --db-verde: #22c55e;
+            --db-amarelo: #f59e0b;
+            --db-vermelho: #ef4444;
+            --db-sombra: 0 1px 2px rgba(16, 36, 58, 0.05), 0 14px 36px rgba(16, 36, 58, 0.07);
+ 
+            max-width: 1240px;
+            margin: 0 auto;
+            color: var(--db-texto);
+            font-family: "Poppins", system-ui, sans-serif;
+        }
+ 
+        :root[data-tema="escuro"] .db-pagina {
+            --db-superficie: #122033;
+            --db-superficie-2: #0f1c2d;
+            --db-texto: #e8eef7;
+            --db-suave: #93a4ba;
+            --db-borda: #22344b;
+            --db-sombra: 0 1px 2px rgba(0, 0, 0, 0.3), 0 14px 36px rgba(0, 0, 0, 0.35);
+        }
+ 
+        .db-pagina *,
+        .db-pagina *::before,
+        .db-pagina *::after { box-sizing: border-box; }
+ 
+        .db-pagina h1,
+        .db-pagina h2,
+        .db-pagina h3,
+        .db-pagina p { margin: 0; }
+ 
+        .db-pagina .oculto { display: none !important; }
+ 
+        /* ---------- Topo ---------- */
+        .db-topo {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+ 
+        .db-pagina .db-topo h1 {
+            font-size: clamp(1.6rem, 3vw, 2.1rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: var(--db-texto);
+        }
+ 
+        .db-pagina .db-topo p {
+            margin-top: 4px;
+            color: var(--db-suave);
+        }
+ 
+        .db-data {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 18px;
+            border-radius: 16px;
+            background: var(--db-superficie);
+            border: 1px solid var(--db-borda);
+            box-shadow: var(--db-sombra);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+ 
+        .db-data i { color: var(--db-marca); }
+ 
+        .db-aviso {
+            margin-bottom: 20px;
+            padding: 14px 18px;
+            border-radius: 16px;
+            background: rgba(239, 68, 68, 0.10);
+            border: 1px solid rgba(239, 68, 68, 0.35);
+            color: var(--db-vermelho);
+            font-size: 0.9rem;
+        }
+ 
+        /* ---------- Botões ---------- */
+        .db-pagina .db-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 20px;
+            border-radius: 14px;
+            border: 1px solid transparent;
+            font: 600 0.92rem "Poppins", system-ui, sans-serif;
+            text-decoration: none;
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+        }
+ 
+        .db-pagina .db-btn:hover { transform: translateY(-1px); }
+ 
+        .db-pagina .db-btn-claro {
+            background: #ffffff;
+            color: #0b3b4a;
+            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.16);
+        }
+ 
+        .db-pagina .db-btn-vidro {
+            background: rgba(255, 255, 255, 0.14);
+            border-color: rgba(255, 255, 255, 0.32);
+            color: #ffffff;
+        }
+ 
+        .db-pagina .db-btn-vidro:hover { background: rgba(255, 255, 255, 0.22); }
+ 
+        .db-badge-btn {
+            display: inline-grid;
+            place-items: center;
+            min-width: 22px;
+            height: 22px;
+            padding: 0 7px;
+            border-radius: 999px;
+            background: #ef4444;
+            color: #ffffff;
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+ 
+        /* ---------- Destaque (hero) ---------- */
+        .db-hero {
+            position: relative;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+            gap: 28px;
+            align-items: center;
+            padding: 34px;
+            border-radius: 28px;
+            color: #ffffff;
+            background:
+                radial-gradient(600px 300px at 100% 0%, rgba(255, 255, 255, 0.18), transparent 60%),
+                linear-gradient(135deg, #0b3b4a 0%, #0f766e 55%, #14b8a6 100%);
+            box-shadow: 0 20px 50px rgba(15, 118, 110, 0.30);
+        }
+ 
+        .db-hero::after {
+            content: "";
+            position: absolute;
+            right: -70px;
+            bottom: -110px;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.07);
+            pointer-events: none;
+        }
+ 
+        .db-hero-texto,
+        .db-hero-lado { position: relative; z-index: 1; }
+ 
+        .db-hero-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.16);
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+        }
+ 
+        .db-pagina .db-hero h2 {
+            margin: 16px 0 8px;
+            font-size: clamp(1.6rem, 3vw, 2.1rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: #ffffff;
+        }
+ 
+        .db-pagina .db-hero-texto p {
+            max-width: 480px;
+            line-height: 1.65;
+            opacity: 0.92;
+        }
+ 
+        .db-hero-acoes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 24px;
+        }
+ 
+        .db-hero-lado { display: grid; gap: 12px; }
+ 
+        .db-vidro {
+            padding: 18px 20px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+ 
+        /* Contagem regressiva da meta */
+        .db-meta-topo {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+ 
+        .db-meta-topo span { display: inline-flex; align-items: center; gap: 8px; opacity: 0.95; }
+ 
+        .db-pagina .db-meta-topo a {
+            color: #ffffff;
+            font-size: 0.78rem;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            opacity: 0.85;
+        }
+ 
+        .db-meta-numero {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            margin: 10px 0 2px;
+        }
+ 
+        .db-meta-numero strong {
+            font-size: 3rem;
+            font-weight: 700;
+            line-height: 1;
+            letter-spacing: -0.03em;
+        }
+ 
+        .db-meta-numero span { font-size: 1rem; opacity: 0.9; }
+ 
+        .db-meta-data { font-size: 0.85rem; opacity: 0.85; }
+ 
+        .db-meta-barra {
+            height: 8px;
+            margin: 14px 0 8px;
+            border-radius: 999px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.2);
+        }
+ 
+        .db-meta-barra span {
+            display: block;
+            height: 100%;
+            border-radius: 999px;
+            background: #ffffff;
+            transition: width 0.8s ease;
+        }
+ 
+        .db-meta-legenda {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.76rem;
+            opacity: 0.85;
+        }
+ 
+        .db-meta-vazio {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+ 
+        .db-meta-vazio > i { font-size: 2rem; opacity: 0.9; }
+        .db-meta-vazio > div { flex: 1; min-width: 160px; }
+        .db-meta-vazio strong { display: block; font-size: 1rem; }
+        .db-meta-vazio span { font-size: 0.82rem; opacity: 0.85; line-height: 1.5; }
+ 
+        .db-hero-stats {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+        }
+ 
+        .db-hero-stats .db-vidro { padding: 14px 16px; border-radius: 18px; }
+        .db-hero-stats i { font-size: 1.05rem; opacity: 0.9; }
+ 
+        .db-hero-stats strong {
+            display: block;
+            margin-top: 6px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+ 
+        .db-hero-stats span { font-size: 0.74rem; opacity: 0.8; }
+ 
+        /* ---------- Cartões de métricas ---------- */
+        .db-metricas {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 20px;
+            margin-top: 24px;
+        }
+ 
+        .db-metrica {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            padding: 20px 20px 0;
+            border-radius: 24px;
+            background: var(--db-superficie);
+            border: 1px solid var(--db-borda);
+            box-shadow: var(--db-sombra);
+        }
+ 
+        .db-metrica-topo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+ 
+        .db-metrica-icone {
+            display: grid;
+            place-items: center;
+            flex-shrink: 0;
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            background: color-mix(in srgb, var(--cor) 14%, transparent);
+            color: var(--cor);
+            font-size: 1.2rem;
+        }
+ 
+        .db-metrica-rotulo { font-size: 0.85rem; font-weight: 600; line-height: 1.3; }
+        .db-metrica-rotulo small { display: block; color: var(--db-suave); font-weight: 400; font-size: 0.74rem; }
+ 
+        .db-tend {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            flex-shrink: 0;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(127, 127, 127, 0.14);
+            color: var(--db-suave);
+            font-size: 0.74rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+ 
+        .db-tend.alta { background: rgba(34, 197, 94, 0.14); color: #16a34a; }
+        .db-tend.baixa { background: rgba(239, 68, 68, 0.13); color: #dc2626; }
+ 
+        :root[data-tema="escuro"] .db-tend.alta { color: #4ade80; }
+        :root[data-tema="escuro"] .db-tend.baixa { color: #f87171; }
+ 
+        .db-metrica-linha {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 16px;
+        }
+ 
+        .db-metrica-valor {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.15;
+        }
+ 
+        .db-metrica-nota {
+            margin-top: 2px;
+            color: var(--db-suave);
+            font-size: 0.78rem;
+        }
+ 
+        .db-spark { margin: 8px -4px 0; min-height: 64px; }
+ 
+        /* ---------- Linhas e cartões ---------- */
+        .db-linha {
+            display: grid;
+            gap: 20px;
+            margin-top: 20px;
+        }
+ 
+        .db-linha-1 { grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr); }
+        .db-linha-2 { grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); }
+        .db-linha-3 { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); }
+ 
+        .db-card {
+            min-width: 0;
+            padding: 24px;
+            border-radius: 26px;
+            background: var(--db-superficie);
+            border: 1px solid var(--db-borda);
+            box-shadow: var(--db-sombra);
+        }
+ 
+        .db-card-topo {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+ 
+        .db-pagina .db-card h2 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--db-texto);
+        }
+ 
+        .db-pagina .db-card-sub {
+            margin-top: 3px;
+            color: var(--db-suave);
+            font-size: 0.85rem;
+        }
+ 
+        .db-pagina .db-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--db-marca);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+        }
+ 
+        .db-pagina .db-link:hover { text-decoration: underline; }
+ 
+        /* Botões 7 / 30 dias */
+        .db-seg {
+            display: inline-flex;
+            padding: 4px;
+            border-radius: 12px;
+            background: var(--db-superficie-2);
+            border: 1px solid var(--db-borda);
+        }
+ 
+        .db-pagina .db-seg button {
+            padding: 7px 16px;
+            border: 0;
+            border-radius: 9px;
+            background: transparent;
+            color: var(--db-suave);
+            font: 500 0.82rem "Poppins", system-ui, sans-serif;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+ 
+        .db-pagina .db-seg button.ativo {
+            background: var(--db-superficie);
+            color: var(--db-texto);
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(16, 36, 58, 0.12);
+        }
+ 
+        .db-mini {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+ 
+        .db-mini div {
+            padding: 12px 14px;
+            border-radius: 14px;
+            background: var(--db-superficie-2);
+        }
+ 
+        .db-mini span { display: block; color: var(--db-suave); font-size: 0.74rem; }
+        .db-mini strong { display: block; margin-top: 2px; font-size: 1.02rem; font-weight: 600; }
+ 
+        /* Aproveitamento */
+        .db-legenda {
+            display: flex;
+            justify-content: center;
+            gap: 28px;
+            margin-top: 4px;
+            font-size: 0.85rem;
+        }
+ 
+        .db-legenda span { display: inline-flex; align-items: center; gap: 8px; color: var(--db-suave); }
+        .db-legenda strong { color: var(--db-texto); font-size: 0.95rem; }
+ 
+        .db-ponto { width: 10px; height: 10px; border-radius: 50%; }
+ 
+        .db-barra-dupla {
+            display: flex;
+            height: 10px;
+            margin: 16px 0 12px;
+            border-radius: 999px;
+            overflow: hidden;
+            background: rgba(239, 68, 68, 0.35);
+        }
+ 
+        .db-barra-dupla span {
+            display: block;
+            height: 100%;
+            width: 0;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #14b8a6, #3b82f6);
+            transition: width 0.8s ease;
+        }
+ 
+        .db-pagina .db-nota {
+            text-align: center;
+            color: var(--db-suave);
+            font-size: 0.82rem;
+        }
+ 
+        /* Matérias sem dados */
+        .db-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+ 
+        .db-chip {
+            padding: 5px 12px;
+            border-radius: 999px;
+            background: var(--db-superficie-2);
+            border: 1px solid var(--db-borda);
+            color: var(--db-suave);
+            font-size: 0.76rem;
+        }
+ 
+        /* Precisa de atenção */
+        .db-atencao-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 16px;
+            border-radius: 18px;
+            border: 1px solid var(--db-borda);
+            border-left: 4px solid var(--cor);
+            background: var(--db-superficie-2);
+            color: inherit;
+            text-decoration: none;
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+ 
+        .db-atencao-item:hover { transform: translateX(2px); box-shadow: var(--db-sombra); }
+        .db-atencao-item + .db-atencao-item { margin-top: 10px; }
+ 
+        .db-atencao-icone {
+            display: grid;
+            place-items: center;
+            flex-shrink: 0;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: color-mix(in srgb, var(--cor) 16%, transparent);
+            color: var(--cor);
+        }
+ 
+        .db-atencao-texto { flex: 1; min-width: 0; }
+ 
+        .db-atencao-texto strong {
+            display: block;
+            overflow: hidden;
+            font-size: 0.92rem;
+            font-weight: 600;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+ 
+        .db-atencao-texto small { display: block; margin-top: 2px; color: var(--db-suave); font-size: 0.8rem; }
+ 
+        .db-selo {
+            padding: 5px 12px;
+            border-radius: 999px;
+            background: color-mix(in srgb, var(--cor) 16%, transparent);
+            color: var(--cor);
+            font-size: 0.75rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+ 
+        .db-vazio {
+            padding: 28px 12px;
+            text-align: center;
+            color: var(--db-suave);
+        }
+ 
+        .db-vazio i { display: block; margin-bottom: 8px; font-size: 2rem; color: var(--db-marca); }
+        .db-vazio strong { display: block; margin-bottom: 4px; color: var(--db-texto); font-size: 0.95rem; }
+        .db-vazio span { font-size: 0.84rem; line-height: 1.5; }
+ 
+        /* ---------- Agenda (semana + lista) ---------- */
+        .db-semana {
+            display: grid;
+            grid-template-columns: repeat(7, minmax(0, 1fr));
+            gap: 8px;
+        }
+ 
+        .db-pagina .db-dia {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            padding: 10px 2px 8px;
+            border-radius: 16px;
+            border: 1px solid var(--db-borda);
+            background: var(--db-superficie-2);
+            color: var(--db-texto);
+            font-family: inherit;
+            cursor: pointer;
+            transition: transform 0.15s, background 0.15s, border-color 0.15s;
+        }
+ 
+        .db-pagina .db-dia:hover { transform: translateY(-2px); border-color: var(--db-marca); }
+ 
+        .db-dia small {
+            color: var(--db-suave);
+            font-size: 0.66rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+        }
+ 
+        .db-dia strong { font-size: 1.15rem; font-weight: 700; }
+ 
+        .db-pontos { display: flex; gap: 3px; height: 6px; margin-top: 4px; }
+        .db-pontos i { width: 6px; height: 6px; border-radius: 50%; background: var(--db-marca); }
+ 
+        .db-pagina .db-dia.hoje { border-color: var(--db-marca); }
+ 
+        .db-pagina .db-dia.ativo {
+            border-color: transparent;
+            background: linear-gradient(160deg, #2dd4bf, #0f9f90);
+            color: #06332d;
+            box-shadow: 0 8px 20px rgba(20, 184, 166, 0.32);
+        }
+ 
+        .db-dia.ativo small { color: rgba(6, 51, 45, 0.75); }
+        .db-dia.ativo .db-pontos i { background: #06332d; }
+ 
+        .db-agenda-filtros { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+ 
+        .db-pagina .db-chip-agenda {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 999px;
+            border: 1px solid var(--db-borda);
+            background: transparent;
+            color: var(--db-suave);
+            font: 500 0.78rem "Poppins", system-ui, sans-serif;
+            cursor: pointer;
+        }
+ 
+        .db-pagina .db-chip-agenda.alerta { color: var(--db-vermelho); border-color: rgba(239, 68, 68, 0.4); }
+ 
+        .db-pagina .db-chip-agenda.ativo {
+            background: var(--db-texto);
+            border-color: var(--db-texto);
+            color: var(--db-superficie);
+        }
+ 
+        .db-agenda-lista { margin-top: 16px; }
+ 
+        .db-agenda-item {
+            display: grid;
+            grid-template-columns: 46px minmax(0, 1fr) auto;
+            align-items: center;
+            gap: 14px;
+            padding: 12px 14px;
+            border-radius: 18px;
+            background: var(--db-superficie-2);
+            border: 1px solid transparent;
+            color: inherit;
+            text-decoration: none;
+            transition: border-color 0.15s, transform 0.15s;
+        }
+ 
+        .db-agenda-item:hover { border-color: var(--cor); transform: translateX(2px); }
+        .db-agenda-item + .db-agenda-item { margin-top: 10px; }
+ 
+        .db-agenda-etapa {
+            display: grid;
+            place-items: center;
+            width: 46px;
+            height: 46px;
+            border-radius: 14px;
+            background: color-mix(in srgb, var(--cor) 16%, transparent);
+            color: var(--cor);
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+ 
+        .db-agenda-texto { min-width: 0; }
+ 
+        .db-agenda-texto strong {
+            display: block;
+            overflow: hidden;
+            font-size: 0.92rem;
+            font-weight: 600;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+ 
+        .db-agenda-texto small { display: block; margin-top: 2px; color: var(--db-suave); font-size: 0.8rem; }
+ 
+        .db-agenda-ir { color: var(--db-suave); }
+ 
+        /* ---------- Histórico (linha do tempo) ---------- */
+        .db-tl { max-height: 520px; overflow-y: auto; padding-right: 6px; }
+ 
+        .db-tl-bloco + .db-tl-bloco { margin-top: 20px; }
+ 
+        .db-tl-grupo {
+            margin-bottom: 14px;
+            color: var(--db-suave);
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+ 
+        .db-tl-item {
+            position: relative;
+            display: grid;
+            grid-template-columns: 36px minmax(0, 1fr);
+            gap: 14px;
+            padding-bottom: 18px;
+        }
+ 
+        .db-tl-item:last-child { padding-bottom: 0; }
+ 
+        .db-tl-item:not(:last-child)::before {
+            content: "";
+            position: absolute;
+            left: 17px;
+            top: 38px;
+            bottom: 2px;
+            width: 2px;
+            border-radius: 2px;
+            background: var(--db-borda);
+        }
+ 
+        .db-tl-no {
+            display: grid;
+            place-items: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: color-mix(in srgb, var(--cor) 16%, var(--db-superficie));
+            color: var(--cor);
+            font-size: 1rem;
+        }
+ 
+        .db-tl-linha { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+        .db-tl-linha strong { font-size: 0.92rem; font-weight: 600; }
+        .db-tl-hora { flex-shrink: 0; color: var(--db-suave); font-size: 0.76rem; }
+        .db-tl-corpo small { display: block; margin-top: 2px; color: var(--db-suave); font-size: 0.82rem; }
+ 
+        .db-tl-chip {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 3px 10px;
+            border-radius: 999px;
+            background: color-mix(in srgb, var(--cor) 16%, transparent);
+            color: var(--cor);
+            font-size: 0.72rem;
+            font-weight: 600;
+        }
+ 
+        /* ---------- Telas menores ---------- */
+        @media (max-width: 1100px) {
+            .db-hero { grid-template-columns: minmax(0, 1fr); }
+            .db-metricas { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .db-linha-1, .db-linha-2, .db-linha-3 { grid-template-columns: minmax(0, 1fr); }
+        }
+ 
+        @media (max-width: 640px) {
+            .db-hero { padding: 24px; border-radius: 24px; }
+            .db-metricas { grid-template-columns: minmax(0, 1fr); }
+            .db-hero-stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+            .db-hero-stats .db-vidro { padding: 12px; }
+            .db-mini { grid-template-columns: minmax(0, 1fr); }
+            .db-card { padding: 20px; border-radius: 22px; }
+            .db-legenda { gap: 18px; }
+        }
+ 
+        @media (prefers-reduced-motion: reduce) {
+            .db-pagina * { transition: none !important; }
+        }
+    </style>
+</head>
+ 
+<body>
+ 
+    <!-- ================= MENU LATERAL ================= -->
+    <aside class="sidebar">
+ 
+        <!-- LOGO -->
+        <div class="logo">
+ 
+            <div class="logo-simbolo">
+                <i class="bi bi-graph-up-arrow"></i>
+            </div>
+ 
+            <div class="logo-texto">
+                <strong>Study</strong><span>Metrics</span>
+            </div>
+ 
+        </div>
+ 
+ 
+        <!-- MENU -->
+        <nav class="menu">
+ 
+            <a href="index.html" class="menu-item">
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Dashboard</span>
+            </a>
+ 
+            <a href="materias.html" class="menu-item">
+                <i class="bi bi-journal-bookmark-fill"></i>
+                <span>Matérias</span>
+            </a>
+ 
+            <a href="sessao.html" class="menu-item">
+                <i class="bi bi-stopwatch-fill"></i>
+                <span>Sessão de estudo</span>
+            </a>
+ 
+            <a href="caderno_de_questos.html" class="menu-item">
+                <i class="bi bi-journal-x"></i>
+                <span>Caderno de Erros</span>
+            </a>
+ 
+            <a href="revisao.html" class="menu-item">
+                <i class="bi bi-arrow-repeat"></i>
+                <span>Revisões</span>
+            </a>
+ 
+            <a href="perfil.html" class="menu-item">
+                <i class="bi bi-person-circle"></i>
+                <span>Perfil</span>
+            </a>
+ 
+        </nav>
+ 
+    </aside>
+ 
+ 
+    <!-- ================= CONTEÚDO PRINCIPAL ================= -->
+    <main class="conteudo">
+ 
+        <div class="db-pagina">
+ 
+            <!-- ================= TOPO ================= -->
+            <header class="db-topo">
+ 
+                <div>
+                    <h1>Dashboard</h1>
+                    <p>Acompanhe sua evolução e decida o que estudar hoje.</p>
+                </div>
+ 
+                <div class="db-data">
+                    <i class="bi bi-calendar3"></i>
+                    <span id="data_atual">--</span>
+                </div>
+ 
+            </header>
+ 
+            <div id="db_erro" class="db-aviso oculto">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+                Não foi possível carregar os dados. Confira se o servidor está ligado e recarregue a página.
+            </div>
+ 
+ 
+            <!-- ================= DESTAQUE ================= -->
+            <section class="db-hero">
+ 
+                <div class="db-hero-texto">
+ 
+                    <span class="db-hero-tag">
+                        <i class="bi bi-lightning-charge-fill"></i>
+                        RESUMO DO DIA
+                    </span>
+ 
+                    <h2 id="db_saudacao">Olá!</h2>
+ 
+                    <p id="db_mensagem">Carregando seus dados...</p>
+ 
+                    <div class="db-hero-acoes">
+ 
+                        <a href="sessao.html" class="db-btn db-btn-claro">
+                            <i class="bi bi-play-fill"></i>
+                            Iniciar sessão
+                        </a>
+ 
+                        <a href="revisao.html" class="db-btn db-btn-vidro">
+                            <i class="bi bi-arrow-repeat"></i>
+                            Fazer revisão
+                            <span id="db_badge_revisoes" class="db-badge-btn oculto">0</span>
+                        </a>
+ 
+                    </div>
+ 
+                </div>
+ 
+                <div class="db-hero-lado">
+ 
+                    <!-- Contagem regressiva (preenchida pelo JavaScript) -->
+                    <div class="db-vidro" id="db_meta"></div>
+ 
+                    <div class="db-hero-stats">
+ 
+                        <div class="db-vidro">
+                            <i class="bi bi-clock-history"></i>
+                            <strong id="db_hoje_tempo">0min</strong>
+                            <span>estudado hoje</span>
+                        </div>
+ 
+                        <div class="db-vidro">
+                            <i class="bi bi-bullseye"></i>
+                            <strong id="db_hoje_questoes">0</strong>
+                            <span>questões hoje</span>
+                        </div>
+ 
+                        <div class="db-vidro">
+                            <i class="bi bi-fire"></i>
+                            <strong id="db_sequencia">0 dias</strong>
+                            <span>de sequência</span>
+                        </div>
+ 
+                    </div>
+ 
+                </div>
+ 
+            </section>
+ 
+ 
+            <!-- ================= MÉTRICAS ================= -->
+            <section class="db-metricas">
+ 
+                <article class="db-metrica" style="--cor:#3b82f6">
+                    <div class="db-metrica-topo">
+                        <span class="db-metrica-icone"><i class="bi bi-clock-fill"></i></span>
+                        <span class="db-metrica-rotulo">Tempo estudado<small>esta semana</small></span>
+                    </div>
+                    <div class="db-metrica-linha">
+                        <strong class="db-metrica-valor" id="total_tempo">0h 00min</strong>
+                        <span class="db-tend" id="tend_tempo">--</span>
+                    </div>
+                    <span class="db-metrica-nota">vs. mesmo período da semana passada</span>
+                    <div class="db-spark" id="spark_tempo"></div>
+                </article>
+ 
+                <article class="db-metrica" style="--cor:#22c55e">
+                    <div class="db-metrica-topo">
+                        <span class="db-metrica-icone"><i class="bi bi-check2-square"></i></span>
+                        <span class="db-metrica-rotulo">Questões<small>esta semana</small></span>
+                    </div>
+                    <div class="db-metrica-linha">
+                        <strong class="db-metrica-valor" id="total_questoes">0</strong>
+                        <span class="db-tend" id="tend_questoes">--</span>
+                    </div>
+                    <span class="db-metrica-nota">vs. mesmo período da semana passada</span>
+                    <div class="db-spark" id="spark_questoes"></div>
+                </article>
+ 
+                <article class="db-metrica" style="--cor:#8b5cf6">
+                    <div class="db-metrica-topo">
+                        <span class="db-metrica-icone"><i class="bi bi-graph-up-arrow"></i></span>
+                        <span class="db-metrica-rotulo">Aproveitamento<small>média geral</small></span>
+                    </div>
+                    <div class="db-metrica-linha">
+                        <strong class="db-metrica-valor" id="media_aproveitamento">0%</strong>
+                        <span class="db-tend" id="tend_aprov">--</span>
+                    </div>
+                    <span class="db-metrica-nota" id="nota_aprov">de acertos nas sessões</span>
+                    <div class="db-spark" id="spark_aprov"></div>
+                </article>
+ 
+                <article class="db-metrica" style="--cor:#ef4444">
+                    <div class="db-metrica-topo">
+                        <span class="db-metrica-icone"><i class="bi bi-x-circle-fill"></i></span>
+                        <span class="db-metrica-rotulo">Erros registrados<small>caderno de erros</small></span>
+                    </div>
+                    <div class="db-metrica-linha">
+                        <strong class="db-metrica-valor" id="total_erros_dashboard">0</strong>
+                        <span class="db-tend" id="tend_erros">--</span>
+                    </div>
+                    <span class="db-metrica-nota">novos nos últimos 7 dias</span>
+                    <div class="db-spark" id="spark_erros"></div>
+                </article>
+ 
+            </section>
+ 
+ 
+            <!-- ================= HORAS + APROVEITAMENTO ================= -->
+            <section class="db-linha db-linha-1">
+ 
+                <article class="db-card">
+ 
+                    <div class="db-card-topo">
+ 
+                        <div>
+                            <h2>Horas estudadas</h2>
+                            <p class="db-card-sub">Seu ritmo de estudo dia a dia</p>
+                        </div>
+ 
+                        <div class="db-seg" id="periodo_grafico">
+                            <button type="button" data-periodo="7" class="ativo">7 dias</button>
+                            <button type="button" data-periodo="30">30 dias</button>
+                        </div>
+ 
+                    </div>
+ 
+                    <div class="db-mini">
+                        <div><span>Total no período</span><strong id="h_total">--</strong></div>
+                        <div><span>Média por dia</span><strong id="h_media">--</strong></div>
+                        <div><span>Melhor dia</span><strong id="h_melhor">--</strong></div>
+                    </div>
+ 
+                    <div id="grafico_horas"></div>
+ 
+                </article>
+ 
+                <article class="db-card">
+ 
+                    <div class="db-card-topo">
+                        <div>
+                            <h2>Aproveitamento</h2>
+                            <p class="db-card-sub">Acertos nas sessões de estudo</p>
+                        </div>
+                    </div>
+ 
+                    <div id="grafico_aproveitamento"></div>
+ 
+                    <div class="db-legenda">
+                        <span><i class="db-ponto" style="background:#14b8a6"></i> Acertos <strong id="leg_acertos">0</strong></span>
+                        <span><i class="db-ponto" style="background:#ef4444"></i> Erros <strong id="leg_erros">0</strong></span>
+                    </div>
+ 
+                    <div class="db-barra-dupla"><span id="barra_acertos"></span></div>
+ 
+                    <p class="db-nota" id="aprov_semana"></p>
+ 
+                </article>
+ 
+            </section>
+ 
+ 
+            <!-- ================= MATÉRIAS + ATENÇÃO ================= -->
+            <section class="db-linha db-linha-2">
+ 
+                <article class="db-card">
+ 
+                    <div class="db-card-topo">
+                        <div>
+                            <h2>Desempenho por matéria</h2>
+                            <p class="db-card-sub">Onde seu rendimento está melhor e pior</p>
+                        </div>
+                    </div>
+ 
+                    <div id="grafico_materias"></div>
+ 
+                    <div class="db-chips" id="materias_sem_dados"></div>
+ 
+                </article>
+ 
+                <article class="db-card">
+ 
+                    <div class="db-card-topo">
+                        <div>
+                            <h2>Precisa de atenção</h2>
+                            <p class="db-card-sub">Assuntos com mais erros ou nota baixa</p>
+                        </div>
+                    </div>
+ 
+                    <div id="lista_atencao"></div>
+ 
+                </article>
+ 
+            </section>
+ 
+ 
+            <!-- ================= AGENDA + HISTÓRICO ================= -->
+            <section class="db-linha db-linha-3">
+ 
+                <article class="db-card">
+ 
+                    <div class="db-card-topo">
+ 
+                        <div>
+                            <h2>Agenda de revisões</h2>
+                            <p class="db-card-sub">Escolha um dia para ver o que revisar</p>
+                        </div>
+ 
+                        <a href="revisao.html" class="db-link">
+                            Ver todas
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+ 
+                    </div>
+ 
+                    <div class="db-semana" id="agenda_semana"></div>
+ 
+                    <div class="db-agenda-filtros" id="agenda_filtros"></div>
+ 
+                    <div class="db-agenda-lista" id="agenda_lista"></div>
+ 
+                </article>
+ 
+                <article class="db-card">
+ 
+                    <div class="db-card-topo">
+                        <div>
+                            <h2>Atividade recente</h2>
+                            <p class="db-card-sub">Suas últimas sessões, erros e revisões</p>
+                        </div>
+                    </div>
+ 
+                    <div class="db-tl" id="atividade_recente"></div>
+ 
+                </article>
+ 
+            </section>
+ 
+        </div>
+ 
+    </main>
+ 
+    <!-- ================= JAVASCRIPT ================= -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.54.1/dist/apexcharts.min.js"></script>
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/menu.js') }}"></script>
+ 
+</body>
+</html>
+ 

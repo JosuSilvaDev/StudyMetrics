@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+ 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ 
+    <title>Dashboard | StudyMetrics</title>
+ 
+    <!-- FONTES -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Monoton&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+ 
+    <!-- CSS PRINCIPAL (menu lateral e layout geral) -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+ 
+    <!-- BOOTSTRAP ICONS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+ 
+    <!-- Usa o mesmo tema (claro/escuro) escolhido no resto do sistema -->
+    <script>
+        try {
+            document.documentElement.setAttribute(
+                "data-tema",
+                localStorage.getItem("studymetrics-tema") || "claro"
+            );
+        } catch (erro) {}
+    </script>
+ 
+    <~i
+  
+</head>
+ 
+<body>
+ 
+    <!-- ================= MENU LATERAL ================= -->
+    <aside class="sidebar">
+ 
+        <!-- LOGO -->
+        <div class="logo">
+ 
+            <div class="logo-simbolo">
+                <i class="bi bi-graph-up-arrow"></i>
+            </div>
+ 
+            <div class="logo-texto">
+                <strong>Study</strong><span>Metrics</span>
+            </div>
+ 
+        </div>
+ 
+ 
+        <!-- MENU -->
+        <nav class="menu">
+ 
+            <a href="index.html" class="menu-item">
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Dashboard</span>
+            </a>
+ 
+            <a href="materias.html" class="menu-item">
+                <i class="bi bi-journal-bookmark-fill"></i>
+                <span>Matérias</span>
+            </a>
+ 
+            <a href="sessao.html" class="menu-item">
+                <i class="bi bi-stopwatch-fill"></i>
+                <span>Sessão de estudo</span>
+            </a>
+ 
+            <a href="caderno_de_questos.html" class="menu-item">
+                <i class="bi bi-journal-x"></i>
+                <span>Caderno de Erros</span>
+            </a>
+ 
+            <a href="revisao.html" class="menu-item">
+                <i class="bi bi-arrow-repeat"></i>
+                <span>Revisões</span>
+            </a>
+ 
+            <a href="perfil.html" class="menu-item">
+                <i class="bi bi-person-circle"></i>
+                <span>Perfil</span>
+            </a>
+ 
+        </nav>
+ 
+    </aside>
+ 
+ 
+    <!-- ================= CONTEÚDO PRINCIPAL ================= -->
+    <main class="conteudo">
+ 
+        <div class="db-pagina">
+ 
+            <!-- ================= TOPO ================= -->
+            <header class="db-topo">
+ 
+                <div>
+                    <h1>Dashboard</h1>
+                    <p>Acompanhe sua evolução e decida o que estudar hoje.</p>
+                </div>
+ 
+                <div class="db-data">
+                    <i class="bi bi-calendar3"></i>
+                    <span id="data_atual">--</span>
+                </div>
+ 
+            </header>
+ 
+            <div id="db_erro" class="db-aviso oculto">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+                Não foi possível carregar os dados. Confira se o servidor está ligado e recarregue a página.
+            </div>
+ 
+ 
+            <!-- ================= DESTAQUE ================= -->
+            <section class="db-hero">
+ 
+                <div class="db-hero-texto">
+ 
+                    <span class="db-hero-tag">
+                        <i class="bi bi-lightning-charge-fill"></i>
+                        RESUMO DO DIA
+                    </span>
+ 
+                    <h2 id="db_saudacao">Olá!</h2>
+ 
+                    <p id="db_mensagem">Carregando seus dados...</p>
+ 
+                    <div class="db-hero-acoes">
+ 
+                        <a href="sessao.html" class="db-btn db-btn-claro">
+                            <i class="bi bi-play-fill"></i>
+                            Iniciar sessão
+                        </a>
+ 
+                        <a href="revisao.html" class="db-btn db-btn-vidro">
+                            <i class="bi bi-arrow-repeat"></i>
+                            Fazer revisão
+                            <span id="db_badge_revisoes" class="db-badge-btn oculto">0</span>
+                        </a>
+ 
+                    </div>
+ 
+                </div>
+ 
+                <div class="db-hero-lado">
+ 
+                    <!-- Contagem regressiva (preenchida pelo JavaScript) -->
+                    <div class="db-vidro" id="db_meta"></div>
+ 
+                    <div class="db-hero-stats">
+ 
+                        <div class="db-vidro">
+                            <i class="bi bi-clock-history"></i>
+                            <strong id="db_hoje_tempo">0min</strong>
+                            <span>estudado hoje</span>
+                        </div>
+ 
+                        <div class="db-vidro">
+                            <i class="bi bi-bullseye"></i>
+                            <strong id="db_hoje_questoes">0</strong>
+                            <span>questões hoje</span>
+                        </div>
+ 
+                        <div class="db-vidro">
+                            <i class="bi bi-fire"></i>
+                            <strong id="db_sequencia">0 dias</strong>
+                            <span>de sequência</span>
+                        </div>
+ 
+                    </div>
+ 
+                </div>
+ 
+            </section>
+ 
+ 
+            <!-- ================= MÉTRICAS ================= -->
+            <section class="db-metricas">
+ 
+                <article class="db-metrica" style="--cor:#3b82f6">
+                    <div class="db-metrica-topo">
+                        <span class="db-metrica-icone"><i class="bi bi-clock-fill"></i></span>
+                        <span class="db-metrica-rotulo">Tempo estudado<small>esta semana</small></span>
+                    </div>
+                    <div class="db-metrica-linha">
+                        <strong class="db-metrica-valor" id="total_tempo">0h 00min</strong>
+                        <span class="db-tend" id="tend_tempo">--</span>
+                    </div>
+                    <span class="db-metrica-nota">vs. mesmo período da semana passada</span>
+                    <div class="db-spark" id="spark_tempo"></div>
+                </article>
+ 
+                <article class="db-metrica" style="--cor:#22c55e">
+                    <div class="db-metrica-topo">
+                        <span class="db-metrica-icone"><i class="bi bi-check2-square"></i></span>
+                        <span class="db-metrica-rotulo">Questões<small>esta semana</small></span>
+                    </div>
+                    <div class="db-metrica-linha">
+                        <strong class="db-metrica-valor" id="total_questoes">0</strong>
+                        <span class="db-tend" id="tend_questoes">--</span>
+                    </div>
+                    <span class="db-metrica-nota">vs. mesmo período da semana passada</span>
+                    <div class="db-spark" id="spark_questoes"></div>
+                </article>
+ 
+                <article class="db-metrica" style="--cor:#8b5cf6">
+                    <div class="db-metrica-topo">
+                        <span class="db-metrica-icone"><i class="bi bi-graph-up-arrow"></i></span>
+                        <span class="db-metrica-rotulo">Aproveitamento<small>média geral</small></span>
+                    </div>
+                    <div class="db-metrica-linha">
+                        <strong class="db-metrica-valor" id="media_aproveitamento">0%</strong>
+                        <span class="db-tend" id="tend_aprov">--</span>
+                    </div>
+                    <span class="db-metrica-nota" id="nota_aprov">de acertos nas sessões</span>
+                    <div class="db-spark" id="spark_aprov"></div>
+                </article>
+ 
+                <article class="db-metrica" style="--cor:#ef4444">
+                    <div class="db-metrica-topo">
+                        <span class="db-metrica-icone"><i class="bi bi-x-circle-fill"></i></span>
+                        <span class="db-metrica-rotulo">Erros registrados<small>caderno de erros</small></span>
+                    </div>
+                    <div class="db-metrica-linha">
+                        <strong class="db-metrica-valor" id="total_erros_dashboard">0</strong>
+                        <span class="db-tend" id="tend_erros">--</span>
+                    </div>
+                    <span class="db-metrica-nota">novos nos últimos 7 dias</span>
+                    <div class="db-spark" id="spark_erros"></div>
+                </article>
+ 
+            </section>
+ 
+ 
+            <!-- ================= HORAS + APROVEITAMENTO ================= -->
+            <section class="db-linha db-linha-1">
+ 
+                <article class="db-card">
+ 
+                    <div class="db-card-topo">
+ 
+                        <div>
+                            <h2>Horas estudadas</h2>
+                            <p class="db-card-sub">Seu ritmo de estudo dia a dia</p>
+                        </div>
+ 
+                        <div class="db-seg" id="periodo_grafico">
+                            <button type="button" data-periodo="7" class="ativo">7 dias</button>
+                            <button type="button" data-periodo="30">30 dias</button>
+                        </div>
+ 
+                    </div>
+ 
+                    <div class="db-mini">
+                        <div><span>Total no período</span><strong id="h_total">--</strong></div>
+                        <div><span>Média por dia</span><strong id="h_media">--</strong></div>
+                        <div><span>Melhor dia</span><strong id="h_melhor">--</strong></div>
+                    </div>
+ 
+                    <div id="grafico_horas"></div>
+ 
+                </article>
+ 
+                <article class="db-card">
+ 
+                    <div class="db-card-topo">
+                        <div>
+                            <h2>Aproveitamento</h2>
+                            <p class="db-card-sub">Acertos nas sessões de estudo</p>
+                        </div>
+                    </div>
+ 
+                    <div id="grafico_aproveitamento"></div>
+ 
+                    <div class="db-legenda">
+                        <span><i class="db-ponto" style="background:#14b8a6"></i> Acertos <strong id="leg_acertos">0</strong></span>
+                        <span><i class="db-ponto" style="background:#ef4444"></i> Erros <strong id="leg_erros">0</strong></span>
+                    </div>
+ 
+                    <div class="db-barra-dupla"><span id="barra_acertos"></span></div>
+ 
+                    <p class="db-nota" id="aprov_semana"></p>
+ 
+                </article>
+ 
+            </section>
+ 
+ 
+            <!-- ================= MATÉRIAS + ATENÇÃO ================= -->
+            <section class="db-linha db-linha-2">
+ 
+                <article class="db-card">
+ 
+                    <div class="db-card-topo">
+                        <div>
+                            <h2>Desempenho por matéria</h2>
+                            <p class="db-card-sub">Onde seu rendimento está melhor e pior</p>
+                        </div>
+                    </div>
+ 
+                    <div id="grafico_materias"></div>
+ 
+                    <div class="db-chips" id="materias_sem_dados"></div>
+ 
+                </article>
+ 
+                <article class="db-card">
+ 
+                    <div class="db-card-topo">
+                        <div>
+                            <h2>Precisa de atenção</h2>
+                            <p class="db-card-sub">Assuntos com mais erros ou nota baixa</p>
+                        </div>
+                    </div>
+ 
+                    <div id="lista_atencao"></div>
+ 
+                </article>
+ 
+            </section>
+ 
+ 
+            <!-- ================= AGENDA + HISTÓRICO ================= -->
+            <section class="db-linha db-linha-3">
+ 
+                <article class="db-card">
+ 
+                    <div class="db-card-topo">
+ 
+                        <div>
+                            <h2>Agenda de revisões</h2>
+                            <p class="db-card-sub">Escolha um dia para ver o que revisar</p>
+                        </div>
+ 
+                        <a href="revisao.html" class="db-link">
+                            Ver todas
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+ 
+                    </div>
+ 
+                    <div class="db-semana" id="agenda_semana"></div>
+ 
+                    <div class="db-agenda-filtros" id="agenda_filtros"></div>
+ 
+                    <div class="db-agenda-lista" id="agenda_lista"></div>
+ 
+                </article>
+ 
+                <article class="db-card">
+ 
+                    <div class="db-card-topo">
+                        <div>
+                            <h2>Atividade recente</h2>
+                            <p class="db-card-sub">Suas últimas sessões, erros e revisões</p>
+                        </div>
+                    </div>
+ 
+                    <div class="db-tl" id="atividade_recente"></div>
+ 
+                </article>
+ 
+            </section>
+ 
+        </div>
+ 
+    </main>
+ 
+    <!-- ================= JAVASCRIPT ================= -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.54.1/dist/apexcharts.min.js"></script>
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/menu.js') }}"></script>
+ 
+</body>
+</html>
+ 

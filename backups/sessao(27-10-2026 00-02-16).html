@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sessão de estudo | StudyMetrics</title>
+  <!-- Usa o mesmo tema (claro/escuro) do resto do sistema -->
+  <script>
+    try { document.documentElement.setAttribute("data-tema", localStorage.getItem("studymetrics-tema") || "claro"); } catch (erro) {}
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="static/css\">
+</head>
+<body>
+  <aside class="sidebar" id="sidebar">
+    <a class="brand" href="index.html" aria-label="StudyMetrics início">
+      <span class="brand-mark"><i class="bi bi-graph-up-arrow"></i></span>
+      <span class="brand-name">Study<span>Metrics</span></span>
+    </a>
+    <div class="menu-label">ESPAÇO DE ESTUDOS</div>
+    <nav class="menu" aria-label="Menu principal">
+      <a class="menu-item" href="index.html"><i class="bi bi-grid-1x2"></i><span>Dashboard</span></a>
+      <a class="menu-item" href="materias.html"><i class="bi bi-journal-bookmark"></i><span>Matérias</span></a>
+      <a class="menu-item active" href="sessao.html" aria-current="page"><i class="bi bi-stopwatch"></i><span>Sessão de estudo</span></a>
+      <a class="menu-item" href="caderno_de_questos.html"><i class="bi bi-journal-x"></i><span>Caderno de erros</span></a>
+      <a class="menu-item" href="revisao.html"><i class="bi bi-arrow-repeat"></i><span>Revisões</span></a>
+      <a class="menu-item" href="perfil.html"><i class="bi bi-person-circle"></i><span>Perfil</span></a>
+    </nav>
+    <div class="sidebar-tip">
+      <span class="tip-icon"><i class="bi bi-lightbulb"></i></span>
+      <strong>Um passo de cada vez</strong>
+      <p>Uma sessão bem-feita hoje é progresso para amanhã.</p>
+    </div>
+    <div class="sidebar-footer"><span class="status-dot"></span> Seu progresso começa aqui</div>
+  </aside>
+
+  <main class="conteudo">
+    <header class="topbar">
+      <div class="mobile-brand"><span class="brand-mark"><i class="bi bi-graph-up-arrow"></i></span><strong>StudyMetrics</strong></div>
+      <div class="breadcrumb">Estudos <i class="bi bi-chevron-right"></i> <strong>Sessão de estudo</strong></div>
+      <div class="topbar-right"><span class="today-label"><i class="bi bi-calendar3"></i> <span id="data_hoje">Organize seu dia</span></span><a class="avatar" href="perfil.html" aria-label="Abrir perfil">S</a></div>
+    </header>
+
+    <section class="page-heading">
+      <div>
+        <span class="eyebrow">SEU ESPAÇO DE FOCO</span>
+        <h1>Sessão de estudo</h1>
+        <p>Planeje seu foco, acompanhe o cronograma e registre sua evolução.</p>
+      </div>
+      <a class="btn-secondary" href="cronograma.html"><i class="bi bi-calendar2-plus"></i> Planejar cronograma</a>
+    </section>
+
+    <section class="quote-card mensagem-dia" aria-label="Mensagem do dia">
+      <div class="quote-symbol"><i class="bi bi-stars"></i></div>
+      <div class="quote-content"><span>LEMBRETE DO DIA</span><blockquote id="frase_do_dia">“A constância transforma pequenos esforços em grandes resultados.”</blockquote><p id="categoria_frase">Constância · Seu ritmo também importa</p></div>
+      <i class="bi bi-quote quote-watermark" aria-hidden="true"></i>
+    </section>
+
+    <section class="planning-overview" aria-label="Calendário e cronograma">
+      <article class="panel calendar-panel calendario-premium">
+        <div class="panel-heading calendar-heading">
+          <div><span class="eyebrow">VISÃO MENSAL</span><h2>Calendário</h2></div>
+          <div class="calendar-controls">
+            <button type="button" class="icon-button" id="cal_anterior" aria-label="Mês anterior"><i class="bi bi-chevron-left"></i></button>
+            <h3 id="cal_titulo">Outubro 2026</h3>
+            <button type="button" class="icon-button" id="cal_proximo" aria-label="Próximo mês"><i class="bi bi-chevron-right"></i></button>
+            <button type="button" id="cal_modo" class="icon-button calendar-toggle" title="Alternar entre mês e semana" aria-label="Alternar entre mês e semana"><i class="bi bi-arrows-collapse" id="cal_icone_modo"></i></button>
+          </div>
+        </div>
+        <div class="calendar-grid">
+          <div class="dias-semana-premium"><span>DOM</span><span>SEG</span><span>TER</span><span>QUA</span><span>QUI</span><span>SEX</span><span>SÁB</span></div>
+          <div id="cal_dias" class="dias-calendario-premium" aria-label="Dias do calendário"></div>
+        </div>
+        <div class="calendar-legend calendario-legenda-premium" id="cal_legenda"></div>
+        <div class="cal-detalhe" id="cal_detalhe" aria-live="polite"></div>
+
+        <!-- Elementos antigos mantidos escondidos só para o script.js não dar erro -->
+        <div hidden aria-hidden="true">
+          <button type="button" id="mes_anterior"></button>
+          <h3 id="mes_ano"></h3>
+          <button type="button" id="proximo_mes"></button>
+          <button type="button" id="toggle_calendario"><i id="icone_toggle"></i></button>
+          <div id="dias_calendario"></div>
+        </div>
+      </article>
+
+      <article class="panel schedule-panel">
+        <div class="panel-heading">
+          <div><span class="eyebrow">PLANO DO DIA</span><h2>Cronograma de estudos</h2><p class="panel-subtitle">As tarefas cadastradas aparecerão aqui.</p></div>
+          <span class="schedule-date"><i class="bi bi-calendar-event"></i> Hoje</span>
+        </div>
+        <div class="schedule-progress"><div class="progress-copy"><span>Progresso do dia</span><strong id="progresso_cronograma">0 de 0 concluídos</strong></div><div class="progress-track"><span id="barra_progresso_cronograma"></span></div></div>
+        <div id="lista_cronograma" class="schedule-list">
+          <div class="schedule-empty"><span class="empty-icon"><i class="bi bi-calendar2-check"></i></span><strong>Seu plano vai aparecer aqui</strong><p>Quando cadastrarmos o cronograma na página de planejamento, os horários, matérias e tarefas do dia serão exibidos neste espaço.</p><a href="cronograma.html" class="btn-primary btn-small"><i class="bi bi-plus-lg"></i> Cadastrar cronograma</a></div>
+        </div>
+        <a class="text-link" href="cronograma.html">Ver cronograma completo <i class="bi bi-arrow-right"></i></a>
+      </article>
+    </section>
+
+    <section class="session-section">
+      <div class="section-title"><div><span class="eyebrow">MÃO NA MASSA</span><h2>Comece uma sessão</h2><p>Defina uma meta realista e concentre-se em uma tarefa por vez.</p></div></div>
+      <div class="sessao-grid">
+        <article class="panel card-sessao">
+          <div class="panel-heading"><div><h2><i class="bi bi-sliders2"></i> Planejar sessão</h2><p class="panel-subtitle">O que você vai estudar agora?</p></div><span class="step-number">01</span></div>
+          <form id="form_planejamento">
+            <fieldset>
+              <div class="campo"><label for="materia_sessao">Matéria</label><select id="materia_sessao" required><option value="">Selecione uma matéria</option><option value="Português">Português</option><option value="Direito Administrativo">Direito Administrativo</option><option value="Direito Constitucional">Direito Constitucional</option><option value="Raciocínio Lógico">Raciocínio Lógico</option></select></div>
+              <div class="campo"><label for="assunto_sessao">Assunto</label><input type="text" id="assunto_sessao" list="lista_assuntos" placeholder="Ex.: Crase, atos administrativos..." required><datalist id="lista_assuntos"></datalist></div>
+              <div class="field-label-row"><span class="field-group-label">Tempo planejado</span><span class="field-hint">Defina sua meta</span></div>
+              <div class="tempo-grid"><div class="campo"><label for="horas_planejadas">Horas</label><input type="number" id="horas_planejadas" min="0" placeholder="1"></div><div class="campo"><label for="minutos_planejados">Minutos</label><input type="number" id="minutos_planejados" min="0" max="59" placeholder="30"></div></div>
+              <div class="campo"><label for="meta_questoes">Meta de questões <span class="optional">(opcional)</span></label><input type="number" id="meta_questoes" min="0" placeholder="Ex.: 20 questões"></div>
+              <button type="submit" class="btn-primary btn-full"><i class="bi bi-play-fill"></i> Iniciar sessão</button>
+            </fieldset>
+          </form>
+        </article>
+
+        <article class="panel cronometro-premium">
+          <div class="panel-heading"><div><span class="eyebrow">SESSÃO ATUAL</span><h2>Tempo de foco</h2><p class="panel-subtitle">Cada minuto conta.</p></div><span class="timer-status"><span class="status-bolinha"></span><span id="status_cronometro">Aguardando</span></span></div>
+          <div class="timer-face"><div class="timer-ring"><div class="timer-ring-inner"><span class="timer-icon"><i class="bi bi-stopwatch"></i></span><div id="cronometro">00:00:00</div><span class="cronometro-legenda">HORAS · MINUTOS · SEGUNDOS</span></div></div></div>
+          <div class="cronometro-acoes-premium"><button type="button" id="btn_retomar" class="btn-primary"><i class="bi bi-play-fill"></i> Retomar</button><button type="button" id="btn_pausar" class="btn-secondary"><i class="bi bi-pause-fill"></i> Pausar</button><button type="button" id="btn_finalizar" class="btn-danger"><i class="bi bi-stop-fill"></i> Finalizar</button></div>
+          <div class="timer-note"><i class="bi bi-info-circle"></i><span>O cronômetro registra seu tempo líquido de estudo. Faça pausas quando precisar.</span></div>
+        </article>
+      </div>
+    </section>
+
+    <section id="resultado_sessao" class="panel resultado-sessao oculto">
+      <div class="panel-heading"><div><span class="eyebrow">SESSÃO FINALIZADA</span><h2>Resultado da sessão</h2><p class="panel-subtitle">Registre seu desempenho antes de salvar.</p></div><span class="result-icon"><i class="bi bi-check2-circle"></i></span></div>
+      <div class="resumo-sessao"><div class="resumo-item"><span>Matéria</span><strong id="resultado_materia">-</strong></div><div class="resumo-item"><span>Assunto</span><strong id="resultado_assunto">-</strong></div><div class="resumo-item"><span>Tempo planejado</span><strong id="resultado_tempo_planejado">-</strong></div><div class="resumo-item"><span>Meta</span><strong id="resultado_meta_questoes">-</strong></div></div>
+      <form id="form_resultado"><div class="resultado-grid"><div class="campo"><label for="questoes_realizadas">Questões realizadas</label><input type="number" id="questoes_realizadas" min="0" required></div><div class="campo"><label for="acertos">Acertos</label><input type="number" id="acertos" min="0" required></div></div><div class="campo"><label for="observacao_sessao">Observação</label><textarea id="observacao_sessao" rows="4" placeholder="O que aprendeu? O que precisa revisar?"></textarea></div><button type="submit" class="btn-primary"><i class="bi bi-check-lg"></i> Salvar sessão</button></form>
+    </section>
+
+    <section class="panel card-historico-sessoes">
+      <div class="panel-heading"><div><span class="eyebrow">SUA EVOLUÇÃO</span><h2>Histórico de sessões</h2><p class="panel-subtitle">Veja o que você já conquistou.</p></div><span class="history-icon"><i class="bi bi-graph-up"></i></span></div>
+      <div class="tabela-responsiva"><table class="tabela-sessoes"><thead><tr><th>Data</th><th>Matéria</th><th>Assunto</th><th>Tempo</th><th>Questões</th><th>Acertos</th><th>Desempenho</th></tr></thead><tbody id="historico_sessoes"><tr class="history-empty"><td colspan="7">Suas sessões registradas aparecerão aqui.</td></tr></tbody></table></div>
+    </section>
+    <footer class="page-footer">StudyMetrics <span>·</span> Consistência antes da intensidade.</footer>
+  </main>
+  <script src="static/js/cronometro.js"></script>
+  <script src="static/js/script.js"></script>
+  <script src="static/js/menu.js"></script>
+  <script src="static/js/calendario_sessao.js"></script>
+  <script>
+    // Data de hoje para o cabeçalho.
+    (function () {
+      const alvo = document.getElementById('data_hoje');
+      if (alvo) alvo.textContent = new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date());
+    })();
+  </script>
+</body>
+</html>
