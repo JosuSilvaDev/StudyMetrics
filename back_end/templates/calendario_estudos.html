@@ -1,0 +1,166 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Calendário de Estudos | StudyMetrics</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/calendario_estudos.css') }}">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+
+<body>
+
+    <main class="cal-container">
+
+        <!-- CABEÇALHO -->
+        <header class="cal-header">
+
+            <div>
+                <a href="/" class="cal-voltar">
+                    <i class="bi bi-arrow-left"></i>
+                    Voltar ao Dashboard
+                </a>
+
+                <h1>Calendário de Estudos</h1>
+
+                <p>Acompanhe sua evolução e consistência diária.</p>
+            </div>
+
+        </header>
+
+
+        <!-- CONTEÚDO PRINCIPAL -->
+        <section class="cal-layout">
+
+            <!-- RESUMO -->
+            <article class="cal-resumo">
+
+                <div class="cal-resumo-titulo">
+                    <span class="cal-icone">
+                        <i class="bi bi-clock-fill"></i>
+                    </span>
+
+                    <div>
+                        <h2>Tempo estudado</h2>
+                        <p>Total do mês</p>
+                    </div>
+                </div>
+
+                <strong id="total_mes" class="cal-total">
+                    0h 00min
+                </strong>
+
+                <div class="cal-divisor"></div>
+
+                <div class="cal-indicador">
+                    <span>Dias estudados</span>
+                    <strong id="dias_estudados">0 dias</strong>
+                </div>
+
+                <div class="cal-indicador">
+                    <span>Média por dia</span>
+                    <strong id="media_diaria">0h 00min</strong>
+                </div>
+
+            </article>
+
+
+            <!-- CALENDÁRIO -->
+            <article class="cal-card">
+
+                <div class="cal-topo">
+
+                    <div>
+                        <h2 id="mes_atual">Novembro 2026</h2>
+                        <p>Seu histórico diário de estudos</p>
+                    </div>
+
+                    <div class="cal-navegacao">
+
+                        <button id="mes_anterior"
+                                aria-label="Mês anterior">
+                            <i class="bi bi-chevron-left"></i>
+                        </button>
+
+                        <button id="mes_proximo"
+                                aria-label="Próximo mês">
+                            <i class="bi bi-chevron-right"></i>
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="cal-dias-semana">
+                    <span>DOM</span>
+                    <span>SEG</span>
+                    <span>TER</span>
+                    <span>QUA</span>
+                    <span>QUI</span>
+                    <span>SEX</span>
+                    <span>SÁB</span>
+                </div>
+
+
+                <div id="grade_calendario" class="cal-grade">
+                    <!-- Preenchido pelo JavaScript -->
+                </div>
+
+
+                <div class="cal-legenda">
+                    <span class="cal-legenda-cor"></span>
+                    Dia com estudo registrado
+                </div>
+
+            </article>
+
+        </section>
+
+
+        <!-- DETALHES DO DIA -->
+        <section class="cal-detalhes">
+
+            <div class="cal-detalhes-topo">
+
+                <div>
+                    <h2 id="titulo_dia">Detalhes do dia</h2>
+                    <p id="subtitulo_dia">
+                        Selecione uma data no calendário.
+                    </p>
+                </div>
+
+                <div class="cal-tempo-dia">
+                    <span>Tempo estudado</span>
+                    <strong id="tempo_dia">0h 00min</strong>
+                </div>
+
+            </div>
+
+
+            <div id="lista_sessoes" class="cal-lista-sessoes">
+
+                <p class="cal-vazio">
+                    Selecione um dia para visualizar suas sessões.
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <script src="{{ url_for('static', filename='js/calendario_estudos.js') }}"></script>
+
+</body>
+</html>
+

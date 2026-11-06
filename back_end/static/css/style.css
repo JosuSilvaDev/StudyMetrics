@@ -1689,6 +1689,41 @@ legend {
     box-shadow: 0 0 0 4px rgba(70,240,210,0.12);
 }
 
+/* BOTÃO excluir */
+.btn-excluir {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+
+    padding: 7px 12px;
+
+    background-color: #fff1f2;
+    color: #d75b5b;
+
+    border: 1px solid #fecdd3;
+    border-radius: 8px;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-excluir:hover {
+    background-color: #ba8b8b;
+    color: #ffffff;
+    border-color: #e11d48;
+    transform: translateY(-2px);
+    box-shadow: 0 3px 8px rgba(225, 29, 72, 0.20);
+}
+
+.btn-excluir:active {
+    transform: scale(0.96);
+}
+
+
 /* BOTÃO SALVAR */
 
 .card-sessao .btn-principal {
@@ -4715,4 +4750,40 @@ CADERNO DE ERROS - STUDYMETRICS
         animation-iteration-count:1!important;
         transition-duration:.01ms!important;
     }
+}
+
+.db-metrica-link {
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.db-metrica-link:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 22px rgba(59, 130, 246, 0.15);
+}
+
+.db-metrica-link:focus-visible {
+    outline: 2px solid #3b82f6;
+    outline-offset: 4px;
+}
+
+.db-metrica-rodape {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(127, 127, 127, 0.15);
+    color: var(--cor);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.db-metrica-rodape i {
+    transition: transform 0.2s ease;
+}
+
+.db-metrica-link:hover .db-metrica-rodape i {
+    transform: translateX(5px);
 }

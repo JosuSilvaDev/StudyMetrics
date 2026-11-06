@@ -1,7 +1,7 @@
 from flask import Flask, render_template, jsonify, request
 from datetime import datetime, timedelta, timezone
 from database import init_db, get_db
-
+from flask import render_template
 
 app = Flask(__name__)
 
@@ -17,6 +17,10 @@ init_db()
 @app.route("/index.html")
 def index():
     return render_template("index.html")
+
+@app.route("/calendario-estudos")
+def calendario_estudos():
+    return render_template("calendario_estudos.html")
 
 
 @app.route("/materias.html")
@@ -77,6 +81,9 @@ def listar_materias():
         conn.close()
 
     return jsonify([dict(materia) for materia in materias])
+
+
+
 
 
 @app.route("/api/materias", methods=["POST"])
@@ -222,6 +229,69 @@ def para_inteiro(valor):
     except (TypeError, ValueError):
         return 0
 
+#O código a seguir define uma rota de API que retorna um calendário de estudos com base no mês fornecido como parâmetro. Se nenhum mês for fornecido, ele usa o mês atual. A função consulta o banco de dados para obter sessões de estudo dentro do intervalo de datas especificado e retorna os resultados em formato JSON.
+@app.route("/api/calendario-estudos", methods=["GET"])
+def api_calendario_estudos():
+
+    mes = request.args.get("mes")
+
+    if not mes:
+        mes = datetime.now().strftime("%Y-%m")
+
+    try:
+        data_inicio = datetime.strptime(mes, "%Y-%m").date()
+        ano = data_inicio.year
+        numero_mes = data_inicio.month
+
+        if not 1 <= numero_mes <= 12:
+            raise ValueError()
+
+        if numero_mes == 12:
+            proximo_mes = data_inicio.replace(
+                year=ano + 1,
+                month=1
+            )
+        else:
+            proximo_mes = data_inicio.replace(
+                month=numero_mes + 1
+            )
+
+    except ValueError:
+        return jsonify({
+            "erro": "Mês inválido."
+        }), 400
+
+    conn = get_db()
+
+    try:
+        sessoes = conn.execute("""
+            SELECT
+                id,
+                materia,
+                assunto,
+                tempo_planejado,
+                tempo_segundos,
+                meta_questoes,
+                questoes_realizadas,
+                acertos,
+                observacao,
+                criado_em
+            FROM sessoes
+            WHERE date(criado_em) >= date(?, '-1 day')
+              AND date(criado_em) < date(?, '+1 day')
+            ORDER BY criado_em ASC
+        """, (
+            data_inicio.isoformat(),
+            proximo_mes.isoformat()
+        )).fetchall()
+
+    finally:
+        conn.close()
+
+    return jsonify([
+        dict(sessao) for sessao in sessoes
+    ])
+
 
 @app.route("/api/sessoes", methods=["GET"])
 def listar_sessoes():
@@ -313,7 +383,35 @@ def cadastrar_sessao():
         "mensagem": "Sessão salva com sucesso."
     }), 201
 
+@app.route("/api/sessoes/<int:sessao_id>", methods=["DELETE"])
+def excluir_sessao(sessao_id):
+    conn = get_db()
 
+    try:
+        cursor = conn.execute(
+            "DELETE FROM sessoes WHERE id = ?",
+            (sessao_id,)
+        )
+
+        conn.commit()
+
+        if cursor.rowcount == 0:
+            return jsonify({
+                "erro": "Sessão não encontrada."
+            }), 404
+
+    except Exception as erro:
+        conn.rollback()
+        return jsonify({
+            "erro": "Não foi possível excluir a sessão."
+        }), 500
+
+    finally:
+        conn.close()
+
+    return jsonify({
+        "mensagem": "Sessão excluída com sucesso."
+    }), 200
 
 # =========================================================
 # API DO CADERNO DE ERROS
@@ -726,7 +824,6 @@ def dados_dashboard():
             ORDER BY id DESC
             LIMIT 6
         """).fetchall()
-
         nomes_materias = conn.execute(
             "SELECT DISTINCT nome FROM materias"
         ).fetchall()

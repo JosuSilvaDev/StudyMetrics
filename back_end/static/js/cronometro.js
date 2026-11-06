@@ -525,41 +525,44 @@ function formatarTempoHistorico(segundos) {
     return segundos + "s";
 }
  
+
 async function carregarHistorico() {
     const corpo = document.getElementById("historico_sessoes");
- 
+
     if (!corpo) {
         return;
     }
- 
+
     try {
         const resposta = await fetch("/api/sessoes");
         const sessoes = await resposta.json();
- 
+
         if (sessoes.length === 0) {
             corpo.innerHTML =
-                '<tr><td colspan="7">Nenhuma sessão registrada ainda.</td></tr>';
+                '<tr><td colspan="8">Nenhuma sessão registrada ainda.</td></tr>';
             return;
         }
- 
+
         corpo.innerHTML = sessoes.map(function (s) {
-            // O banco guarda a hora em UTC; aqui vira a data local
+
+            // Converte a data UTC para a data local
             const data = new Date(
                 s.criado_em.replace(" ", "T") + "Z"
             ).toLocaleDateString("pt-BR");
- 
+
             let desempenho = "-";
- 
+
             if (s.questoes_realizadas > 0) {
                 const pct = Math.round(
                     (s.acertos / s.questoes_realizadas) * 100
                 );
+
                 const classe = pct >= 80 ? "bom" : pct >= 60 ? "medio" : "ruim";
- 
+
                 desempenho =
                     '<span class="desempenho ' + classe + '">' + pct + "%</span>";
             }
- 
+
             return `
                 <tr>
                     <td>${data}</td>
@@ -569,12 +572,56 @@ async function carregarHistorico() {
                     <td>${s.questoes_realizadas}</td>
                     <td>${s.acertos}</td>
                     <td>${desempenho}</td>
-                </tr>`;
+                    <td>
+                        <button
+                            class="btn-excluir"
+                            onclick="excluirSessao(${s.id})">
+                            Excluir
+                        </button>
+                    </td>
+                </tr>
+            `;
         }).join("");
+
     } catch (erro) {
         console.error("Erro ao carregar histórico:", erro);
     }
 }
+
+
+// FUNÇÃO PARA EXCLUIR UMA SESSÃO
+async function excluirSessao(id) {
+
+    const confirmar = confirm(
+        "Tem certeza que deseja excluir esta sessão?"
+    );
+
+    if (!confirmar) {
+        return;
+    }
+
+    try {
+        const resposta = await fetch(`/api/sessoes/${id}`, {
+            method: "DELETE"
+        });
+
+        const dados = await resposta.json();
+
+        if (!resposta.ok) {
+            throw new Error(dados.erro);
+        }
+
+        alert(dados.mensagem);
+
+        // Atualiza a tabela após a exclusão
+        carregarHistorico();
+
+    } catch (erro) {
+        console.error("Erro ao excluir sessão:", erro);
+        alert("Não foi possível excluir a sessão.");
+    }
+}
+
  
 // =========================
 // INÍCIO

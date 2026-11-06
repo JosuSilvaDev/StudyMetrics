@@ -182,19 +182,37 @@
  
             <!-- ================= MÉTRICAS ================= -->
             <section class="db-metricas">
- 
-                <article class="db-metrica" style="--cor:#3b82f6">
+
+                
+                <article
+                    class="db-metrica db-metrica-link"
+                    style="--cor:#3b82f6"
+                    onclick="window.location.href='/calendario-estudos'"
+                    role="link"
+                    tabindex="0"
+                    onkeydown="if(event.key === 'Enter') window.location.href='/calendario-estudos'"
+                >
                     <div class="db-metrica-topo">
-                        <span class="db-metrica-icone"><i class="bi bi-clock-fill"></i></span>
-                        <span class="db-metrica-rotulo">Tempo estudado<small>esta semana</small></span>
+                        <span class="db-metrica-icone">
+                            <i class="bi bi-clock-fill"></i>
+                        </span>
+                        <span class="db-metrica-rotulo">
+                            Tempo estudado
+                            <small>esta semana</small>
+                        </span>
                     </div>
+
                     <div class="db-metrica-linha">
                         <strong class="db-metrica-valor" id="total_tempo">0h 00min</strong>
                         <span class="db-tend" id="tend_tempo">--</span>
                     </div>
-                    <span class="db-metrica-nota">vs. mesmo período da semana passada</span>
+
+                    <span class="db-metrica-nota">
+                        vs. mesmo período da semana passada
+                    </span>
+
                     <div class="db-spark" id="spark_tempo"></div>
-                </article>
+                </article>                
  
                 <article class="db-metrica" style="--cor:#22c55e">
                     <div class="db-metrica-topo">
@@ -240,7 +258,11 @@
  
             <!-- ================= HORAS + APROVEITAMENTO ================= -->
             <section class="db-linha db-linha-1">
+               
  
+
+
+                
                 <article class="db-card">
  
                     <div class="db-card-topo">

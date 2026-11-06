@@ -3,6 +3,7 @@ const calendario = document.querySelector(".calendario-premium");
 const diasCalendario = document.getElementById("dias_calendario");
 const tituloMesAno = document.getElementById("mes_ano");
 
+
 const btnAnterior = document.getElementById("mes_anterior");
 const btnProximo = document.getElementById("proximo_mes");
 
@@ -464,6 +465,3 @@ gerarCalendario();
     }
 
 });
-
-
-
