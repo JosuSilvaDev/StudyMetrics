@@ -1,7 +1,7 @@
 from flask import Flask, render_template, jsonify, request
 from datetime import datetime, timedelta, timezone
 from database import init_db, get_db
-from flask import render_template
+
 
 app = Flask(__name__)
 
