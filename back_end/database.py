@@ -42,7 +42,18 @@ def init_db():
         observacao TEXT,
         criado_em TEXT DEFAULT CURRENT_TIMESTAMP
     )
-""")
+
+    conn.execute("""
+    CREATE TABLE IF NOT EXISTS tempo_estudo(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        
+        tempo_segundos INTEGER DEFAULT 0,
+        criado_em TEXT DEFAULT CURRENT_TIMESTAMP
+        )
+    """)             
+
+
+    """)
     conn.execute("""
         CREATE TABLE IF NOT EXISTS erros (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
