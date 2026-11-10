@@ -31,7 +31,10 @@ def pagina_materias():
 @app.route("/sessao.html")
 def pagina_sessao():
     return render_template("sessao.html")
-
+    
+@app.route("/horas_estudo.html")
+    def horas_estudos():
+        return render_template("horas_estudo.html")
 
 @app.route("/caderno_de_questos.html")
 def pagina_caderno():
