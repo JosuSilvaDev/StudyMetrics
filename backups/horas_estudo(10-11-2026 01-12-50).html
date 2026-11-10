@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Horas de Estudo | StudyMetrics</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    link css
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="logo">
+            <div class="logo-simbolo"><i class="bi bi-graph-up-arrow"></i></div>
+            <div class="logo-texto"><strong>Study</strong><span>Metrics</span></div>
+        </div>
+        <nav class="menu">
+            <a href="/" class="menu-item"><i class="bi bi-grid-1x2-fill"></i><span>Dashboard</span></a>
+            <a href="/materias.html" class="menu-item"><i class="bi bi-journal-bookmark-fill"></i><span>Matérias</span></a>
+            <a href="/sessao.html" class="menu-item"><i class="bi bi-stopwatch-fill"></i><span>Sessão de estudo</span></a>
+            <a href="/historico-estudos" class="menu-item ativo"><i class="bi bi-clock-history"></i><span>Horas de estudo</span></a>
+            <a href="/caderno_de_questos.html" class="menu-item"><i class="bi bi-journal-x"></i><span>Caderno de Erros</span></a>
+            <a href="/revisao.html" class="menu-item"><i class="bi bi-arrow-repeat"></i><span>Revisões</span></a>
+            <a href="/perfil.html" class="menu-item"><i class="bi bi-person-circle"></i><span>Perfil</span></a>
+        </nav>
+    </aside>
+
+    <main class="conteudo">
+        <div class="he-pagina">
+            <header class="he-topo">
+                <div>
+                    <h1>Horas de estudo</h1>
+                    <p>Acompanhe todo o tempo que você já dedicou aos estudos.</p>
+                </div>
+                <a href="/" class="db-link"><i class="bi bi-arrow-left"></i> Voltar ao Dashboard</a>
+            </header>
+
+            <p id="he_erro" class="he-aviso">Não foi possível carregar os dados. Confira se o servidor está ligado.</p>
+
+            <section class="he-card he-destaque">
+                <div>
+                    <p class="he-sub">TEMPO TOTAL ACUMULADO</p>
+                    <div class="he-total" id="he_total">--</div>
+                    <p class="he-sub">Somatório de todas as sessões registradas</p>
+                </div>
+                <div class="he-icone"><i class="bi bi-hourglass-split"></i></div>
+            </section>
+
+            <section class="he-grid">
+                <article class="he-card">
+                    <div class="he-label">Sessões realizadas</div>
+                    <div class="he-numero" id="he_sessoes">--</div>
+                </article>
+                <article class="he-card">
+                    <div class="he-label">Dias com estudo</div>
+                    <div class="he-numero" id="he_dias">--</div>
+                </article>
+                <article class="he-card">
+                    <div class="he-label">Média por dia estudado</div>
+                    <div class="he-numero" id="he_media">--</div>
+                </article>
+            </section>
+
+            <section class="he-secoes">
+                <article class="he-card">
+                    <h2>Últimos 30 dias</h2>
+                    <p class="he-sub">Tempo registrado por dia</p>
+                    <div id="he_diario" class="he-lista"><p class="he-vazio">Carregando...</p></div>
+                </article>
+                <article class="he-card">
+                    <h2>Últimos 12 meses</h2>
+                    <p class="he-sub">Evolução mensal do tempo estudado</p>
+                    <div id="he_mensal" class="he-lista"><p class="he-vazio">Carregando...</p></div>
+                </article>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        function formatarTempo(segundos) {
+            segundos = Number(segundos) || 0;
+            const horas = Math.floor(segundos / 3600);
+            const minutos = Math.floor((segundos % 3600) / 60);
+            if (horas > 0) return `${horas}h ${String(minutos).padStart(2, "0")}min`;
+            return `${minutos}min`;
+        }
+
+        function formatarData(iso) {
+            const [ano, mes, dia] = iso.split("-");
+            return `${dia}/${mes}`;
+        }
+
+        function renderizarBarras(elementoId, itens, chaveData) {
+            const elemento = document.getElementById(elementoId);
+            const maximo = Math.max(...itens.map(item => Number(item.segundos) || 0), 1);
+            if (!itens.length || itens.every(item => !Number(item.segundos))) {
+                elemento.innerHTML = '<p class="he-vazio">Ainda não há horas registradas neste período.</p>';
+                return;
+            }
+
+            elemento.innerHTML = itens.map(item => {
+                const rotulo = chaveData === "data"
+                    ? formatarData(item.data)
+                    : item.mes.split("-").reverse().join("/");
+                const valor = Number(item.segundos) || 0;
+                const largura = Math.max(valor > 0 ? 2 : 0, valor / maximo * 100);
+                return `<div class="he-linha">
+                    <span>${rotulo}</span>
+                    <div class="he-barra"><span style="width:${largura}%"></span></div>
+                    <span class="he-tempo">${formatarTempo(valor)}</span>
+                </div>`;
+            }).join("");
+        }
+
+        async function carregarHistorico() {
+            try {
+                const resposta = await fetch("/api/horas-estudo");
+                if (!resposta.ok) throw new Error("Falha ao consultar a API.");
+                const dados = await resposta.json();
+
+                document.getElementById("he_total").textContent = formatarTempo(dados.total_segundos);
+                document.getElementById("he_sessoes").textContent = dados.total_sessoes;
+                document.getElementById("he_dias").textContent = dados.dias_ativos;
+                document.getElementById("he_media").textContent = formatarTempo(dados.media_diaria_segundos);
+
+                renderizarBarras("he_diario", dados.historico_diario, "data");
+                renderizarBarras("he_mensal", dados.historico_mensal, "mes");
+            } catch (erro) {
+                document.getElementById("he_erro").style.display = "block";
+                document.getElementById("he_diario").innerHTML = '<p class="he-vazio">Não foi possível carregar o histórico.</p>';
+                document.getElementById("he_mensal").innerHTML = '<p class="he-vazio">Não foi possível carregar o histórico.</p>';
+                console.error(erro);
+            }
+        }
+
+        carregarHistorico();
+    </script>
+    <script src="{{ url_for('static', filename='js/menu.js') }}"></script>
+</body>
+</html>

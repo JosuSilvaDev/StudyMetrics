@@ -413,6 +413,100 @@ def excluir_sessao(sessao_id):
         "mensagem": "Sessão excluída com sucesso."
     }), 200
 
+
+
+@app.route("/historico-estudos")
+def pagina_historico_estudos():
+    return render_template("horas_estudo.html")
+
+
+@app.route("/api/horas-estudo", methods=["GET"])
+def api_horas_estudo():
+    """Retorna o total acumulado e a evolução diária/mensal das sessões."""
+    conn = get_db()
+
+    try:
+        sessoes = conn.execute("""
+            SELECT tempo_segundos, criado_em
+            FROM sessoes
+            WHERE COALESCE(tempo_segundos, 0) > 0
+            ORDER BY criado_em ASC
+        """).fetchall()
+    finally:
+        conn.close()
+
+    hoje = datetime.now().date()
+    total_segundos = 0
+    segundos_por_dia = {}
+    segundos_por_mes = {}
+
+    for sessao in sessoes:
+        segundos = para_inteiro(sessao["tempo_segundos"])
+        total_segundos += segundos
+
+        dia = data_local(sessao["criado_em"])
+        chave_dia = dia.isoformat()
+        chave_mes = dia.strftime("%Y-%m")
+
+        segundos_por_dia[chave_dia] = segundos_por_dia.get(chave_dia, 0) + segundos
+        segundos_por_mes[chave_mes] = segundos_por_mes.get(chave_mes, 0) + segundos
+
+    dias_ativos = len(segundos_por_dia)
+    media_diaria = round(total_segundos / dias_ativos) if dias_ativos else 0
+
+    historico_diario = []
+    for deslocamento in range(29, -1, -1):
+        dia = hoje - timedelta(days=deslocamento)
+        chave = dia.isoformat()
+        historico_diario.append({
+            "data": chave,
+            "segundos": segundos_por_dia.get(chave, 0)
+        })
+
+    historico_mensal = []
+    primeiro_mes = hoje.replace(day=1)
+    for deslocamento in range(11, -1, -1):
+        ano = primeiro_mes.year
+        mes = primeiro_mes.month - deslocamento
+        while mes <= 0:
+            mes += 12
+            ano -= 1
+        chave = f"{ano:04d}-{mes:02d}"
+        historico_mensal.append({
+            "mes": chave,
+            "segundos": segundos_por_mes.get(chave, 0)
+        })
+
+    return jsonify({
+        "total_segundos": total_segundos,
+        "total_sessoes": len(sessoes),
+        "dias_ativos": dias_ativos,
+        "media_diaria_segundos": media_diaria,
+        "historico_diario": historico_diario,
+        "historico_mensal": historico_mensal
+    })
+
+@app.route("/horas-estudo")
+def horas_estudo():
+    conn = get_db()
+
+    try:
+        total_segundos = conn.execute("""
+            SELECT
+            COALESCE(SUM(tempo_segundos), 0) AS total_segundos
+            FROM sessoes;
+        """).fetchone()["total_segundos"]
+    finally:
+        conn.close()
+
+    horas = total_segundos // 3600
+    minutos = (total_segundos % 3600) // 60
+
+    return jsonify({
+        "horas": horas,
+        "minutos": minutos
+    })
+
 # =========================================================
 # API DO CADERNO DE ERROS
 # =========================================================
