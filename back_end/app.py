@@ -41,10 +41,10 @@ def pagina_caderno():
     return render_template("caderno_de_questos.html")
 
 
-@app.route("/revisoes.html")
 @app.route("/revisao.html")
 def pagina_revisoes():
     return render_template("revisao.html")
+
 
 
 @app.route("/revisao_questoes.html")
