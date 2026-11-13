@@ -223,6 +223,7 @@
                 <article class="db-metrica" style="--cor:#22c55e">
                     <div class="db-metrica-topo">
                         <span class="db-metrica-icone"><i class="bi bi-check2-square"></i></span>
+
                         <span class="db-metrica-rotulo">Questões<small>esta semana</small></span>
                     </div>
                     <div class="db-metrica-linha">
@@ -262,63 +263,109 @@
             </section>
  
  
-            <!-- ================= HORAS + APROVEITAMENTO ================= -->
-            <section class="db-linha db-linha-1">
-               
- 
+
+<!-- ================= HORAS + APROVEITAMENTO ================= -->
+<section class="db-linha db-linha-1">
+
+    <!-- CARTÃO DE HORAS ESTUDADAS -->
+    <article class="db-card">
+
+        <div class="db-card-topo">
+
+            <div>
+                <h2>Horas estudadas</h2>
+                <p class="db-card-sub">
+                    Seu ritmo de estudo dia a dia
+                </p>
+            </div>
+
+            <a href="/historico-estudos" class="db-link">
+                Ver histórico
+                <i class="bi bi-arrow-right"></i>
+            </a>
+
+        </div>
+
+        <!-- FILTRO DE PERÍODO -->
+        <div class="db-seg" id="periodo_grafico">
+            <button type="button" data-periodo="7" class="ativo">
+                7 dias
+            </button>
+
+            <button type="button" data-periodo="30">
+                30 dias
+            </button>
+        </div>
+
+        <!-- INDICADORES -->
+        <div class="db-mini">
+
+            <div>
+                <span>Total no período</span>
+                <strong id="h_total">--</strong>
+            </div>
+
+            <div>
+                <span>Média por dia</span>
+                <strong id="h_media">--</strong>
+            </div>
+
+            <div>
+                <span>Melhor dia</span>
+                <strong id="h_melhor">--</strong>
+            </div>
+
+        </div>
+
+        <!-- GRÁFICO -->
+        <div id="grafico_horas"></div>
+
+    </article>
 
 
-                
-                <article class="db-card">
- 
-                    <div class="db-card-topo">
- 
-                        <div>
-                            <h2>Horas estudadas</h2>
-                            <p class="db-card-sub">Seu ritmo de estudo dia a dia</p>
-                        </div>
- 
-                        <div class="db-seg" id="periodo_grafico">
-                            <button type="button" data-periodo="7" class="ativo">7 dias</button>
-                            <button type="button" data-periodo="30">30 dias</button>
-                        </div>
- 
-                    </div>
- 
-                    <div class="db-mini">
-                        <div><span>Total no período</span><strong id="h_total">--</strong></div>
-                        <div><span>Média por dia</span><strong id="h_media">--</strong></div>
-                        <div><span>Melhor dia</span><strong id="h_melhor">--</strong></div>
-                    </div>
- 
-                    <div id="grafico_horas"></div>
- 
-                </article>
- 
-                <article class="db-card">
- 
-                    <div class="db-card-topo">
-                        <div>
-                            <h2>Aproveitamento</h2>
-                            <p class="db-card-sub">Acertos nas sessões de estudo</p>
-                        </div>
-                    </div>
- 
-                    <div id="grafico_aproveitamento"></div>
- 
-                    <div class="db-legenda">
-                        <span><i class="db-ponto" style="background:#14b8a6"></i> Acertos <strong id="leg_acertos">0</strong></span>
-                        <span><i class="db-ponto" style="background:#ef4444"></i> Erros <strong id="leg_erros">0</strong></span>
-                    </div>
- 
-                    <div class="db-barra-dupla"><span id="barra_acertos"></span></div>
- 
-                    <p class="db-nota" id="aprov_semana"></p>
- 
-                </article>
- 
-            </section>
- 
+    <!-- CARTÃO DE APROVEITAMENTO -->
+    <article class="db-card">
+
+        <div class="db-card-topo">
+
+            <div>
+                <h2>Aproveitamento</h2>
+                <p class="db-card-sub">
+                    Acertos nas sessões de estudo
+                </p>
+            </div>
+
+        </div>
+
+        <div id="grafico_aproveitamento"></div>
+
+        <div class="db-legenda">
+
+            <span>
+                <i class="db-ponto" style="background:#14b8a6"></i>
+                Acertos
+                <strong id="leg_acertos">0</strong>
+            </span>
+
+            <span>
+                <i class="db-ponto" style="background:#ef4444"></i>
+                Erros
+                <strong id="leg_erros">0</strong>
+            </span>
+
+        </div>
+
+        <div class="db-barra-dupla">
+            <span id="barra_acertos"></span>
+        </div>
+
+        <p class="db-nota" id="aprov_semana"></p>
+
+    </article>
+
+</section>
+
+            
  
             <!-- ================= MATÉRIAS + ATENÇÃO ================= -->
             <section class="db-linha db-linha-2">

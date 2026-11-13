@@ -1,7 +1,7 @@
 from flask import Flask, render_template, jsonify, request
 from datetime import datetime, timedelta, timezone
 from database import init_db, get_db
-
+from flask import render_template
 
 app = Flask(__name__)
 
@@ -27,24 +27,25 @@ def calendario_estudos():
 def pagina_materias():
     return render_template("materias.html")
 
+@app.route("/historico-estudos")
+@app.route("/horas-estudo")
+def pagina_historico_estudos():
+    return render_template("horas_estudo.html")
 
 @app.route("/sessao.html")
 def pagina_sessao():
     return render_template("sessao.html")
-    
-@app.route("/horas_estudo.html")
-    def horas_estudos():
-        return render_template("horas_estudo.html")
+
 
 @app.route("/caderno_de_questos.html")
 def pagina_caderno():
     return render_template("caderno_de_questos.html")
 
 
+
 @app.route("/revisao.html")
 def pagina_revisoes():
     return render_template("revisao.html")
-
 
 
 @app.route("/revisao_questoes.html")
@@ -418,9 +419,6 @@ def excluir_sessao(sessao_id):
 
 
 
-@app.route("/historico-estudos")
-def pagina_historico_estudos():
-    return render_template("horas_estudo.html")
 
 
 @app.route("/api/horas-estudo", methods=["GET"])
@@ -489,26 +487,6 @@ def api_horas_estudo():
         "historico_mensal": historico_mensal
     })
 
-@app.route("/horas-estudo")
-def horas_estudo():
-    conn = get_db()
-
-    try:
-        total_segundos = conn.execute("""
-            SELECT
-            COALESCE(SUM(tempo_segundos), 0) AS total_segundos
-            FROM sessoes;
-        """).fetchone()["total_segundos"]
-    finally:
-        conn.close()
-
-    horas = total_segundos // 3600
-    minutos = (total_segundos % 3600) // 60
-
-    return jsonify({
-        "horas": horas,
-        "minutos": minutos
-    })
 
 # =========================================================
 # API DO CADERNO DE ERROS
