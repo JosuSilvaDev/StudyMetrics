@@ -2,169 +2,59 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perfil | StudyMetrics</title>
-    <link rel="preconnect"
-          href="https://fonts.googleapis.com">
-    <link rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Monoton&family=Poppins:wght@300;400;500;600;700&display=swap"
-          rel="stylesheet">
-    <link rel="stylesheet" href="static/css/style.css">
-
-    <link
-    rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
-    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/rede.png') }}">
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/perfil.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='img/rede.png') }}">
 </head>
 <body>
-    <!-- ================= MENU LATERAL ================= -->
-    <!-- ================= MENU LATERAL ================= -->
-<!-- ================= MENU LATERAL ================= -->
 <aside class="sidebar">
-
-    <!-- LOGO -->
-    <div class="logo">
-
-        <div class="logo-simbolo">
-            <i class="bi bi-graph-up-arrow"></i>
-        </div>
-
-        <div class="logo-texto">
-            <strong>Study</strong><span>Metrics</span>
-        </div>
-
-    </div>
-
-
-    <!-- MENU -->
-    <nav class="menu">
-
-        <a href="index.html" class="menu-item">
-            <i class="bi bi-grid-1x2-fill"></i>
-            <span>Dashboard</span>
-        </a>
-
-        <a href="materias.html" class="menu-item">
-            <i class="bi bi-journal-bookmark-fill"></i>
-            <span>Matérias</span>
-        </a>
-
-        <a href="sessao.html" class="menu-item">
-            <i class="bi bi-stopwatch-fill"></i>
-            <span>Sessão de estudo</span>
-        </a>
-
-        <a href="caderno_de_questos.html" class="menu-item">
-            <i class="bi bi-journal-x"></i>
-            <span>Caderno de Erros</span>
-        </a>
-
-        <a href="/historico-estudos" class="menu-item">
-            <i class="bi bi-clock-history"></i>
-            <span>Horas de estudo</span>
-        </a>
-        
-        <a href="revisao.html" class="menu-item">
-            <i class="bi bi-arrow-repeat"></i>
-            <span>Revisões</span>
-        </a>
-
-        <a href="perfil.html" class="menu-item">
-            <i class="bi bi-person-circle"></i>
-            <span>Perfil</span>
-        </a>
-
+    <div class="logo"><div class="logo-simbolo"><i class="bi bi-graph-up-arrow"></i></div><div class="logo-texto"><strong>Study</strong><span>Metrics</span></div></div>
+    <nav class="menu" aria-label="Menu principal">
+        <a href="index.html" class="menu-item"><i class="bi bi-grid-1x2-fill"></i><span>Dashboard</span></a>
+        <a href="materias.html" class="menu-item"><i class="bi bi-journal-bookmark-fill"></i><span>Matérias</span></a>
+        <a href="sessao.html" class="menu-item"><i class="bi bi-stopwatch-fill"></i><span>Sessão de estudo</span></a>
+        <a href="/historico-estudos" class="menu-item"><i class="bi bi-clock-history"></i><span>Horas de estudo</span></a>
+        <a href="caderno_de_questos.html" class="menu-item"><i class="bi bi-journal-x"></i><span>Caderno de Erros</span></a>
+        <a href="revisao.html" class="menu-item"><i class="bi bi-arrow-repeat"></i><span>Revisões</span></a>
+        <a href="perfil.html" class="menu-item"><i class="bi bi-person-circle"></i><span>Perfil</span></a>
     </nav>
-
 </aside>
-
-
-
-
-    <!-- CONTEÚDO Dados-->
-    <main class="conteudo">
-        <header class="cabecalho-pagina">
-            <div>
-                <h1>Perfil</h1>
-                <p> Configure suas informações e preferências.</p>
-            </div>
-        </header>
-        <section class="perfil-cabecalho">
-            <img src="imagens/avatar.png"
-                 alt="Foto de perfil"
-                 class="avatar">
-            <div>
-                <h2>Meu perfil</h2>
-                <p>Personalize sua experiência no StudyMetrics.</p>
-            </div>
-        </section>
-        <section class="perfil-grid">
-            <!-- CARD 1 -->
-            <div class="card-perfil">
-                <form>
-                    <fieldset>
-                        <legend>
-                            Informações pessoais
-                        </legend>
-                        <div class="campo">
-                            <label for="nome">Nome</label>
-                            <input type="text" name="nome" id="nome" placeholder="Digite seu nome">
-                        </div>
-                        <div class="campo">
-                            <label for="data_nascimento">Data de nascimento</label>
-                            <input type="date" name="data_nascimento" id="data_nascimento">
-                        </div>
-                        <div class="campo">
-                            <label for="email">E-mail</label>
-                            <input type="email"name="email"id="email" placeholder="seuemail@email.com">
-                        </div>
-                        <button type="submit" class="btn-principal">Salvar</button>
-                    </fieldset>
-                </form>
-            </div>
-         <!-- CARD 2 -->
-            <div class="card-perfil">
-                <form>
-                    <fieldset>
-                        <legend>Objetivo e motivação</legend>
-                        <div class="campo">
-                            <label for="data_conclusao">Data que deseja alcançar seu objetivo</label>
-                            <input type="date" name="data_conclusao" id="data_conclusao">
-                        </div>
-                        <p class="titulo-motivacao">Que tipo de motivação</p>
-                        <div class="lista-motivacoes">
-                            <label class="motivacao-opcao">
-                                <input type="checkbox"name="motivacao"value="Disciplina">
-                                <span>Disciplina</span>
-                            </label>
-                            <label class="motivacao-opcao">
-                                <input type="checkbox"name="motivacao" value="Foco">
-                                <span>Foco</span>
-                            </label>
-                            <label class="motivacao-opcao">
-                                <input type="checkbox" name="motivacao"  value="Persistência">
-                                <span>Persistência</span>
-                            </label>
-                            <label class="motivacao-opcao">
-                                <input type="checkbox"name="motivacao"  value="Evolução">
-                                <span>Evolução</span>
-                            </label>
-                            <label class="motivacao-opcao">
-                                <input type="checkbox" name="motivacao" value="Constância">
-                                <span>Constância</span>
-                            </label>
-                        </div>
-                        <button type="submit"class="btn-principal">Salvar preferências</button>
-                    </fieldset>
-                </form>
-            </div>
-        </section>
-    </main>
-    <script src="static/js/menu.js"></script>
+<main class="conteudo perfil-pagina">
+    <header class="perfil-topo"><div><span class="perfil-sobrelinha">SEU ESPAÇO</span><h1>Meu perfil</h1><p>Suas informações, seus objetivos e a sua jornada.</p></div></header>
+    <section class="perfil-destaque" aria-label="Resumo do perfil">
+        <div class="perfil-identidade"><div class="perfil-avatar" id="avatar-iniciais" aria-hidden="true"><i class="bi bi-person-fill"></i></div><div><span class="perfil-etiqueta">SUA JORNADA COMEÇA AQUI</span><h2 id="resumo-nome">Olá, estudante!</h2><p id="resumo-objetivo">Cada passo de hoje aproxima você do seu objetivo.</p></div></div>
+        <i class="bi bi-stars perfil-estrela" aria-hidden="true"></i>
+    </section>
+    <section class="contagem-card" aria-labelledby="contagem-titulo">
+        <div class="contagem-intro"><div class="icone-bloco"><i class="bi bi-flag-fill"></i></div><div><span class="perfil-sobrelinha">SEU PRÓXIMO GRANDE PASSO</span><h2 id="contagem-titulo">Rumo à aprovação</h2><p id="contagem-mensagem">Defina sua data de aprovação para começar a contagem regressiva.</p></div></div>
+        <div class="contagem-resultado" id="contagem-resultado" hidden><strong id="contagem-dias">0</strong><span id="contagem-unidade">dias<br>para sua meta</span></div>
+        <div class="contagem-data" id="contagem-data" hidden><i class="bi bi-calendar-event"></i> <span></span></div>
+    </section>
+    <form id="form-perfil">
+        <div class="perfil-form-grid">
+            <section class="perfil-painel"><div class="painel-titulo"><div class="icone-bloco suave"><i class="bi bi-person"></i></div><div><h2>Informações pessoais</h2><p>Conte um pouco sobre você.</p></div></div>
+                <div class="perfil-campo"><label for="nome">Nome</label><input id="nome" name="nome" maxlength="200" autocomplete="name" placeholder="Como podemos chamar você?"></div>
+                <div class="perfil-campo"><label for="email">E-mail</label><input id="email" name="email" type="email" maxlength="200" autocomplete="email" placeholder="seuemail@email.com"></div>
+                <div class="perfil-campo"><label for="data_nascimento">Data de nascimento</label><input id="data_nascimento" name="data_nascimento" type="date"></div>
+            </section>
+            <section class="perfil-painel"><div class="painel-titulo"><div class="icone-bloco suave"><i class="bi bi-bullseye"></i></div><div><h2>Objetivo e motivação</h2><p>Deixe sua meta sempre à vista.</p></div></div>
+                <div class="perfil-campo"><label for="objetivo">Seu objetivo</label><input id="objetivo" name="objetivo" maxlength="200" placeholder="Ex.: Aprovação no concurso"></div>
+                <div class="perfil-campo"><label for="data_aprovacao">Data desejada para aprovação</label><input id="data_aprovacao" name="data_aprovacao" type="date"><small>Você pode alterar ou remover esta data quando quiser.</small></div>
+                <fieldset class="motivacoes"><legend>O que motiva você?</legend><div class="motivacoes-lista">
+                    <label><input type="checkbox" name="motivacao" value="Disciplina"><span>Disciplina</span></label><label><input type="checkbox" name="motivacao" value="Foco"><span>Foco</span></label><label><input type="checkbox" name="motivacao" value="Persistência"><span>Persistência</span></label><label><input type="checkbox" name="motivacao" value="Evolução"><span>Evolução</span></label><label><input type="checkbox" name="motivacao" value="Constância"><span>Constância</span></label>
+                </div></fieldset>
+            </section>
+        </div>
+        <div class="perfil-acoes"><p id="perfil-status" role="status" aria-live="polite"></p><button type="submit" id="salvar-perfil"><i class="bi bi-check2"></i> Salvar alterações</button></div>
+    </form>
+</main>
+<script src="{{ url_for('static', filename='js/menu.js') }}"></script>
+<script src="{{ url_for('static', filename='js/perfil.js') }}"></script>
 </body>
 </html>

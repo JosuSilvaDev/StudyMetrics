@@ -1,5 +1,6 @@
 from flask import Flask, render_template, jsonify, request
 from datetime import datetime, timedelta, timezone
+import json
 from database import init_db, get_db
 from flask import render_template
 
@@ -56,6 +57,53 @@ def pagina_revisao_questoes():
 @app.route("/perfil.html")
 def pagina_perfil():
     return render_template("perfil.html")
+
+
+@app.route("/api/perfil", methods=["GET", "PUT"])
+def api_perfil():
+    campos = ("nome", "email", "data_nascimento", "objetivo", "data_aprovacao")
+    conn = get_db()
+    try:
+        if request.method == "GET":
+            perfil = conn.execute("SELECT * FROM perfil WHERE id = 1").fetchone()
+            if perfil is None:
+                return jsonify({**{campo: "" for campo in campos}, "motivacoes": []})
+            dados = dict(perfil)
+            dados.pop("id")
+            dados["motivacoes"] = json.loads(dados["motivacoes"])
+            return jsonify(dados)
+
+        dados = request.get_json(silent=True)
+        if not isinstance(dados, dict):
+            return jsonify({"erro": "Envie os dados do perfil."}), 400
+        valores = []
+        for campo in campos:
+            valor = dados.get(campo, "")
+            if not isinstance(valor, str) or len(valor) > 200:
+                return jsonify({"erro": "Confira os dados informados."}), 400
+            valor = valor.strip()
+            if campo in ("data_nascimento", "data_aprovacao") and valor:
+                try:
+                    if datetime.strptime(valor, "%Y-%m-%d").strftime("%Y-%m-%d") != valor:
+                        raise ValueError
+                except ValueError:
+                    return jsonify({"erro": "Informe uma data válida."}), 400
+            valores.append(valor)
+        motivacoes = dados.get("motivacoes", [])
+        permitidas = {"Disciplina", "Foco", "Persistência", "Evolução", "Constância"}
+        if not isinstance(motivacoes, list) or any(not isinstance(m, str) or m not in permitidas for m in motivacoes):
+            return jsonify({"erro": "Confira as motivações selecionadas."}), 400
+        conn.execute("""
+            INSERT INTO perfil (id, nome, email, data_nascimento, objetivo, data_aprovacao, motivacoes)
+            VALUES (1, ?, ?, ?, ?, ?, ?)
+            ON CONFLICT(id) DO UPDATE SET nome=excluded.nome, email=excluded.email,
+                data_nascimento=excluded.data_nascimento, objetivo=excluded.objetivo,
+                data_aprovacao=excluded.data_aprovacao, motivacoes=excluded.motivacoes
+        """, (*valores, json.dumps(motivacoes, ensure_ascii=False)))
+        conn.commit()
+        return jsonify({"mensagem": "Perfil salvo com sucesso."})
+    finally:
+        conn.close()
 
 
 # =========================================================

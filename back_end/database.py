@@ -17,6 +17,18 @@ def init_db():
     conn = get_db()
 
     conn.execute("""
+        CREATE TABLE IF NOT EXISTS perfil (
+            id INTEGER PRIMARY KEY CHECK (id = 1),
+            nome TEXT NOT NULL DEFAULT '',
+            email TEXT NOT NULL DEFAULT '',
+            data_nascimento TEXT NOT NULL DEFAULT '',
+            objetivo TEXT NOT NULL DEFAULT '',
+            data_aprovacao TEXT NOT NULL DEFAULT '',
+            motivacoes TEXT NOT NULL DEFAULT '[]'
+        )
+    """)
+
+    conn.execute("""
         CREATE TABLE IF NOT EXISTS materias (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             nome TEXT NOT NULL,

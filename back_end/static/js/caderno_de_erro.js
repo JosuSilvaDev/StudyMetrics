@@ -232,3 +232,133 @@ form.addEventListener("submit", async function (evento) {
 
 carregarMaterias();
 carregarErros();
+
+// Separa alternativas coladas e transforma em radio box.
+// Preenche o campo "Resposta correta" sozinho.
+// Roda ANTES do caderno_de_erro.js e não mexe nele.
+
+(function () {
+    const $ = (id) => document.getElementById(id);
+
+    const form = $('form_erro');
+    const enunciado = $('questao');
+    const colar = $('alternativas_colar');
+    const tipoSel = $('tipo_questao');
+    const lista = $('lista_alternativas');
+    const area = $('area_alternativas');
+    const resposta = $('resposta_correta');
+
+    let atual = null; // { tipo, itens }
+
+    /* ---------- SEPARAR O TEXTO ---------- */
+
+    // A) B) C) ... mesmo que esteja tudo na mesma linha
+    function separarMC(texto) {
+        const limpo = texto.replace(/\r/g, '').replace(/\s+(?=\(?[A-Ea-e][\)\.]\s)/g, '\n');
+        const alts = [];
+        limpo.split('\n').forEach(linha => {
+            const m = linha.match(/^\s*\(?([A-Ea-e])[\)\.\-:]\s*(.+)$/);
+            if (m) alts.push({ letra: m[1].toUpperCase(), texto: m[2].trim() });
+            else if (linha.trim() && alts.length) alts[alts.length - 1].texto += ' ' + linha.trim();
+        });
+        return alts;
+    }
+
+    // V ou F / Certo ou Errado: cada linha vira uma afirmação
+    function separarAfirmacoes(texto) {
+        return texto.replace(/\r/g, '').split('\n')
+            .map(l => l.trim())
+            .filter(Boolean)
+            .map(l => l.replace(/^(\(\s*[VFCEvfce]?\s*\)|[IVXivx]+\s*[\-\.\)]|\d+\s*[\-\.\)]|[-•*])\s*/, '').trim())
+            .filter(Boolean)
+            .map((t, i) => ({ n: i + 1, texto: t }));
+    }
+
+    /* ---------- DESENHAR OS RADIOS ---------- */
+
+    function desenhar() {
+        lista.innerHTML = '';
+
+        if (atual.tipo === 'mc') {
+            atual.itens.forEach(a => {
+                const l = document.createElement('label');
+                l.className = 'motivo-card';
+                l.innerHTML = '<input type="radio" name="gabarito_mc" value="' + a.letra + '"><b>' + a.letra + ')</b><span></span>';
+                l.querySelector('span').textContent = a.texto;
+                lista.appendChild(l);
+            });
+        } else {
+            const op = atual.tipo === 'ce' ? ['Certo', 'Errado'] : ['V', 'F'];
+            atual.itens.forEach(it => {
+                const d = document.createElement('div');
+                d.className = 'item-vf';
+                d.innerHTML =
+                    '<div class="texto-vf"></div>' +
+                    '<div class="opcoes-vf">' +
+                    '<label><input type="radio" name="gab_' + it.n + '" value="' + op[0] + '"> ' + op[0] + '</label>' +
+                    '<label><input type="radio" name="gab_' + it.n + '" value="' + op[1] + '"> ' + op[1] + '</label>' +
+                    '</div>';
+                d.querySelector('.texto-vf').textContent = it.n + '. ' + it.texto;
+                lista.appendChild(d);
+            });
+        }
+        area.hidden = false;
+    }
+
+    /* ---------- PREENCHER "RESPOSTA CORRETA" ---------- */
+
+    function atualizarResposta() {
+        if (!atual) return;
+
+        if (atual.tipo === 'mc') {
+            const s = document.querySelector('input[name="gabarito_mc"]:checked');
+            resposta.value = s ? 'Alternativa ' + s.value : '';
+        } else {
+            const partes = atual.itens.map(it => {
+                const s = document.querySelector('input[name="gab_' + it.n + '"]:checked');
+                return s ? it.n + '-' + s.value : null;
+            });
+            resposta.value = partes.every(Boolean) ? partes.join(', ') : '';
+        }
+    }
+
+    lista.addEventListener('change', atualizarResposta);
+
+    /* ---------- BOTÃO SEPARAR ---------- */
+
+    $('btn_separar').addEventListener('click', () => {
+        const texto = colar.value.trim();
+        if (!texto) { alert('Cole as alternativas primeiro.'); return; }
+
+        let tipo = tipoSel.value;
+        if (tipo === 'auto') tipo = separarMC(texto).length >= 2 ? 'mc' : 'vf';
+
+        const itens = tipo === 'mc' ? separarMC(texto) : separarAfirmacoes(texto);
+        if (!itens.length) { alert('Não consegui separar. Confira o texto colado.'); return; }
+
+        atual = { tipo, itens };
+        resposta.value = '';
+        desenhar();
+    });
+
+    /* ---------- AO SALVAR: junta as alternativas ao enunciado ---------- */
+    // Assim as alternativas ficam guardadas junto com a questão,
+    // sem precisar mudar o banco nem o caderno_de_erro.js.
+
+    form.addEventListener('submit', () => {
+        if (!atual) return;
+        const extra = atual.tipo === 'mc'
+            ? atual.itens.map(a => a.letra + ') ' + a.texto).join('\n')
+            : atual.itens.map(a => a.n + '. ' + a.texto).join('\n');
+        if (!enunciado.value.includes(extra)) {
+            enunciado.value = enunciado.value.trim() + '\n\n' + extra;
+        }
+    }, true); // "true" = roda antes do seu outro script
+
+    // Limpa os radios quando o formulário é limpo
+    form.addEventListener('reset', () => {
+        atual = null;
+        lista.innerHTML = '';
+        area.hidden = true;
+    });
+})();
