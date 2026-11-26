@@ -61,6 +61,11 @@ def pagina_perfil():
 
 @app.route("/api/perfil", methods=["GET", "PUT"])
 def api_perfil():
+    """Consulta ou substitui os dados do único perfil do aplicativo.
+
+    GET devolve campos vazios antes do primeiro cadastro; PUT valida o corpo
+    e salva todos os campos juntos, inclusive a lista de motivações.
+    """
     campos = ("nome", "email", "data_nascimento", "objetivo", "data_aprovacao")
     conn = get_db()
     try:
@@ -93,6 +98,7 @@ def api_perfil():
         permitidas = {"Disciplina", "Foco", "Persistência", "Evolução", "Constância"}
         if not isinstance(motivacoes, list) or any(not isinstance(m, str) or m not in permitidas for m in motivacoes):
             return jsonify({"erro": "Confira as motivações selecionadas."}), 400
+        # O mesmo comando cria o perfil na primeira gravação e atualiza depois.
         conn.execute("""
             INSERT INTO perfil (id, nome, email, data_nascimento, objetivo, data_aprovacao, motivacoes)
             VALUES (1, ?, ?, ?, ?, ?, ?)
@@ -276,14 +282,15 @@ def excluir_materia(materia_id):
 # =========================================================
 
 def para_inteiro(valor):
+    """Converte entradas numéricas em inteiros não negativos; inválidos viram zero."""
     try:
         return max(int(valor), 0)
     except (TypeError, ValueError):
         return 0
 
-#O código a seguir define uma rota de API que retorna um calendário de estudos com base no mês fornecido como parâmetro. Se nenhum mês for fornecido, ele usa o mês atual. A função consulta o banco de dados para obter sessões de estudo dentro do intervalo de datas especificado e retorna os resultados em formato JSON.
 @app.route("/api/calendario-estudos", methods=["GET"])
 def api_calendario_estudos():
+    """Retorna sessões próximas ao mês solicitado para o calendário do navegador."""
 
     mes = request.args.get("mes")
 
@@ -316,6 +323,8 @@ def api_calendario_estudos():
     conn = get_db()
 
     try:
+        # A margem de um dia permite que o navegador converta de UTC para a
+        # data local sem perder sessões próximas à virada do mês.
         sessoes = conn.execute("""
             SELECT
                 id,
@@ -374,6 +383,7 @@ def listar_sessoes():
 
 @app.route("/api/sessoes", methods=["POST"])
 def cadastrar_sessao():
+    """Valida e registra uma sessão finalizada, incluindo tempo e questões."""
     dados = request.get_json(silent=True)
 
     if not dados:
@@ -667,6 +677,11 @@ def data_local(texto):
 
 @app.route("/api/revisoes/resumo", methods=["GET"])
 def resumo_revisoes():
+    """Calcula grupos pendentes e datas de revisão a partir dos erros registrados.
+
+    A última resposta de cada questão determina se ela continua pendente; o
+    histórico do grupo determina a etapa e o intervalo da próxima revisão.
+    """
     conn = get_db()
 
     try:
@@ -847,6 +862,7 @@ def questoes_para_revisar():
 
 @app.route("/api/revisoes", methods=["POST"])
 def registrar_revisao():
+    """Salva uma revisão e os resultados individuais das questões respondidas."""
     dados = request.get_json(silent=True)
 
     if not dados:
@@ -927,6 +943,11 @@ def porcentagem(acertos, total):
 
 @app.route("/api/dashboard", methods=["GET"])
 def dados_dashboard():
+    """Reúne sessões, erros, revisões e perfil para os cartões do dashboard.
+
+    A semana começa no domingo. Os gráficos usam os últimos 30 dias locais,
+    enquanto o aproveitamento geral considera todas as sessões registradas.
+    """
     conn = get_db()
 
     try:
@@ -950,6 +971,9 @@ def dados_dashboard():
         nomes_materias = conn.execute(
             "SELECT DISTINCT nome FROM materias"
         ).fetchall()
+        perfil = conn.execute(
+            "SELECT nome, objetivo, data_aprovacao FROM perfil WHERE id = 1"
+        ).fetchone()
     finally:
         conn.close()
 
@@ -959,6 +983,9 @@ def dados_dashboard():
     inicio_semana = hoje - timedelta(days=(hoje.weekday() + 1) % 7)
 
     segundos_por_dia = {}
+    questoes_por_dia = {}
+    acertos_por_dia = {}
+    erros_por_dia = {}
     tempo_semana = 0
     questoes_semana = 0
     total_questoes = 0
@@ -980,8 +1007,10 @@ def dados_dashboard():
     for s in sessoes:
         dia = data_local(s["criado_em"])
         segundos_por_dia[dia] = segundos_por_dia.get(dia, 0) + s["tempo_segundos"]
+        questoes_por_dia[dia] = questoes_por_dia.get(dia, 0) + s["questoes_realizadas"]
+        acertos_por_dia[dia] = acertos_por_dia.get(dia, 0) + s["acertos"]
 
-        if dia >= inicio_semana:
+        if inicio_semana <= dia <= hoje:
             tempo_semana += s["tempo_segundos"]
             questoes_semana += s["questoes_realizadas"]
 
@@ -1000,6 +1029,8 @@ def dados_dashboard():
 
     for e in erros:
         grupo_assunto(e["materia"], e["assunto"])["erros"] += 1
+        dia = data_local(e["criado_em"])
+        erros_por_dia[dia] = erros_por_dia.get(dia, 0) + 1
 
     # Horas por dia (últimos 30 dias; o gráfico de 7 dias usa os 7 últimos)
     grafico_horas = []
@@ -1008,7 +1039,10 @@ def dados_dashboard():
         dia = hoje - timedelta(days=i)
         grafico_horas.append({
             "data": dia.isoformat(),
-            "segundos": segundos_por_dia.get(dia, 0)
+            "segundos": segundos_por_dia.get(dia, 0),
+            "questoes": questoes_por_dia.get(dia, 0),
+            "acertos": acertos_por_dia.get(dia, 0),
+            "erros": erros_por_dia.get(dia, 0)
         })
 
     # Desempenho por matéria (inclui as cadastradas que ainda não têm sessão)
@@ -1085,7 +1119,23 @@ def dados_dashboard():
     atividade.sort(key=lambda a: a["criado_em"], reverse=True)
 
     # Próximas revisões: usa o mesmo cálculo da página de Revisões
-    proximas_revisoes = resumo_revisoes().get_json()["grupos"][:4]
+    resumo = resumo_revisoes().get_json()
+    proximas_revisoes = resumo["grupos"]
+
+    # Compara a semana atual com os mesmos dias da semana anterior; assim, por
+    # exemplo, uma terça-feira não é comparada a uma semana anterior inteira.
+    def soma_periodo(valores, inicio, fim):
+        return sum(valor for dia, valor in valores.items() if inicio <= dia <= fim)
+
+    inicio_anterior = inicio_semana - timedelta(days=7)
+    fim_anterior = hoje - timedelta(days=7)
+    # A sequência inclui hoje quando houve estudo; caso contrário, começa ontem.
+    # Só contam dias consecutivos com tempo estudado maior que zero.
+    sequencia = 0
+    dia_sequencia = hoje if segundos_por_dia.get(hoje, 0) > 0 else hoje - timedelta(days=1)
+    while segundos_por_dia.get(dia_sequencia, 0) > 0:
+        sequencia += 1
+        dia_sequencia -= timedelta(days=1)
 
     return jsonify({
         "tempo_semana": tempo_semana,
@@ -1094,6 +1144,18 @@ def dados_dashboard():
         "total_acertos": total_acertos,
         "total_questoes": total_questoes,
         "total_erros": len(erros),
+        "perfil": dict(perfil) if perfil else {"nome": "", "objetivo": "", "data_aprovacao": ""},
+        "hoje_tempo": segundos_por_dia.get(hoje, 0),
+        "hoje_questoes": questoes_por_dia.get(hoje, 0),
+        "sequencia": sequencia,
+        "tempo_semana_anterior": soma_periodo(segundos_por_dia, inicio_anterior, fim_anterior),
+        "questoes_semana_anterior": soma_periodo(questoes_por_dia, inicio_anterior, fim_anterior),
+        "questoes_semana_atual": soma_periodo(questoes_por_dia, inicio_semana, hoje),
+        "acertos_semana_atual": soma_periodo(acertos_por_dia, inicio_semana, hoje),
+        "questoes_semana_anterior_total": soma_periodo(questoes_por_dia, inicio_anterior, fim_anterior),
+        "acertos_semana_anterior": soma_periodo(acertos_por_dia, inicio_anterior, fim_anterior),
+        "erros_7_dias": soma_periodo(erros_por_dia, hoje - timedelta(days=6), hoje),
+        "revisoes_pendentes": resumo["para_hoje"] + resumo["atrasadas"],
         "grafico_horas": grafico_horas,
         "desempenho_materias": desempenho_materias,
         "atencao": atencao[:4],

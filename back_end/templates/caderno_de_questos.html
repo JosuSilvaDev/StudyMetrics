@@ -19,80 +19,14 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/rede.png') }}">
 
-    <!-- ESTILO DAS ALTERNATIVAS (pode mover para static/css/style.css) -->
-    <style>
-        .lista-alternativas { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
-        .lista-alternativas .motivo-card { width: 100%; justify-content: flex-start; text-align: left; gap: 10px; }
-        .lista-alternativas .motivo-card b { min-width: 22px; }
-        .item-vf { border: 1px solid rgba(128,128,128,.35); border-radius: 12px; padding: 12px 14px; }
-        .item-vf .opcoes-vf { display: flex; gap: 20px; margin-top: 8px; }
-        .item-vf .opcoes-vf label { display: flex; gap: 6px; align-items: center; cursor: pointer; }
-        .linha-separar { display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap; margin-top: 10px; }
-        .linha-separar .campo { flex: 1; min-width: 200px; margin: 0; }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/caderno.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/tema.css') }}">
 </head>
 
 <body>
 
     <!-- ================= MENU LATERAL ================= -->
-    <aside class="sidebar">
-
-        <!-- LOGO -->
-        <div class="logo">
-
-            <div class="logo-simbolo">
-                <i class="bi bi-graph-up-arrow"></i>
-            </div>
-
-            <div class="logo-texto">
-                <strong>Study</strong><span>Metrics</span>
-            </div>
-
-        </div>
-
-
-        <!-- MENU -->
-        <nav class="menu">
-
-            <a href="index.html" class="menu-item">
-                <i class="bi bi-grid-1x2-fill"></i>
-                <span>Dashboard</span>
-            </a>
-
-            <a href="materias.html" class="menu-item">
-                <i class="bi bi-journal-bookmark-fill"></i>
-                <span>Matérias</span>
-            </a>
-
-            <a href="sessao.html" class="menu-item">
-                <i class="bi bi-stopwatch-fill"></i>
-                <span>Sessão de estudo</span>
-            </a>
-            
-            <a href="/historico-estudos" class="menu-item">
-                <i class="bi bi-clock-history"></i>
-                <span>Horas de estudo</span>
-            </a>
-            
-            <a href="caderno_de_questos.html" class="menu-item">
-                <i class="bi bi-journal-x"></i>
-                <span>Caderno de Erros</span>
-            </a>
-
-
-            <a href="revisao.html" class="menu-item">
-                <i class="bi bi-arrow-repeat"></i>
-                <span>Revisões</span>
-            </a>
-
-            <a href="perfil.html" class="menu-item">
-                <i class="bi bi-person-circle"></i>
-                <span>Perfil</span>
-            </a>
-
-        </nav>
-
-    </aside>
+    {% include '_sidebar.html' %}
 
     <!-- ================= CONTEÚDO PRINCIPAL ================= -->
     <main class="conteudo">
@@ -524,7 +458,6 @@
     <!-- ================= JAVASCRIPT ================= -->
     <script src="static/js/alternativas.js"></script>
     <script src="static/js/caderno_de_erro.js"></script>
-    <script src="static/js/menu.js"></script>
 
 </body>
 </html>

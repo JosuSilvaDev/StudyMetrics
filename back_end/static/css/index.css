@@ -805,3 +805,10 @@ font-weight: 600;
     outline: 2px solid #3b82f6;
     outline-offset: 4px;
 }
+
+.db-desempenho + .db-desempenho { margin-top: 16px; }
+.db-desempenho > div:first-child { display: flex; justify-content: space-between; gap: 12px; font-size: .85rem; }
+.db-desempenho > div:first-child span { color: var(--db-suave); white-space: nowrap; }
+.db-desempenho-trilho { height: 8px; margin-top: 7px; overflow: hidden; border-radius: 999px; background: var(--db-superficie-2); }
+.db-desempenho-trilho span { display: block; height: 100%; border-radius: inherit; background: var(--db-marca); }
+.db-meta-vazio a { color: white; font-size: .82rem; }

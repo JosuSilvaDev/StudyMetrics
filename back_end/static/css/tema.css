@@ -1,0 +1,89 @@
+/* Identidade visual compartilhada. Os arquivos de cada página cuidam apenas
+   do layout e dos componentes específicos daquela tela. */
+:root {
+    --sm-fundo: #f4f7f8;
+    --sm-superficie: #ffffff;
+    --sm-texto: #173047;
+    --sm-suave: #6b7e8c;
+    --sm-borda: #e2eae9;
+    --sm-marca: #108b7d;
+    --sm-marca-clara: #dff5ef;
+    --sm-sidebar: #112d40;
+    --sm-sombra: 0 10px 30px rgba(29, 59, 67, .06);
+    --sm-raio: 20px;
+}
+
+body { -webkit-font-smoothing: antialiased; }
+.sidebar { background: var(--sm-sidebar); border-right: 0; padding: 28px 18px; }
+.sidebar .logo { text-decoration: none; }
+.sidebar .logo-simbolo { background: #8fe5ce; color: #103a36; box-shadow: none; }
+.sidebar .logo-texto span { color: #8fe5ce; }
+.sidebar .menu-item { color: #c0d1d5; border-radius: 12px; }
+.sidebar .menu-item.ativo { background: rgba(143, 229, 206, .13); color: #a8f2db; box-shadow: inset 3px 0 #8fe5ce; }
+.sidebar .menu-item.ativo i { color: inherit; }
+.conteudo { background: var(--sm-fundo); }
+.cabecalho-pagina h1, .perfil-topo h1, .cal-header h1, .he-topo h1 { color: var(--sm-texto); font-size: clamp(1.65rem, 3vw, 2rem); font-weight: 700; letter-spacing: -.035em; }
+.cabecalho-pagina p, .perfil-topo p, .cal-header p, .he-topo p { color: var(--sm-suave); }
+
+/* Superfícies e formulários compartilham a mesma borda, raio e foco. */
+.card-materia, .card-lista-materias, .card-historico-sessoes,
+.card-sessao, .calendario-premium, .card-registrar-erro,
+.card-estatisticas-erros, .card-resumo, .card-resumo-revisao,
+.card-revisoes-hoje, .card-proximas-revisoes, .card-revisao,
+.cal-resumo, .cal-card, .cal-detalhes, .he-card,
+.perfil-painel, .contagem-card {
+    border: 1px solid var(--sm-borda);
+    border-radius: var(--sm-raio);
+    background: var(--sm-superficie);
+    box-shadow: var(--sm-sombra);
+}
+.campo input, .campo select, .campo textarea,
+.perfil-campo input, .campo-pesquisa input, .filtros-materias select {
+    border-color: var(--sm-borda);
+    border-radius: 11px;
+    background-color: #fbfdfc;
+    color: var(--sm-texto);
+}
+.campo input:focus, .campo select:focus, .campo textarea:focus,
+.perfil-campo input:focus, .campo-pesquisa input:focus, .filtros-materias select:focus {
+    outline: none;
+    border-color: #59baa8;
+    box-shadow: 0 0 0 3px rgba(16, 139, 125, .14);
+}
+.btn-principal, .btn-salvar-erro, .btn-iniciar-revisao, .perfil-acoes button {
+    border: 0;
+    border-radius: 12px;
+    background: var(--sm-marca);
+    color: #fff;
+    box-shadow: 0 6px 16px rgba(16, 139, 125, .16);
+}
+.btn-principal:hover, .btn-salvar-erro:hover, .btn-iniciar-revisao:hover, .perfil-acoes button:hover { background: #087568; }
+:where(a, button, input, select, textarea):focus-visible { outline: 3px solid #44bca6; outline-offset: 3px; }
+
+/* Os destaques mantêm a mesma família de cores sem alterar seu conteúdo. */
+.mensagem-dia, .perfil-destaque, .he-destaque {
+    border: 0;
+    background: linear-gradient(120deg, #14394a, #126c66);
+    color: white;
+}
+.db-pagina { --db-marca: var(--sm-marca); --db-borda: var(--sm-borda); }
+.db-hero { background: linear-gradient(120deg, #14394a, #126c66); }
+.db-card, .db-metrica { border-radius: var(--sm-raio); }
+.cal-container { --azul: var(--sm-marca); --azul-claro: #e9f7f3; max-width: none; margin-right: 0; margin-left: var(--sidebar-largura); padding: 40px; }
+.cal-voltar, .he-pagina .db-link { color: var(--sm-marca); font-weight: 600; text-decoration: none; }
+.he-pagina { max-width: 1240px; padding: 0; }
+.cal-icone { color: var(--sm-marca); background: var(--sm-marca-clara); }
+
+/* O menu passa para uma faixa rolável no celular, preservando a área útil. */
+@media (max-width: 700px) {
+    .sidebar { position: static; width: 100%; height: auto; padding: 14px 16px 10px; overflow: visible; }
+    .sidebar .logo { width: auto; margin: 0 0 12px; padding: 0; }
+    .sidebar .logo-simbolo { width: 34px; height: 34px; border-radius: 10px; font-size: 17px; }
+    .sidebar .logo-texto { font-size: 17px; }
+    .sidebar .menu { flex-direction: row; gap: 6px; overflow-x: auto; padding-bottom: 4px; }
+    .sidebar .menu-item { width: auto; min-height: 40px; flex: 0 0 auto; padding: 9px 12px; font-size: 12px; }
+    .sidebar .menu-item.ativo { box-shadow: inset 0 -2px #8fe5ce; }
+    .conteudo { width: 100%; margin-left: 0; padding: 24px 16px 40px; }
+    .cal-container { margin-left: 0; padding: 24px 16px 40px; }
+    .he-pagina { padding: 0; }
+}

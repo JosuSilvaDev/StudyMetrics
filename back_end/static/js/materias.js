@@ -22,6 +22,7 @@ function escapar(texto) {
 }
 
 function desenharTabela() {
+    // Filtra a lista já carregada no navegador; os totais abaixo usam a lista inteira.
     const busca = campoPesquisa.value.toLowerCase();
 
     const filtradas = materias.filter(function (m) {

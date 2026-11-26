@@ -1,0 +1,8 @@
+.lista-alternativas { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
+.lista-alternativas .motivo-card { width: 100%; justify-content: flex-start; text-align: left; gap: 10px; }
+.lista-alternativas .motivo-card b { min-width: 22px; }
+.item-vf { border: 1px solid rgba(128,128,128,.35); border-radius: 12px; padding: 12px 14px; }
+.item-vf .opcoes-vf { display: flex; gap: 20px; margin-top: 8px; }
+.item-vf .opcoes-vf label { display: flex; gap: 6px; align-items: center; cursor: pointer; }
+.linha-separar { display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap; margin-top: 10px; }
+.linha-separar .campo { flex: 1; min-width: 200px; margin: 0; }

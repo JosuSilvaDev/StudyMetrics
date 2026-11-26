@@ -130,6 +130,8 @@ btnMostrar.addEventListener("click", function () {
 // ACERTEI / ERREI
 // =========================
 function registrar(acertou) {
+    // Guarda a escolha do estudante por ID; o servidor usará a última resposta
+    // para determinar se cada questão permanece pendente de revisão.
     respostas.push({
         erro_id: questoes[indice].id,
         acertou: acertou
@@ -156,6 +158,7 @@ btnErrei.addEventListener("click", function () {
 // FINALIZAR: MOSTRA E SALVA O RESULTADO
 // =========================
 async function finalizar() {
+    // Mostra o resumo localmente e depois tenta gravar a rodada completa na API.
     areaQuestao.classList.add("oculto");
  
     const total = respostas.length;
@@ -204,4 +207,4 @@ btnNovamente.addEventListener("click", function () {
 });
  
 iniciar();
- 
+

@@ -1,563 +1,170 @@
-// =========================================================
-// DASHBOARD: busca os dados em /api/dashboard e desenha a página
-// =========================================================
- 
+// Dashboard: todos os valores vêm da API e refletem os registros salvos.
 const el = id => document.getElementById(id);
- 
-// Nome de cada motivo de erro (mesmos valores do Caderno de Erros)
-const MOTIVOS = {
-    nao_sabia: "Não sabia",
-    esqueci: "Esqueci",
-    interpretacao: "Interpretação",
-    desatencao: "Desatenção",
-    confusao: "Confusão",
-    calculo: "Erro de cálculo",
-    chute: "Chute"
-};
- 
-const VERDE = "#1ae163";
-const AMARELO = "#f59e0b";
-const VERMELHO = "#ef4444";
-const AZUL = "#3b82f6";
-const MARCA = "#2dd4bf";
- 
 let dados = null;
-let graficoHoras = null;
-let graficoAproveitamento = null;
- 
-// =========================
-// ESTILOS DOS ITENS DAS LISTAS
-// (funcionam no tema claro e no escuro)
-// =========================
-function adicionarEstilos() {
-    const estilo = document.createElement("style");
- 
-    estilo.textContent = `
-        .dx-item {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            padding: 12px 14px;
-            border-radius: 16px;
-            background: rgba(127, 127, 127, 0.07);
-            border: 1px solid rgba(127, 127, 127, 0.18);
-            color: inherit;
-            text-decoration: none;
-        }
-        .dx-item + .dx-item { margin-top: 10px; }
-        a.dx-item:hover { border-color: var(--dx-cor); }
-        .dx-icone {
-            display: grid;
-            place-items: center;
-            flex-shrink: 0;
-            width: 42px;
-            height: 42px;
-            border-radius: 12px;
-            font-size: 1.1rem;
-            background: color-mix(in srgb, var(--dx-cor) 16%, transparent);
-            color: var(--dx-cor);
-        }
-        .dx-texto { flex: 1; min-width: 0; }
-        .dx-texto strong {
-            display: block;
-            overflow: hidden;
-            font-size: 0.92rem;
-            font-weight: 600;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-        .dx-texto small {
-            display: block;
-            margin-top: 2px;
-            font-size: 0.8rem;
-            opacity: 0.7;
-        }
-        .dx-selo {
-            padding: 5px 12px;
-            border-radius: 999px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            white-space: nowrap;
-            background: color-mix(in srgb, var(--dx-cor) 16%, transparent);
-            color: var(--dx-cor);
-        }
-        .dx-hora {
-            font-size: 0.78rem;
-            white-space: nowrap;
-            opacity: 0.65;
-        }
-    `;
- 
-    document.head.appendChild(estilo);
+let periodo = 7;
+let diaAgenda = 0;
+let filtroAgenda = "dia";
+const graficos = {};
+
+// Textos vindos do banco são escapados antes de serem inseridos em HTML.
+function escapar(valor) {
+    const elemento = document.createElement("div");
+    elemento.textContent = valor ?? "";
+    return elemento.innerHTML;
 }
- 
-// =========================
-// FUNÇÕES AUXILIARES
-// =========================
-// Evita que um texto digitado vire código HTML
-function escapar(texto) {
-    const div = document.createElement("div");
-    div.textContent = texto ?? "";
-    return div.innerHTML;
+function tempo(segundos) {
+    const horas = Math.floor(segundos / 3600);
+    const minutos = Math.floor((segundos % 3600) / 60);
+    return horas ? `${horas}h ${String(minutos).padStart(2, "0")}min` : `${minutos}min`;
 }
- 
-// 5400 -> "1h 30min"
-function formatarTempo(segundos) {
-    const h = Math.floor(segundos / 3600);
-    const m = Math.floor((segundos % 3600) / 60);
- 
-    return h + "h " + String(m).padStart(2, "0") + "min";
+function dataIso(data) {
+    return `${data.getFullYear()}-${String(data.getMonth() + 1).padStart(2, "0")}-${String(data.getDate()).padStart(2, "0")}`;
 }
- 
-// 5400 -> "1h30" | 1800 -> "30min"
-function formatarTempoCurto(segundos) {
-    const h = Math.floor(segundos / 3600);
-    const m = Math.floor((segundos % 3600) / 60);
- 
-    if (h > 0) {
-        return h + "h" + String(m).padStart(2, "0");
+function dataLocal(iso) { return new Date(`${iso}T00:00:00`); }
+function vazio(texto) { return `<div class="db-vazio"><span>${escapar(texto)}</span></div>`; }
+function porcentagem(acertos, total) { return total ? Math.round(acertos * 100 / total) : null; }
+// Destruir o gráfico anterior evita sobreposição ao trocar o período ou atualizar.
+// Se a biblioteca externa não carregar, os demais indicadores continuam visíveis.
+function grafico(id, opcoes) {
+    if (graficos[id]) { graficos[id].destroy(); delete graficos[id]; }
+    el(id).innerHTML = "";
+    if (typeof ApexCharts === "undefined") {
+        el(id).innerHTML = vazio("Gráfico indisponível. Verifique sua conexão com a internet.");
+        return;
     }
- 
-    return m + "min";
+    graficos[id] = new ApexCharts(el(id), opcoes);
+    graficos[id].render();
 }
- 
-function tempoRelativo(criadoEm) {
-    // O banco guarda a hora em UTC
-    const momento = new Date(criadoEm.replace(" ", "T") + "Z");
-    const minutos = Math.floor((Date.now() - momento.getTime()) / 60000);
- 
-    if (minutos < 1) return "agora";
-    if (minutos < 60) return "há " + minutos + " min";
- 
-    const horas = Math.floor(minutos / 60);
- 
-    if (horas < 24) return "há " + horas + " h";
- 
-    const dias = Math.floor(horas / 24);
- 
-    if (dias === 1) return "ontem";
-    if (dias < 7) return "há " + dias + " dias";
- 
-    return momento.toLocaleDateString("pt-BR");
+// Tempo e questões variam em porcentagem; aproveitamento varia em pontos
+// percentuais, pois já é uma porcentagem. Sem base anterior, não há comparação.
+function tendencia(id, atual, anterior, pontos = false) {
+    const elemento = el(id);
+    elemento.className = "db-tend";
+    if (atual === null || anterior === null || (!pontos && anterior === 0)) {
+        elemento.textContent = "Sem comparação";
+        return;
+    }
+    const diferenca = pontos ? atual - anterior : Math.round((atual - anterior) * 100 / anterior);
+    elemento.textContent = `${diferenca > 0 ? "+" : ""}${diferenca}${pontos ? " p.p." : "%"}`;
+    if (diferenca) elemento.classList.add(diferenca > 0 ? "alta" : "baixa");
 }
- 
-function corDesempenho(pct) {
-    if (pct === null) return "rgba(127, 127, 127, 0.4)";
-    if (pct >= 80) return VERDE;
-    if (pct >= 60) return AMARELO;
- 
-    return VERMELHO;
+// A meta vem do perfil salvo. A diferença usa apenas datas, sem contar horas.
+function mostrarDestaque() {
+    const perfil = dados.perfil;
+    const nome = perfil.nome.trim().split(/\s+/)[0];
+    el("db_saudacao").textContent = nome ? `Olá, ${nome}!` : "Olá, estudante!";
+    el("db_mensagem").textContent = dados.revisoes_pendentes
+        ? `Você tem ${dados.revisoes_pendentes} ${dados.revisoes_pendentes === 1 ? "revisão pendente" : "revisões pendentes"} para hoje ou atrasadas.`
+        : "Continue sua jornada: cada sessão de estudo conta.";
+    el("db_hoje_tempo").textContent = tempo(dados.hoje_tempo);
+    el("db_hoje_questoes").textContent = dados.hoje_questoes;
+    el("db_sequencia").textContent = `${dados.sequencia} ${dados.sequencia === 1 ? "dia" : "dias"}`;
+    const badge = el("db_badge_revisoes");
+    badge.textContent = dados.revisoes_pendentes;
+    badge.classList.toggle("oculto", !dados.revisoes_pendentes);
+    if (!perfil.data_aprovacao) {
+        el("db_meta").innerHTML = `<div class="db-meta-vazio"><i class="bi bi-flag"></i><div><strong>Sua meta de aprovação</strong><span>Defina uma data no perfil para acompanhar sua contagem regressiva.</span></div><a href="perfil.html">Definir meta</a></div>`;
+        return;
+    }
+    const alvo = dataLocal(perfil.data_aprovacao);
+    const hoje = new Date();
+    const dias = Math.round((Date.UTC(alvo.getFullYear(), alvo.getMonth(), alvo.getDate()) - Date.UTC(hoje.getFullYear(), hoje.getMonth(), hoje.getDate())) / 86400000);
+    const descricao = dias < 0 ? "A data passou. Atualize sua meta no perfil." : dias === 0 ? "O grande dia chegou!" : `até ${alvo.toLocaleDateString("pt-BR")}`;
+    el("db_meta").innerHTML = `<div class="db-meta-topo"><span><i class="bi bi-flag-fill"></i> Rumo à aprovação</span><a href="perfil.html">Editar meta</a></div><div class="db-meta-numero"><strong>${Math.max(0, dias)}</strong><span>${dias === 1 ? "dia" : "dias"}</span></div><div class="db-meta-data">${descricao}</div>`;
 }
- 
-// =========================
-// TOPO: DATA E MÉTRICAS
-// =========================
-function mostrarData() {
-    const texto = new Date().toLocaleDateString("pt-BR", {
-        weekday: "long",
-        day: "numeric",
-        month: "long"
-    });
- 
-    el("data_atual").textContent =
-        texto.charAt(0).toUpperCase() + texto.slice(1);
-}
- 
 function mostrarMetricas() {
-    el("total_tempo").textContent = formatarTempo(dados.tempo_semana);
+    el("total_tempo").textContent = tempo(dados.tempo_semana);
     el("total_questoes").textContent = dados.questoes_semana;
-    el("media_aproveitamento").textContent = dados.aproveitamento + "%";
+    el("media_aproveitamento").textContent = dados.total_questoes ? `${dados.aproveitamento}%` : "Sem dados";
     el("total_erros_dashboard").textContent = dados.total_erros;
-    el("donut_porcentagem").textContent = dados.aproveitamento + "%";
+    tendencia("tend_tempo", dados.tempo_semana, dados.tempo_semana_anterior);
+    tendencia("tend_questoes", dados.questoes_semana, dados.questoes_semana_anterior);
+    tendencia("tend_aprov", porcentagem(dados.acertos_semana_atual, dados.questoes_semana_atual), porcentagem(dados.acertos_semana_anterior, dados.questoes_semana_anterior_total), true);
+    el("nota_aprov").textContent = "geral nas sessões · variação semanal";
+    el("tend_erros").textContent = `+${dados.erros_7_dias}`;
+    const series = [["spark_tempo", "segundos", "#3b82f6"], ["spark_questoes", "questoes", "#22c55e"], ["spark_aprov", "aprov", "#8b5cf6"], ["spark_erros", "erros", "#ef4444"]];
+    series.forEach(([id, chave, cor]) => {
+        const valores = dados.grafico_horas.slice(-7).map(d => chave === "aprov" ? porcentagem(d.acertos, d.questoes) : d[chave]);
+        if (typeof ApexCharts === "undefined") { el(id).textContent = ""; return; }
+        grafico(id, {chart: {type: "area", height: 64, sparkline: {enabled: true}, animations: {enabled: false}}, series: [{data: valores}], stroke: {curve: "smooth", width: 2}, colors: [cor], fill: {opacity: .15}, tooltip: {enabled: false}});
+    });
 }
- 
-// =========================
-// GRÁFICOS
-// =========================
-// Garante que o gráfico tenha uma área com altura para se desenhar
-function prepararArea(canvas, altura) {
-    const pai = canvas.parentElement;
- 
-    if (getComputedStyle(pai).position === "static") {
-        pai.style.position = "relative";
-    }
- 
-    if (pai.getBoundingClientRect().height <= 160) {
-        pai.style.height = altura + "px";
-    }
-}
- 
-function rotuloDia(iso, periodo) {
-    const data = new Date(iso + "T00:00:00");
- 
-    if (periodo <= 7) {
-        const dia = data.toLocaleDateString("pt-BR", { weekday: "short" });
-        return (dia.charAt(0).toUpperCase() + dia.slice(1)).replace(".", "");
-    }
- 
-    return data.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" });
-}
- 
-function corDaLegenda(seletor, padrao) {
-    const elemento = document.querySelector(seletor);
- 
-    if (!elemento) {
-        return padrao;
-    }
- 
-    const cor = getComputedStyle(elemento).backgroundColor;
- 
-    if (!cor || cor === "transparent" || cor === "rgba(0, 0, 0, 0)") {
-        return padrao;
-    }
- 
-    return cor;
-}
- 
-function desenharGraficoHoras() {
-    if (typeof Chart === "undefined") {
-        return;
-    }
- 
-    const canvas = el("grafico_horas");
-    const periodo = Number(el("periodo_grafico").value) || 7;
+// Os 30 pontos já vêm da API: o filtro de 7 dias usa os últimos sete deles.
+function mostrarHoras() {
     const pontos = dados.grafico_horas.slice(-periodo);
- 
-    const rotulos = pontos.map(p => rotuloDia(p.data, periodo));
-    const horas = pontos.map(p => Math.round(p.segundos / 36) / 100);
- 
-    if (graficoHoras) {
-        graficoHoras.destroy();
-    }
- 
-    prepararArea(canvas, 300);
- 
-    graficoHoras = new Chart(canvas, {
-        type: "bar",
-        data: {
-            labels: rotulos,
-            datasets: [{
-                label: "Horas estudadas",
-                data: horas,
-                backgroundColor: MARCA,
-                borderRadius: 8,
-                maxBarThickness: 36
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { display: false },
-                tooltip: {
-                    callbacks: {
-                        label: contexto =>
-                            " " + formatarTempoCurto(pontos[contexto.dataIndex].segundos)
-                    }
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: { callback: valor => valor + "h" },
-                    grid: { color: "rgba(127, 127, 127, 0.18)" }
-                },
-                x: { grid: { display: false } }
-            }
-        }
-    });
+    const total = pontos.reduce((soma, p) => soma + p.segundos, 0);
+    const melhor = pontos.reduce((a, b) => b.segundos > a.segundos ? b : a, pontos[0]);
+    el("h_total").textContent = tempo(total);
+    el("h_media").textContent = tempo(total / pontos.length);
+    el("h_melhor").textContent = melhor.segundos ? `${dataLocal(melhor.data).toLocaleDateString("pt-BR", {day: "2-digit", month: "2-digit"})} · ${tempo(melhor.segundos)}` : "Sem registros";
+    grafico("grafico_horas", {chart: {type: "bar", height: 280, toolbar: {show: false}}, series: [{name: "Horas estudadas", data: pontos.map(p => +(p.segundos / 3600).toFixed(2))}], colors: ["#14b8a6"], plotOptions: {bar: {borderRadius: 4, columnWidth: "60%"}}, dataLabels: {enabled: false}, xaxis: {categories: pontos.map(p => dataLocal(p.data).toLocaleDateString("pt-BR", {day: "2-digit", month: "2-digit"}))}, yaxis: {labels: {formatter: n => `${n.toFixed(1)}h`}}, tooltip: {y: {formatter: (_, info) => tempo(pontos[info.dataPointIndex].segundos)}}});
 }
- 
-function desenharGraficoAproveitamento() {
-    if (typeof Chart === "undefined") {
-        return;
-    }
- 
-    const canvas = el("grafico_aproveitamento");
+function mostrarAproveitamento() {
     const acertos = dados.total_acertos;
-    const erros = dados.total_questoes - dados.total_acertos;
-    const semDados = dados.total_questoes === 0;
- 
-    if (graficoAproveitamento) {
-        graficoAproveitamento.destroy();
-    }
- 
-    prepararArea(canvas, 240);
- 
-    graficoAproveitamento = new Chart(canvas, {
-        type: "doughnut",
-        data: {
-            labels: ["Acertos", "Erros"],
-            datasets: [{
-                data: semDados ? [1] : [acertos, erros],
-                backgroundColor: semDados
-                    ? ["rgba(127, 127, 127, 0.25)"]
-                    : [
-                        corDaLegenda(".legenda-circulo.acertos", VERDE),
-                        corDaLegenda(".legenda-circulo.erros", VERMELHO)
-                    ],
-                borderWidth: 0
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            cutout: "72%",
-            plugins: {
-                legend: { display: false },
-                tooltip: { enabled: !semDados }
-            }
-        }
-    });
+    const erros = Math.max(0, dados.total_questoes - acertos);
+    el("leg_acertos").textContent = acertos;
+    el("leg_erros").textContent = erros;
+    el("barra_acertos").style.width = `${dados.total_questoes ? dados.aproveitamento : 0}%`;
+    const pct = porcentagem(dados.acertos_semana_atual, dados.questoes_semana_atual);
+    el("aprov_semana").textContent = pct === null ? "Ainda não há questões registradas nesta semana." : `Nesta semana: ${pct}% de acertos em ${dados.questoes_semana_atual} questões.`;
+    if (!dados.total_questoes) { el("grafico_aproveitamento").innerHTML = vazio("Registre questões em uma sessão para ver o aproveitamento."); return; }
+    grafico("grafico_aproveitamento", {chart: {type: "donut", height: 260}, series: [acertos, erros], labels: ["Acertos", "Erros"], colors: ["#14b8a6", "#ef4444"], legend: {show: false}, dataLabels: {enabled: false}, plotOptions: {pie: {donut: {size: "72%", labels: {show: true, total: {show: true, label: "Aproveitamento", formatter: () => `${dados.aproveitamento}%`}}}}}});
 }
- 
-// =========================
-// DESEMPENHO POR MATÉRIA
-// =========================
-function desenharMaterias() {
-    const caixa = el("lista_desempenho_materias");
-    const lista = dados.desempenho_materias;
- 
-    if (lista.length === 0) {
-        caixa.innerHTML = `
-            <div class="dashboard-vazio">
-                <i class="bi bi-journal-bookmark"></i>
-                <p>Cadastre matérias para ver o desempenho.</p>
-            </div>`;
-        return;
-    }
- 
-    caixa.innerHTML = lista.map(function (m) {
-        const pct = m.aproveitamento;
-        const largura = pct === null ? 0 : pct;
-        const texto = pct === null ? "sem dados" : pct + "%";
- 
-        return `
-            <div class="materia-desempenho">
-                <div class="materia-info">
-                    <span>${escapar(m.materia)}</span>
-                    <strong>${texto}</strong>
-                </div>
-                <div class="materia-barra">
-                    <div class="materia-progresso"
-                         style="width:${largura}%; background:${corDesempenho(pct)}"></div>
-                </div>
-            </div>`;
-    }).join("");
+// Matérias sem questões são listadas separadamente: ausência não significa 0%.
+function mostrarMaterias() {
+    const comDados = dados.desempenho_materias.filter(m => m.aproveitamento !== null);
+    const semDados = dados.desempenho_materias.filter(m => m.aproveitamento === null);
+    el("materias_sem_dados").innerHTML = semDados.map(m => `<span class="db-chip">${escapar(m.materia)} · sem questões</span>`).join("");
+    if (!comDados.length) { el("grafico_materias").innerHTML = vazio("Registre questões nas sessões para acompanhar o desempenho por matéria."); return; }
+    el("grafico_materias").innerHTML = comDados.map(m => `<div class="db-desempenho"><div><strong>${escapar(m.materia)}</strong><span>${m.aproveitamento}% · ${m.questoes} questões</span></div><div class="db-desempenho-trilho"><span style="width:${Math.min(100, Math.max(0, m.aproveitamento))}%"></span></div></div>`).join("");
 }
- 
-// =========================
-// PRECISA DE ATENÇÃO
-// =========================
-function desenharAtencao() {
-    const caixa = el("lista_atencao");
-    const lista = dados.atencao;
- 
-    if (lista.length === 0) {
-        caixa.innerHTML = `
-            <div class="atencao-vazia">
-                <i class="bi bi-check-circle"></i>
-                <div>
-                    <strong>Nenhum alerta ainda</strong>
-                    <span>Seus dados aparecerão aqui conforme você estudar.</span>
-                </div>
-            </div>`;
-        return;
-    }
- 
-    caixa.innerHTML = lista.map(function (a) {
-        const grave = a.erros >= 3 ||
-            (a.aproveitamento !== null && a.aproveitamento < 50);
- 
-        const cor = grave ? VERMELHO : AMARELO;
- 
-        const partes = [];
- 
-        if (a.erros > 0) {
-            partes.push(a.erros + (a.erros === 1 ? " erro" : " erros") + " no caderno");
-        }
- 
-        if (a.aproveitamento !== null) {
-            partes.push(a.aproveitamento + "% nas sessões");
-        }
- 
-        const selo = a.erros > 0
-            ? a.erros + (a.erros === 1 ? " erro" : " erros")
-            : a.aproveitamento + "%";
- 
-        return `
-            <div class="dx-item" style="--dx-cor:${cor}">
-                <span class="dx-icone"><i class="bi bi-exclamation-triangle"></i></span>
-                <span class="dx-texto">
-                    <strong>${escapar(a.materia)} · ${escapar(a.assunto)}</strong>
-                    <small>${partes.join(" · ")}</small>
-                </span>
-                <span class="dx-selo">${selo}</span>
-            </div>`;
-    }).join("");
+function mostrarAtencao() {
+    el("lista_atencao").innerHTML = dados.atencao.length ? dados.atencao.map(a => `<a class="db-atencao-item" style="--cor:#ef4444" href="caderno_de_questos.html"><span class="db-atencao-icone"><i class="bi bi-exclamation-triangle"></i></span><span class="db-atencao-texto"><strong>${escapar(a.materia)} · ${escapar(a.assunto)}</strong><small>${a.erros} ${a.erros === 1 ? "erro registrado" : "erros registrados"}${a.aproveitamento === null ? "" : ` · ${a.aproveitamento}% nas sessões`}</small></span></a>`).join("") : vazio("Nenhum assunto precisa de atenção no momento.");
 }
- 
-// =========================
-// PRÓXIMAS REVISÕES
-// =========================
-function seloRevisao(g) {
-    if (g.dias < 0) return { texto: "Atrasada", cor: VERMELHO };
-    if (g.dias === 0) return { texto: "Hoje", cor: AMARELO };
-    if (g.dias === 1) return { texto: "Amanhã", cor: MARCA };
- 
-    return { texto: "Em " + g.dias + " dias", cor: MARCA };
+// A agenda filtra todos os grupos retornados pela API pelo dia selecionado;
+// revisões atrasadas possuem um filtro próprio para não desaparecerem da lista.
+function mostrarAgenda() {
+    const hoje = new Date();
+    const dias = Array.from({length: 7}, (_, i) => { const d = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate() + i); return d; });
+    el("agenda_semana").innerHTML = dias.map((d, i) => `<button type="button" class="db-dia ${i === 0 ? "hoje" : ""} ${filtroAgenda === "dia" && diaAgenda === i ? "ativo" : ""}" data-dia="${i}" aria-label="${d.toLocaleDateString("pt-BR")}"><small>${d.toLocaleDateString("pt-BR", {weekday: "short"}).replace(".", "")}</small><strong>${d.getDate()}</strong><span class="db-pontos">${dados.proximas_revisoes.some(g => g.vence === dataIso(d)) ? "<i></i>" : ""}</span></button>`).join("");
+    const atrasadas = dados.proximas_revisoes.filter(g => g.dias < 0);
+    el("agenda_filtros").innerHTML = `<button type="button" class="db-chip-agenda alerta ${filtroAgenda === "atrasadas" ? "ativo" : ""}" id="agenda_atrasadas">Atrasadas (${atrasadas.length})</button>`;
+    const lista = filtroAgenda === "atrasadas" ? atrasadas : dados.proximas_revisoes.filter(g => g.vence === dataIso(dias[diaAgenda]));
+    el("agenda_lista").innerHTML = lista.length ? lista.map(g => `<a href="revisao.html" class="db-agenda-item" style="--cor:${g.dias < 0 ? "#ef4444" : "#14b8a6"}"><span class="db-agenda-etapa">R${g.etapa}</span><span class="db-agenda-texto"><strong>${escapar(g.materia)} · ${escapar(g.assunto)}</strong><small>${g.pendentes} ${g.pendentes === 1 ? "questão" : "questões"} · ${g.dias < 0 ? "atrasada desde " + escapar(dataLocal(g.vence).toLocaleDateString("pt-BR")) : "revisão programada"}</small></span><i class="bi bi-arrow-right db-agenda-ir"></i></a>`).join("") : vazio(filtroAgenda === "atrasadas" ? "Nenhuma revisão atrasada." : "Nenhuma revisão programada para este dia.");
 }
- 
-function desenharProximasRevisoes() {
-    const caixa = el("proximas_revisoes");
-    const lista = dados.proximas_revisoes;
- 
-    if (lista.length === 0) {
-        caixa.innerHTML = `
-            <div class="dashboard-vazio">
-                <i class="bi bi-calendar-check"></i>
-                <p>Nenhuma revisão programada.</p>
-            </div>`;
-        return;
-    }
- 
-    caixa.innerHTML = lista.map(function (g) {
-        const selo = seloRevisao(g);
-        const palavra = g.pendentes === 1 ? "questão" : "questões";
- 
-        return `
-            <a class="dx-item" href="revisao.html" style="--dx-cor:${selo.cor}">
-                <span class="dx-icone"><i class="bi bi-arrow-repeat"></i></span>
-                <span class="dx-texto">
-                    <strong>${escapar(g.materia)} · ${escapar(g.assunto)}</strong>
-                    <small>R${g.etapa} • ${g.intervalo} ${g.intervalo === 1 ? "dia" : "dias"} · ${g.pendentes} ${palavra}</small>
-                </span>
-                <span class="dx-selo">${selo.texto}</span>
-            </a>`;
-    }).join("");
+function mostrarAtividade() {
+    el("atividade_recente").innerHTML = dados.atividade.length ? dados.atividade.map(a => {
+        const titulo = a.tipo === "sessao" ? `Sessão de ${a.materia}` : a.tipo === "erro" ? `Erro em ${a.materia}` : `Revisão de ${a.materia}`;
+        const detalhe = a.tipo === "sessao" ? `${tempo(a.segundos)} · ${a.questoes} questões` : a.tipo === "erro" ? "Erro registrado no caderno" : `${a.acertos}/${a.questoes} acertos`;
+        const data = new Date(a.criado_em.replace(" ", "T") + "Z");
+        return `<div class="db-tl-item" style="--cor:#14b8a6"><span class="db-tl-no"><i class="bi ${a.tipo === "sessao" ? "bi-stopwatch" : a.tipo === "erro" ? "bi-x-circle" : "bi-arrow-repeat"}"></i></span><div class="db-tl-corpo"><div class="db-tl-linha"><strong>${escapar(titulo)}</strong><span class="db-tl-hora">${escapar(data.toLocaleDateString("pt-BR"))}</span></div><small>${escapar(a.assunto)} · ${escapar(detalhe)}</small></div></div>`;
+    }).join("") : vazio("Nenhuma atividade registrada.");
 }
- 
-// =========================
-// ATIVIDADE RECENTE
-// =========================
-function itemAtividade(a) {
-    if (a.tipo === "sessao") {
-        let detalhe = escapar(a.assunto) + " · " + formatarTempoCurto(a.segundos);
- 
-        if (a.questoes > 0) {
-            const pct = Math.round((a.acertos / a.questoes) * 100);
-            detalhe += " · " + a.questoes + " questões (" + pct + "%)";
-        }
- 
-        return {
-            icone: "bi-stopwatch",
-            cor: AZUL,
-            titulo: "Estudou " + escapar(a.materia),
-            detalhe: detalhe
-        };
-    }
- 
-    if (a.tipo === "erro") {
-        return {
-            icone: "bi-x-circle",
-            cor: VERMELHO,
-            titulo: "Erro registrado em " + escapar(a.materia),
-            detalhe: escapar(a.assunto) + " · " + escapar(MOTIVOS[a.motivo] || a.motivo)
-        };
-    }
- 
-    return {
-        icone: "bi-arrow-repeat",
-        cor: MARCA,
-        titulo: "Revisão de " + escapar(a.materia),
-        detalhe: escapar(a.assunto) + " · " + a.acertos + "/" + a.questoes + " acertos"
-    };
-}
- 
-function desenharAtividade() {
-    const caixa = el("atividade_recente");
-    const lista = dados.atividade;
- 
-    if (lista.length === 0) {
-        caixa.innerHTML = `
-            <div class="dashboard-vazio">
-                <i class="bi bi-clock-history"></i>
-                <p>Nenhuma atividade registrada.</p>
-            </div>`;
-        return;
-    }
- 
-    caixa.innerHTML = lista.map(function (a) {
-        const item = itemAtividade(a);
- 
-        return `
-            <div class="dx-item" style="--dx-cor:${item.cor}">
-                <span class="dx-icone"><i class="bi ${item.icone}"></i></span>
-                <span class="dx-texto">
-                    <strong>${item.titulo}</strong>
-                    <small>${item.detalhe}</small>
-                </span>
-                <span class="dx-hora">${tempoRelativo(a.criado_em)}</span>
-            </div>`;
-    }).join("");
-}
- 
-// =========================
-// CARREGAR E DESENHAR TUDO
-// =========================
-function desenharTudo() {
-    if (typeof Chart !== "undefined") {
-        Chart.defaults.color = getComputedStyle(document.body).color;
-        Chart.defaults.font.family = "Poppins, sans-serif";
-    }
- 
-    mostrarMetricas();
-    desenharGraficoHoras();
-    desenharGraficoAproveitamento();
-    desenharMaterias();
-    desenharAtencao();
-    desenharProximasRevisoes();
-    desenharAtividade();
-}
- 
+// Uma única requisição abastece todos os blocos; falhas ficam visíveis na página.
 async function carregarDashboard() {
     try {
         const resposta = await fetch("/api/dashboard");
- 
-        if (!resposta.ok) {
-            throw new Error("Erro " + resposta.status);
-        }
- 
+        if (!resposta.ok) throw new Error(`HTTP ${resposta.status}`);
         dados = await resposta.json();
+        mostrarDestaque(); mostrarMetricas(); mostrarHoras(); mostrarAproveitamento(); mostrarMaterias(); mostrarAtencao(); mostrarAgenda(); mostrarAtividade();
+        el("db_erro").classList.add("oculto");
     } catch (erro) {
         console.error("Erro ao carregar o dashboard:", erro);
-        return;
+        el("db_erro").classList.remove("oculto");
+        el("db_mensagem").textContent = "Não foi possível carregar seus dados.";
     }
- 
-    desenharTudo();
 }
- 
-// Trocar entre 7 e 30 dias não precisa buscar de novo
-el("periodo_grafico").addEventListener("change", function () {
-    if (dados) {
-        desenharGraficoHoras();
-    }
+// Os botões são filhos do contêiner: a delegação trata cliques mesmo após redesenho.
+el("periodo_grafico").addEventListener("click", evento => {
+    const botao = evento.target.closest("button[data-periodo]");
+    if (!botao || !dados) return;
+    periodo = Number(botao.dataset.periodo);
+    el("periodo_grafico").querySelectorAll("button").forEach(b => b.classList.toggle("ativo", b === botao));
+    mostrarHoras();
 });
- 
-// Atualiza os números quando você volta para esta aba ou página
-document.addEventListener("visibilitychange", function () {
-    if (document.visibilityState === "visible") {
-        carregarDashboard();
-    }
-});
- 
-window.addEventListener("pageshow", function (evento) {
-    if (evento.persisted) {
-        carregarDashboard();
-    }
-});
- 
-adicionarEstilos();
-mostrarData();
+el("agenda_semana").addEventListener("click", evento => { const botao = evento.target.closest("button[data-dia]"); if (botao && dados) { diaAgenda = Number(botao.dataset.dia); filtroAgenda = "dia"; mostrarAgenda(); } });
+el("agenda_filtros").addEventListener("click", evento => { if (evento.target.closest("#agenda_atrasadas") && dados) { filtroAgenda = "atrasadas"; mostrarAgenda(); } });
+document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") carregarDashboard(); });
+window.addEventListener("pageshow", evento => { if (evento.persisted) carregarDashboard(); });
+el("data_atual").textContent = new Date().toLocaleDateString("pt-BR", {weekday: "long", day: "numeric", month: "long"});
 carregarDashboard();
- 

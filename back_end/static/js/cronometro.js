@@ -169,6 +169,8 @@ function mudarStatus(texto) {
 }
  
 function segundosDecorridos() {
+    // Usa a diferença entre horários, não a quantidade de disparos do intervalo:
+    // navegadores podem atrasar timers quando a aba está em segundo plano.
     let ms = msAcumulados;
  
     if (inicioTrecho !== null) {
@@ -218,6 +220,7 @@ function pausarContagem() {
         return;
     }
  
+    // Fecha o trecho atual e preserva o acumulado para a próxima retomada.
     msAcumulados += Date.now() - inicioTrecho;
     inicioTrecho = null;
  
@@ -634,4 +637,4 @@ async function iniciarPagina() {
 }
  
 iniciarPagina();
- 
+

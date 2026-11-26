@@ -6,16 +6,22 @@ DATABASE = Path(__file__).parent / "database" / "studymetrics.db"
 
 
 def get_db():
+    """Abre uma conexão SQLite cujas linhas podem ser acessadas pelo nome da coluna.
+
+    Quem chama esta função deve fechar a conexão após a consulta ou alteração.
+    """
     conn = sqlite3.connect(DATABASE)
     conn.row_factory = sqlite3.Row
     return conn
 
 
 def init_db():
+    """Cria as tabelas ausentes; registros e tabelas existentes são preservados."""
     DATABASE.parent.mkdir(parents=True, exist_ok=True)
 
     conn = get_db()
 
+    # O CHECK limita a tabela a um único perfil neste aplicativo de uso individual.
     conn.execute("""
         CREATE TABLE IF NOT EXISTS perfil (
             id INTEGER PRIMARY KEY CHECK (id = 1),

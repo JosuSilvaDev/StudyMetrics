@@ -11,31 +11,23 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/perfil.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='img/rede.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/tema.css') }}">
 </head>
 <body>
-<aside class="sidebar">
-    <div class="logo"><div class="logo-simbolo"><i class="bi bi-graph-up-arrow"></i></div><div class="logo-texto"><strong>Study</strong><span>Metrics</span></div></div>
-    <nav class="menu" aria-label="Menu principal">
-        <a href="index.html" class="menu-item"><i class="bi bi-grid-1x2-fill"></i><span>Dashboard</span></a>
-        <a href="materias.html" class="menu-item"><i class="bi bi-journal-bookmark-fill"></i><span>Matérias</span></a>
-        <a href="sessao.html" class="menu-item"><i class="bi bi-stopwatch-fill"></i><span>Sessão de estudo</span></a>
-        <a href="/historico-estudos" class="menu-item"><i class="bi bi-clock-history"></i><span>Horas de estudo</span></a>
-        <a href="caderno_de_questos.html" class="menu-item"><i class="bi bi-journal-x"></i><span>Caderno de Erros</span></a>
-        <a href="revisao.html" class="menu-item"><i class="bi bi-arrow-repeat"></i><span>Revisões</span></a>
-        <a href="perfil.html" class="menu-item"><i class="bi bi-person-circle"></i><span>Perfil</span></a>
-    </nav>
-</aside>
+{% include '_sidebar.html' %}
 <main class="conteudo perfil-pagina">
     <header class="perfil-topo"><div><span class="perfil-sobrelinha">SEU ESPAÇO</span><h1>Meu perfil</h1><p>Suas informações, seus objetivos e a sua jornada.</p></div></header>
     <section class="perfil-destaque" aria-label="Resumo do perfil">
         <div class="perfil-identidade"><div class="perfil-avatar" id="avatar-iniciais" aria-hidden="true"><i class="bi bi-person-fill"></i></div><div><span class="perfil-etiqueta">SUA JORNADA COMEÇA AQUI</span><h2 id="resumo-nome">Olá, estudante!</h2><p id="resumo-objetivo">Cada passo de hoje aproxima você do seu objetivo.</p></div></div>
         <i class="bi bi-stars perfil-estrela" aria-hidden="true"></i>
     </section>
+    <!-- O JavaScript preenche a contagem com a data salva no perfil. -->
     <section class="contagem-card" aria-labelledby="contagem-titulo">
         <div class="contagem-intro"><div class="icone-bloco"><i class="bi bi-flag-fill"></i></div><div><span class="perfil-sobrelinha">SEU PRÓXIMO GRANDE PASSO</span><h2 id="contagem-titulo">Rumo à aprovação</h2><p id="contagem-mensagem">Defina sua data de aprovação para começar a contagem regressiva.</p></div></div>
         <div class="contagem-resultado" id="contagem-resultado" hidden><strong id="contagem-dias">0</strong><span id="contagem-unidade">dias<br>para sua meta</span></div>
         <div class="contagem-data" id="contagem-data" hidden><i class="bi bi-calendar-event"></i> <span></span></div>
     </section>
+    <!-- Os dois painéis fazem parte do mesmo formulário e são salvos juntos. -->
     <form id="form-perfil">
         <div class="perfil-form-grid">
             <section class="perfil-painel"><div class="painel-titulo"><div class="icone-bloco suave"><i class="bi bi-person"></i></div><div><h2>Informações pessoais</h2><p>Conte um pouco sobre você.</p></div></div>
@@ -54,7 +46,6 @@
         <div class="perfil-acoes"><p id="perfil-status" role="status" aria-live="polite"></p><button type="submit" id="salvar-perfil"><i class="bi bi-check2"></i> Salvar alterações</button></div>
     </form>
 </main>
-<script src="{{ url_for('static', filename='js/menu.js') }}"></script>
 <script src="{{ url_for('static', filename='js/perfil.js') }}"></script>
 </body>
 </html>

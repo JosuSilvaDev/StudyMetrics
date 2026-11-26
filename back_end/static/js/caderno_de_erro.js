@@ -200,6 +200,8 @@ form.addEventListener("submit", async function (evento) {
 
     const motivoEscolhido = form.querySelector('input[name="motivo_erro"]:checked');
 
+    // A marcação para revisão é salva junto ao erro e determina se ele entra
+    // na fila usada pelas páginas de revisão e pelo dashboard.
     const dados = {
         questao: document.getElementById("questao").value,
         materia: selectMateria.value,
@@ -233,9 +235,8 @@ form.addEventListener("submit", async function (evento) {
 carregarMaterias();
 carregarErros();
 
-// Separa alternativas coladas e transforma em radio box.
-// Preenche o campo "Resposta correta" sozinho.
-// Roda ANTES do caderno_de_erro.js e não mexe nele.
+// O bloco abaixo interpreta alternativas coladas e cria opções de seleção.
+// A escolha preenche o mesmo campo "Resposta correta" enviado pelo formulário.
 
 (function () {
     const $ = (id) => document.getElementById(id);
@@ -254,6 +255,7 @@ carregarErros();
 
     // A) B) C) ... mesmo que esteja tudo na mesma linha
     function separarMC(texto) {
+        // Insere quebras antes das letras e junta continuações à alternativa anterior.
         const limpo = texto.replace(/\r/g, '').replace(/\s+(?=\(?[A-Ea-e][\)\.]\s)/g, '\n');
         const alts = [];
         limpo.split('\n').forEach(linha => {

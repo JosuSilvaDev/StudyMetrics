@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const campos = ["nome", "email", "data_nascimento", "objetivo", "data_aprovacao"];
     let perfilSalvo = null;
 
+    // O resumo usa o último perfil salvo, sem antecipar alterações ainda no formulário.
     function atualizarResumo(perfil) {
         const nome = perfil.nome.trim();
         document.getElementById("resumo-nome").textContent = nome ? `Olá, ${nome.split(/\s+/)[0]}!` : "Olá, estudante!";
@@ -22,6 +23,8 @@ document.addEventListener("DOMContentLoaded", () => {
             mensagem.textContent = "Defina sua data de aprovação para começar a contagem regressiva.";
             return;
         }
+        // Comparar datas em UTC (sem horário) evita diferenças de uma hora por
+        // mudanças de fuso ou horário de verão no cálculo dos dias de calendário.
         const [ano, mes, dia] = perfil.data_aprovacao.split("-").map(Number);
         const hoje = new Date();
         const dias = Math.round((Date.UTC(ano, mes - 1, dia) - Date.UTC(hoje.getFullYear(), hoje.getMonth(), hoje.getDate())) / 86400000);
@@ -31,6 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
         mensagem.textContent = dias > 0 ? "Continue avançando: cada dia de estudo conta." : dias === 0 ? "O grande dia chegou! Confie na sua preparação." : "A data da sua meta passou. Atualize-a para uma nova contagem.";
     }
 
+    // Bloqueia o envio até carregar o perfil para evitar sobrescrever dados existentes.
     async function carregar() {
         botao.disabled = true;
         try {
@@ -46,6 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
             status.className = "erro";
         }
     }
+    // PUT envia todos os campos e a lista de motivações como um único perfil.
     form.addEventListener("submit", async evento => {
         evento.preventDefault();
         const dados = Object.fromEntries(campos.map(campo => [campo, form.elements[campo].value.trim()]));
@@ -65,6 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
             status.textContent = erro.message || "Não foi possível salvar. Tente novamente.";
         } finally { botao.disabled = false; }
     });
+    // Recalcula a contagem quando o dia muda, mesmo com a página aberta.
     setInterval(() => { if (perfilSalvo) atualizarResumo(perfilSalvo); }, 60000);
     carregar();
 });

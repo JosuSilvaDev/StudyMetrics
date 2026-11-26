@@ -1,0 +1,15 @@
+<aside class="sidebar" aria-label="Navegação principal">
+    <a class="logo" href="{{ url_for('index') }}" aria-label="StudyMetrics, início">
+        <span class="logo-simbolo"><i class="bi bi-graph-up-arrow" aria-hidden="true"></i></span>
+        <span class="logo-texto"><strong>Study</strong><span>Metrics</span></span>
+    </a>
+    <nav class="menu" aria-label="Páginas">
+        <a href="{{ url_for('index') }}" class="menu-item{% if request.endpoint in ('index', 'calendario_estudos') %} ativo{% endif %}"><i class="bi bi-grid-1x2-fill"></i><span>Dashboard</span></a>
+        <a href="{{ url_for('pagina_materias') }}" class="menu-item{% if request.endpoint == 'pagina_materias' %} ativo{% endif %}"><i class="bi bi-journal-bookmark-fill"></i><span>Matérias</span></a>
+        <a href="{{ url_for('pagina_sessao') }}" class="menu-item{% if request.endpoint == 'pagina_sessao' %} ativo{% endif %}"><i class="bi bi-stopwatch-fill"></i><span>Sessão de estudo</span></a>
+        <a href="{{ url_for('pagina_historico_estudos') }}" class="menu-item{% if request.endpoint == 'pagina_historico_estudos' %} ativo{% endif %}"><i class="bi bi-clock-history"></i><span>Horas de estudo</span></a>
+        <a href="{{ url_for('pagina_caderno') }}" class="menu-item{% if request.endpoint == 'pagina_caderno' %} ativo{% endif %}"><i class="bi bi-journal-x"></i><span>Caderno de Erros</span></a>
+        <a href="{{ url_for('pagina_revisoes') }}" class="menu-item{% if request.endpoint in ('pagina_revisoes', 'pagina_revisao_questoes') %} ativo{% endif %}"><i class="bi bi-arrow-repeat"></i><span>Revisões</span></a>
+        <a href="{{ url_for('pagina_perfil') }}" class="menu-item{% if request.endpoint == 'pagina_perfil' %} ativo{% endif %}"><i class="bi bi-person-circle"></i><span>Perfil</span></a>
+    </nav>
+</aside>

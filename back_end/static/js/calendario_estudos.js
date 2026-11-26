@@ -19,6 +19,7 @@ function chaveData(data) {
 }
 
 function converterDataUTC(valor) {
+    // O sufixo Z identifica a data do SQLite como UTC; Date a exibe no fuso local.
     return new Date(valor.replace(" ", "T") + "Z");
 }
 
@@ -52,6 +53,7 @@ function agruparSessoes() {
     const grupos = {};
 
     sessoesCalendario.forEach(sessao => {
+        // Uma sessão perto da meia-noite pode pertencer a outro dia no fuso local.
         const data = converterDataUTC(sessao.criado_em);
         const chave = chaveData(data);
 
@@ -128,6 +130,7 @@ function atualizarResumo(grupos) {
 
     const quantidadeDias = dias.length;
 
+    // Média por dia com registro, não pelo número total de dias do mês.
     const media = quantidadeDias > 0
         ? Math.floor(totalSegundos / quantidadeDias)
         : 0;

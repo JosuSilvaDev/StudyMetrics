@@ -239,6 +239,8 @@ modal.addEventListener("click", function (evento) {
         return;
     }
  
+    // A página seguinte lê estes parâmetros para pedir ao servidor apenas
+    // questões do grupo e da quantidade escolhidos no modal.
     const parametros = new URLSearchParams({
         materia: grupoEscolhido.materia,
         assunto: grupoEscolhido.assunto,
@@ -256,4 +258,4 @@ document.addEventListener("keydown", function (evento) {
 });
  
 carregarResumo();
- 
+

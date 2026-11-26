@@ -1,3 +1,4 @@
+/* Estilos exclusivos do perfil; o layout lateral comum vem de style.css. */
 .perfil-pagina { max-width: 1600px; padding-top: 38px; padding-bottom: 60px; }
 .perfil-topo { margin-bottom: 25px; }
 .perfil-topo h1 { color: #142d45; font-size: 30px; letter-spacing: -.8px; }
@@ -34,6 +35,7 @@
 .motivacoes { border: 0; margin-top: 20px; }
 .motivacoes-lista { display: flex; flex-wrap: wrap; gap: 8px; }
 .motivacoes label { cursor: pointer; }
+/* O checkbox continua acessível pelo teclado; o span representa o botão visual. */
 .motivacoes input { position: absolute; opacity: 0; }
 .motivacoes span { display: block; padding: 7px 12px; border: 1px solid #dfe8ed; border-radius: 30px; color: #667b89; font-size: 12px; }
 .motivacoes input:checked + span { background: #ddf8ef; border-color: #9edfcf; color: #087b6d; }
@@ -44,5 +46,6 @@
 .perfil-acoes button { border: 0; border-radius: 11px; padding: 14px 20px; background: #0d8c7c; color: white; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; }
 .perfil-acoes button:hover { background: #087363; }
 .perfil-acoes button:disabled { opacity: .6; cursor: wait; }
+/* Em telas estreitas, os painéis passam de duas colunas para uma. */
 @media (max-width: 900px) { .perfil-form-grid { grid-template-columns: 1fr; } .contagem-card { flex-wrap: wrap; } .contagem-intro { flex-basis: 100%; } }
 @media (max-width: 600px) { .perfil-pagina { padding-top: 25px; } .perfil-destaque, .perfil-painel, .contagem-card { padding: 22px; } .perfil-identidade { align-items: flex-start; } .perfil-avatar { width: 58px; height: 58px; flex-basis: 58px; border-radius: 17px; } .perfil-destaque h2 { font-size: 20px; } .perfil-acoes { align-items: stretch; flex-direction: column; } }
